@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.EventSystems;
 
 public class InteractionManager : MonoBehaviour
 {
@@ -33,6 +34,10 @@ public class InteractionManager : MonoBehaviour
 
     void HandleSelectionInput()
     {
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            return;
+        }
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -169,7 +174,7 @@ public class InteractionManager : MonoBehaviour
 
     void HandleRotationInput()
     {
-        if (Input.GetMouseButton(1)) // 使用右键进行旋转
+        if (Input.GetMouseButton(1))
         {
             float mouseX = Input.GetAxis("Mouse X") * rotationSpeed;
             float mouseY = Input.GetAxis("Mouse Y") * rotationSpeed;
