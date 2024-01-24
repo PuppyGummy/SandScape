@@ -13,8 +13,10 @@ public class InteractionManager : MonoBehaviour
     public float dragSpeed = 10f;
     public float rotationSpeed = 10f;
     public float minYValue = 0.5f;
-    private float bottomToCenterDistance;
-    // private float distanceToGround;
+    // private float bottomToCenterDistance;
+    private RaycastHit hit;
+    public LayerMask layerMask;
+    private Vector3 pos;
 
     private WaitForFixedUpdate waitForFixedUpdate = new WaitForFixedUpdate();
     private void Start()
@@ -31,6 +33,14 @@ public class InteractionManager : MonoBehaviour
             HandleScaleInput();
         }
     }
+    void FixedUpdate()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out hit, 1000, layerMask))
+        {
+            pos = hit.point;
+        }
+    }
 
     void HandleSelectionInput()
     {
@@ -41,11 +51,11 @@ public class InteractionManager : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
+            RaycastHit raycastHit;
 
-            if (Physics.Raycast(ray, out hit))
+            if (Physics.Raycast(ray, out raycastHit))
             {
-                GameObject hitObject = hit.collider.gameObject;
+                GameObject hitObject = raycastHit.collider.gameObject;
 
                 if (hitObject.CompareTag("Interactable"))
                 {
@@ -84,7 +94,7 @@ public class InteractionManager : MonoBehaviour
     }
     private IEnumerator DragObject(GameObject selectedObject)
     {
-        float distance = Vector3.Distance(selectedObject.transform.position, Camera.main.transform.position);
+        // float distance = Vector3.Distance(selectedObject.transform.position, Camera.main.transform.position);
         selectedObject.TryGetComponent(out Rigidbody rb);
 
         if (rb != null)
@@ -94,13 +104,15 @@ public class InteractionManager : MonoBehaviour
 
         while (Input.GetMouseButton(0))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            // Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (rb != null)
             {
                 float bottomToCenterDistance = selectedObject.GetComponent<Collider>().bounds.extents.y;
-                Vector3 direction = ray.GetPoint(distance) - selectedObject.transform.position;
-                rb.velocity = direction * dragSpeed;
-                selectedObject.transform.position = new Vector3(selectedObject.transform.position.x, Mathf.Max(selectedObject.transform.position.y - bottomToCenterDistance, minYValue), selectedObject.transform.position.z);
+                // Vector3 direction = ray.GetPoint(distance) - selectedObject.transform.position;
+                // rb.velocity = direction * dragSpeed;
+                // Vector3 pos = ray.GetPoint(distance);
+                selectedObject.transform.position = new Vector3(pos.x, Mathf.Max(pos.y - bottomToCenterDistance, minYValue), pos.z);
+                // selectedObject.transform.position = new Vector3(pos.x, pos.y, pos.z);
             }
             yield return waitForFixedUpdate;
         }
@@ -110,7 +122,6 @@ public class InteractionManager : MonoBehaviour
             rb.freezeRotation = false;
         }
     }
-
 
     // void HandleDragInput()
     // {
