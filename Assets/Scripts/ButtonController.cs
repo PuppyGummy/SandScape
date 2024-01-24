@@ -7,6 +7,6 @@ public class ButtonController : MonoBehaviour
 
     public void OnButtonClick()
     {
-        GameObject.FindObjectOfType<ObjectSpawner>().SendMessage("SpawnObject", associatedObject);
+        GameObject.FindObjectOfType<InteractionManager>().SendMessage("SpawnObject", associatedObject);
     }
 }

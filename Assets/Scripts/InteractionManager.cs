@@ -17,6 +17,9 @@ public class InteractionManager : MonoBehaviour
     private RaycastHit hit;
     public LayerMask layerMask;
     private Vector3 pos;
+    public float buryDepth = 1f;
+    private float bottomToCenterDistance;
+    public GameObject sandbox;
 
     private WaitForFixedUpdate waitForFixedUpdate = new WaitForFixedUpdate();
     private void Start()
@@ -107,7 +110,8 @@ public class InteractionManager : MonoBehaviour
             // Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (rb != null)
             {
-                float bottomToCenterDistance = selectedObject.GetComponent<Collider>().bounds.extents.y;
+                float originalY = selectedObject.transform.position.y;
+                bottomToCenterDistance = selectedObject.GetComponent<Collider>().bounds.extents.y;
                 // Vector3 direction = ray.GetPoint(distance) - selectedObject.transform.position;
                 // rb.velocity = direction * dragSpeed;
                 // Vector3 pos = ray.GetPoint(distance);
@@ -121,43 +125,8 @@ public class InteractionManager : MonoBehaviour
         {
             rb.freezeRotation = false;
         }
+        selectedObject.transform.position = new Vector3(selectedObject.transform.position.x, bottomToCenterDistance, selectedObject.transform.position.z);
     }
-
-    // void HandleDragInput()
-    // {
-    //     if (isDragging)
-    //     {
-    //         Debug.Log("Dragging");
-    //         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.nearClipPlane));
-    //         selectedObject.transform.position = new Vector3(mousePosition.x + offset.x, selectedObject.transform.position.y, mousePosition.z + offset.z);
-    //     }
-
-    //     if (Input.GetMouseButtonUp(0))
-    //     {
-    //         isDragging = false;
-    //     }
-
-    //     if (Input.GetMouseButtonDown(0))
-    //     {
-    //         RaycastHit hit;
-    //         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-    //         if (Physics.Raycast(ray, out hit))
-    //         {
-    //             if (hit.collider.CompareTag("Interactable"))
-    //             {
-    //                 StartDragging(selectedObject);
-    //             }
-    //         }
-    //     }
-    // }
-
-    // void StartDragging(GameObject objectToDrag)
-    // {
-    //     Vector3 mousePosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, Camera.main.nearClipPlane));
-    //     offset = objectToDrag.transform.position - mousePosition;
-    //     isDragging = true;
-    // }
 
     // void HandleRotationInput()
     // {
@@ -203,6 +172,10 @@ public class InteractionManager : MonoBehaviour
 
         selectedObject.transform.localScale += new Vector3(scrollWheel, scrollWheel, scrollWheel) * scaleSpeed;
     }
+    public void SpawnObject(GameObject associatedObject)
+    {
+        Instantiate(associatedObject, new Vector3(0f, 2f, 0f), transform.rotation);
+    }
     public void Reset()
     {
         if (selectedObject != null)
@@ -217,6 +190,14 @@ public class InteractionManager : MonoBehaviour
         if (selectedObject != null)
         {
             Destroy(selectedObject);
+        }
+    }
+    public void Bury()
+    {
+        if (selectedObject != null)
+        {
+            Physics.IgnoreCollision(selectedObject.GetComponent<Collider>(), sandbox.GetComponent<Collider>());
+            selectedObject.transform.position = new Vector3(selectedObject.transform.position.x, selectedObject.transform.position.y - buryDepth, selectedObject.transform.position.z);
         }
     }
 }
