@@ -20,8 +20,23 @@ public class InteractionManager : MonoBehaviour
     public float buryDepth = 1f;
     private float bottomToCenterDistance;
     public GameObject sandbox;
+    public float destroyYValue = -5f;
+    private Rigidbody selectedRb;
 
     private WaitForFixedUpdate waitForFixedUpdate = new WaitForFixedUpdate();
+
+    private static InteractionManager instance;
+    public static InteractionManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = FindObjectOfType<InteractionManager>();
+            }
+            return instance;
+        }
+    }
     private void Start()
     {
     }
@@ -78,6 +93,8 @@ public class InteractionManager : MonoBehaviour
                     {
                         outline.enabled = true;
                     }
+                    selectedObject.TryGetComponent(out selectedRb);
+
                     StartCoroutine(DragObject(selectedObject));
                 }
                 else
@@ -98,19 +115,21 @@ public class InteractionManager : MonoBehaviour
     private IEnumerator DragObject(GameObject selectedObject)
     {
         // float distance = Vector3.Distance(selectedObject.transform.position, Camera.main.transform.position);
-        selectedObject.TryGetComponent(out Rigidbody rb);
+        // selectedObject.TryGetComponent(out Rigidbody rb);
 
-        if (rb != null)
+        if (selectedRb != null)
         {
-            rb.freezeRotation = true;
+            selectedRb.freezeRotation = true;
+            selectedRb.useGravity = true;
+            Physics.IgnoreCollision(selectedObject.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
         }
 
         while (Input.GetMouseButton(0))
         {
             // Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (rb != null)
+            if (selectedRb != null)
             {
-                float originalY = selectedObject.transform.position.y;
+                // float originalY = selectedObject.transform.position.y;
                 bottomToCenterDistance = selectedObject.GetComponent<Collider>().bounds.extents.y;
                 // Vector3 direction = ray.GetPoint(distance) - selectedObject.transform.position;
                 // rb.velocity = direction * dragSpeed;
@@ -121,9 +140,9 @@ public class InteractionManager : MonoBehaviour
             yield return waitForFixedUpdate;
         }
 
-        if (rb != null)
+        if (selectedRb != null)
         {
-            rb.freezeRotation = false;
+            selectedRb.freezeRotation = false;
         }
         selectedObject.transform.position = new Vector3(selectedObject.transform.position.x, bottomToCenterDistance, selectedObject.transform.position.z);
     }
@@ -154,13 +173,14 @@ public class InteractionManager : MonoBehaviour
 
     void HandleRotationInput()
     {
-        if (Input.GetMouseButton(1))
+        if (Input.GetMouseButton(1)) // 使用右键进行旋转
         {
+            selectedRb.constraints = RigidbodyConstraints.FreezePosition;
+
             float mouseX = Input.GetAxis("Mouse X") * rotationSpeed;
             float mouseY = Input.GetAxis("Mouse Y") * rotationSpeed;
 
             selectedObject.transform.Rotate(Vector3.up, -mouseX, Space.World);
-
             selectedObject.transform.Rotate(Vector3.right, mouseY, Space.World);
         }
     }
@@ -174,13 +194,16 @@ public class InteractionManager : MonoBehaviour
     }
     public void SpawnObject(GameObject associatedObject)
     {
-        Instantiate(associatedObject, new Vector3(0f, 2f, 0f), transform.rotation);
+        Instantiate(associatedObject, new Vector3(0f, associatedObject.GetComponent<Renderer>().bounds.extents.y, 0f), transform.rotation);
     }
     public void Reset()
     {
         if (selectedObject != null)
         {
-            selectedObject.transform.position = new Vector3(0f, 2f, 0f);
+            selectedRb.useGravity = true;
+            selectedRb.velocity = Vector3.zero;
+            Physics.IgnoreCollision(selectedObject.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
+            selectedObject.transform.position = new Vector3(0f, selectedObject.GetComponent<Renderer>().bounds.extents.y, 0f);
             selectedObject.transform.rotation = Quaternion.identity;
             selectedObject.transform.localScale = Vector3.one;
         }
@@ -196,6 +219,7 @@ public class InteractionManager : MonoBehaviour
     {
         if (selectedObject != null)
         {
+            selectedRb.useGravity = false;
             Physics.IgnoreCollision(selectedObject.GetComponent<Collider>(), sandbox.GetComponent<Collider>());
             selectedObject.transform.position = new Vector3(selectedObject.transform.position.x, selectedObject.transform.position.y - buryDepth, selectedObject.transform.position.z);
         }

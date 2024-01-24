@@ -14,7 +14,8 @@ GameObject:
   - component: {fileID: 3048691347045128014}
   - component: {fileID: 3820019089404487911}
   - component: {fileID: 1744450985464671029}
-  m_Layer: 0
+  - component: {fileID: 1737831839862192882}
+  m_Layer: 6
   m_Name: Cube
   m_TagString: Interactable
   m_Icon: {fileID: 0}
@@ -129,7 +130,7 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
@@ -152,3 +153,15 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!114 &1737831839862192882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 577668324217162731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5a59a71ad15b403693e95d66331e722, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
