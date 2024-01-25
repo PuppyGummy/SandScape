@@ -5,11 +5,11 @@ using UnityEngine.EventSystems;
 public class InteractionManager : MonoBehaviour
 {
     #region Fields
-    
+
     private Vector3 offset;
     private Vector3 rotationOrigin;
     private GameObject selectedObject;
-    
+
     private RaycastHit hit;
 
     /// <summary>
@@ -18,7 +18,7 @@ public class InteractionManager : MonoBehaviour
     private Vector3 pos;
 
     private float bottomToCenterDistance;
-    
+
     /// <summary>
     /// Rigidbody of the selected object
     /// </summary>
@@ -34,6 +34,7 @@ public class InteractionManager : MonoBehaviour
     public float buryDepth = 1f;
     public GameObject sandbox;
     public float destroyYValue = -5f;
+    public float scaleSpeed = 0.1f;
 
     #endregion
 
@@ -57,7 +58,6 @@ public class InteractionManager : MonoBehaviour
         HandleSelectionInput();
         if (selectedObject)
         {
-            // HandleDragInput();
             HandleRotationInput();
             HandleScaleInput();
         }
@@ -66,14 +66,14 @@ public class InteractionManager : MonoBehaviour
     {
         //Set the world position based on the mouse position in screen space
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-   
+
         //BUG: Ray origin changes to center of object when hovering over an object???
         //The above mentioned may be a non issue
-        
-        if (Physics.Raycast(ray, out hit, 1000)) //Removed the layer mask so it reacts to other objects
+
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity)) //Removed the layer mask so it reacts to other objects
         {
             pos = hit.point;
-            
+
             // Debug.DrawLine(ray.origin, hit.transform.position, Color.red, 1.0f); //Debug ray pos
             // Debug.Log("Distance: " + hit.distance);
         }
@@ -94,9 +94,9 @@ public class InteractionManager : MonoBehaviour
             RaycastHit raycastHit;
 
             if (!Physics.Raycast(ray, out raycastHit)) return;
-            
+
             GameObject hitObject = raycastHit.collider.gameObject;
-            
+
             if (hitObject.CompareTag("Interactable"))
             {
                 if (selectedObject)
@@ -124,11 +124,11 @@ public class InteractionManager : MonoBehaviour
             else
             {
                 if (!selectedObject) return;
-                
+
                 Outline outline = selectedObject.GetComponent<Outline>();
-                    
+
                 if (!outline) return;
-                    
+
                 outline.enabled = false;
                 selectedObject.layer = LayerMask.NameToLayer("Objects");
                 selectedObject = null;
@@ -155,7 +155,7 @@ public class InteractionManager : MonoBehaviour
             if (selectedRb)
             {
                 selectedRb.constraints = RigidbodyConstraints.FreezeRotation;
-                
+
                 bottomToCenterDistance = selectedObject.GetComponent<Collider>().bounds.extents.y + pos.y;
                 selectedObject.transform.position = new Vector3(pos.x, Mathf.Max(pos.y + bottomToCenterDistance, minYValue), pos.z);
             }
@@ -163,7 +163,7 @@ public class InteractionManager : MonoBehaviour
         }
 
         if (!selectedRb) yield break;
-        
+
         //Reset velocity to prevent it from smashing down too hard
         selectedRb.velocity = Vector3.zero;
         selectedRb.freezeRotation = false;
@@ -182,7 +182,7 @@ public class InteractionManager : MonoBehaviour
             selectedObject.transform.Rotate(Vector3.up, -mouseX, Space.World);
             selectedObject.transform.Rotate(Vector3.right, mouseY, Space.World);
         }
-        else if(!Input.GetMouseButtonUp(1))
+        else if (!Input.GetMouseButtonUp(1))
         {
             selectedRb.constraints = RigidbodyConstraints.None;
         }
@@ -190,7 +190,6 @@ public class InteractionManager : MonoBehaviour
 
     void HandleScaleInput()
     {
-        float scaleSpeed = 0.1f;
         float scrollWheel = Input.GetAxis("Mouse ScrollWheel");
 
         selectedObject.transform.localScale += new Vector3(scrollWheel, scrollWheel, scrollWheel) * scaleSpeed;
@@ -202,7 +201,7 @@ public class InteractionManager : MonoBehaviour
     public void Reset()
     {
         if (!selectedObject) return;
-        
+
         selectedRb.useGravity = true;
         selectedRb.velocity = Vector3.zero;
         Physics.IgnoreCollision(selectedObject.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
@@ -219,14 +218,13 @@ public class InteractionManager : MonoBehaviour
     }
     public void Bury()
     {
-        //BUG: If user attempts to bury while on top of another object, it jumps into the air
-        //Proposed solution - Only allow burring if on the sandtray and not on other objects
         if (selectedObject == null) return;
+        if (selectedObject.GetComponent<ObjectController>().IsOnGround() == false) return;
 
         selectedRb.velocity = Vector3.zero;
         selectedRb.freezeRotation = true;
         selectedRb.useGravity = false;
-        
+
         Physics.IgnoreCollision(selectedObject.GetComponent<Collider>(), sandbox.GetComponent<Collider>());
         selectedObject.transform.position = new Vector3(selectedObject.transform.position.x, selectedObject.transform.position.y - buryDepth, selectedObject.transform.position.z);
     }

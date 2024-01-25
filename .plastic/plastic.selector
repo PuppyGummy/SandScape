@@ -1,0 +1,4 @@
+repository "SandScape@Go_LD49@cloud"
+  path "/"
+    br "/main"
+    co "/main"
