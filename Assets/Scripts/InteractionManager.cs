@@ -154,6 +154,8 @@ public class InteractionManager : MonoBehaviour
         {
             if (selectedRb)
             {
+                selectedRb.constraints = RigidbodyConstraints.FreezeRotation;
+                
                 bottomToCenterDistance = selectedObject.GetComponent<Collider>().bounds.extents.y + pos.y;
                 selectedObject.transform.position = new Vector3(pos.x, Mathf.Max(pos.y + bottomToCenterDistance, minYValue), pos.z);
             }
@@ -170,15 +172,20 @@ public class InteractionManager : MonoBehaviour
     void HandleRotationInput()
     {
         //Only rotate object if the right mouse button is held
-        if (!Input.GetMouseButton(1)) return;
-        
-        selectedRb.constraints = RigidbodyConstraints.FreezePosition;
+        if (Input.GetMouseButton(1))
+        {
+            selectedRb.constraints = RigidbodyConstraints.FreezePosition;
 
-        float mouseX = Input.GetAxis("Mouse X") * rotationSpeed;
-        float mouseY = Input.GetAxis("Mouse Y") * rotationSpeed;
+            float mouseX = Input.GetAxis("Mouse X") * rotationSpeed;
+            float mouseY = Input.GetAxis("Mouse Y") * rotationSpeed;
 
-        selectedObject.transform.Rotate(Vector3.up, -mouseX, Space.World);
-        selectedObject.transform.Rotate(Vector3.right, mouseY, Space.World);
+            selectedObject.transform.Rotate(Vector3.up, -mouseX, Space.World);
+            selectedObject.transform.Rotate(Vector3.right, mouseY, Space.World);
+        }
+        else if(!Input.GetMouseButtonUp(1))
+        {
+            selectedRb.constraints = RigidbodyConstraints.None;
+        }
     }
 
     void HandleScaleInput()
