@@ -4,24 +4,39 @@ using UnityEngine.EventSystems;
 
 public class InteractionManager : MonoBehaviour
 {
-    private bool isDragging = false;
-    private Vector3 offset;
+    #region Fields
 
-    private bool isRotating = false;
+    private Vector3 offset;
     private Vector3 rotationOrigin;
     private GameObject selectedObject;
+
+    private RaycastHit hit;
+
+    /// <summary>
+    /// 3D coordinate of the cursors position in the world
+    /// </summary>
+    private Vector3 pos;
+
+    private float bottomToCenterDistance;
+
+    /// <summary>
+    /// Rigidbody of the selected object
+    /// </summary>
+    private Rigidbody selectedRb;
+
+    #endregion
+
+    #region Properties
+
     public float dragSpeed = 10f;
     public float rotationSpeed = 10f;
     public float minYValue = 0.5f;
-    // private float bottomToCenterDistance;
-    private RaycastHit hit;
-    public LayerMask layerMask;
-    private Vector3 pos;
     public float buryDepth = 1f;
-    private float bottomToCenterDistance;
     public GameObject sandbox;
     public float destroyYValue = -5f;
-    private Rigidbody selectedRb;
+    public float scaleSpeed = 0.1f;
+
+    #endregion
 
     private WaitForFixedUpdate waitForFixedUpdate = new WaitForFixedUpdate();
 
@@ -30,36 +45,43 @@ public class InteractionManager : MonoBehaviour
     {
         get
         {
-            if (instance == null)
+            if (!instance)
             {
                 instance = FindObjectOfType<InteractionManager>();
             }
             return instance;
         }
     }
-    private void Start()
-    {
-    }
 
     void Update()
     {
         HandleSelectionInput();
-        if (selectedObject != null)
+        if (selectedObject)
         {
-            // HandleDragInput();
             HandleRotationInput();
             HandleScaleInput();
         }
     }
     void FixedUpdate()
     {
+        //Set the world position based on the mouse position in screen space
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out hit, 1000, layerMask))
+
+        //NOTE: Ray origin changes to center of object when hovering over an object???
+        //The above mentioned may be a non issue
+
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity)) //Removed the layer mask so it reacts to other objects
         {
             pos = hit.point;
+
+            // Debug.DrawLine(ray.origin, hit.transform.position, Color.red, 1.0f); //Debug ray pos
+            // Debug.Log("Distance: " + hit.distance);
         }
     }
 
+    /// <summary>
+    /// Handles selection of objects, and starts dragging the object if held
+    /// </summary>
     void HandleSelectionInput()
     {
         if (EventSystem.current.IsPointerOverGameObject())
@@ -71,109 +93,88 @@ public class InteractionManager : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit raycastHit;
 
-            if (Physics.Raycast(ray, out raycastHit))
+            if (!Physics.Raycast(ray, out raycastHit)) return;
+
+            GameObject hitObject = raycastHit.collider.gameObject;
+
+            if (hitObject.CompareTag("Interactable"))
             {
-                GameObject hitObject = raycastHit.collider.gameObject;
-
-                if (hitObject.CompareTag("Interactable"))
+                if (selectedObject)
                 {
-                    if (selectedObject != null)
+                    Outline priorOutline = selectedObject.GetComponent<Outline>();
+                    if (priorOutline)
                     {
-                        Outline priorOutline = selectedObject.GetComponent<Outline>();
-                        if (priorOutline != null)
-                        {
-                            priorOutline.enabled = false;
-                            selectedObject = null;
-                        }
-                    }
-                    selectedObject = hitObject;
-
-                    Outline outline = selectedObject.GetComponent<Outline>();
-                    if (outline != null)
-                    {
-                        outline.enabled = true;
-                    }
-                    selectedObject.TryGetComponent(out selectedRb);
-
-                    StartCoroutine(DragObject(selectedObject));
-                }
-                else
-                {
-                    if (selectedObject != null)
-                    {
-                        Outline outline = selectedObject.GetComponent<Outline>();
-                        if (outline != null)
-                        {
-                            outline.enabled = false;
-                            selectedObject = null;
-                        }
+                        priorOutline.enabled = false;
+                        selectedObject.layer = LayerMask.NameToLayer("Objects");
+                        selectedObject = null;
                     }
                 }
+                selectedObject = hitObject;
+
+                Outline outline = selectedObject.GetComponent<Outline>();
+                if (outline)
+                {
+                    outline.enabled = true;
+                }
+                selectedObject.TryGetComponent(out selectedRb);
+
+                StartCoroutine(DragObject(selectedObject));
+                selectedObject.layer = LayerMask.NameToLayer("Ignore Raycast");
             }
+            else
+            {
+                if (!selectedObject) return;
+
+                Outline outline = selectedObject.GetComponent<Outline>();
+
+                if (!outline) return;
+
+                outline.enabled = false;
+                selectedObject.layer = LayerMask.NameToLayer("Objects");
+                selectedObject = null;
+            }
+        }
+        else if (Input.GetMouseButtonUp(0) && selectedObject) //If we release mouse button and there is a selected object
+        {
+            selectedObject.layer = LayerMask.NameToLayer("Objects"); //Reenable raycasts on the object
         }
     }
     private IEnumerator DragObject(GameObject selectedObject)
     {
-        // float distance = Vector3.Distance(selectedObject.transform.position, Camera.main.transform.position);
-        // selectedObject.TryGetComponent(out Rigidbody rb);
-
-        if (selectedRb != null)
+        // TODO: Every time when the object is dragged and immediately released, the object will jump very high up
+        //Freeze the object and change its settings, as to allow for smoother dragging
+        if (selectedRb)
         {
             selectedRb.freezeRotation = true;
             selectedRb.useGravity = true;
+            selectedRb.isKinematic = false;
             Physics.IgnoreCollision(selectedObject.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
         }
 
+        //Move object as long as mouse button is held and the rigid body is valid
         while (Input.GetMouseButton(0))
         {
-            // Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (selectedRb != null)
+            if (selectedRb)
             {
-                // float originalY = selectedObject.transform.position.y;
-                bottomToCenterDistance = selectedObject.GetComponent<Collider>().bounds.extents.y;
-                // Vector3 direction = ray.GetPoint(distance) - selectedObject.transform.position;
-                // rb.velocity = direction * dragSpeed;
-                // Vector3 pos = ray.GetPoint(distance);
-                selectedObject.transform.position = new Vector3(pos.x, Mathf.Max(pos.y - bottomToCenterDistance, minYValue), pos.z);
-                // selectedObject.transform.position = new Vector3(pos.x, pos.y, pos.z);
+                selectedRb.constraints = RigidbodyConstraints.FreezeRotation;
+
+                bottomToCenterDistance = selectedObject.GetComponent<Collider>().bounds.extents.y + pos.y;
+                selectedObject.transform.position = new Vector3(pos.x, Mathf.Max(pos.y + bottomToCenterDistance, minYValue), pos.z);
             }
             yield return waitForFixedUpdate;
         }
 
-        if (selectedRb != null)
-        {
-            selectedRb.freezeRotation = false;
-        }
-        selectedObject.transform.position = new Vector3(selectedObject.transform.position.x, bottomToCenterDistance, selectedObject.transform.position.z);
+        if (!selectedRb) yield break;
+
+        //Reset velocity to prevent it from smashing down too hard
+        selectedRb.velocity = Vector3.zero;
+        selectedRb.freezeRotation = false;
     }
-
-    // void HandleRotationInput()
-    // {
-    //     if (Input.GetMouseButtonDown(1))
-    //     {
-    //         isRotating = true;
-    //         rotationOrigin = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-    //     }
-
-    //     if (Input.GetMouseButtonUp(1))
-    //     {
-    //         isRotating = false;
-    //     }
-
-    //     if (isRotating)
-    //     {
-    //         Debug.Log("Rotating");
-    //         Vector3 currentMousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-    //         float angle = Vector2.SignedAngle(rotationOrigin, currentMousePosition);
-
-    //         selectedObject.transform.Rotate(Vector3.forward, angle);
-    //         rotationOrigin = currentMousePosition;
-    //     }
-    // }
 
     void HandleRotationInput()
     {
-        if (Input.GetMouseButton(1)) // 使用右键进行旋转
+        //Only rotate object if the right mouse button is held
+        if (Input.GetMouseButton(1))
         {
             selectedRb.constraints = RigidbodyConstraints.FreezePosition;
 
@@ -183,30 +184,44 @@ public class InteractionManager : MonoBehaviour
             selectedObject.transform.Rotate(Vector3.up, -mouseX, Space.World);
             selectedObject.transform.Rotate(Vector3.right, mouseY, Space.World);
         }
+        else if (!Input.GetMouseButtonUp(1))
+        {
+            selectedRb.constraints = RigidbodyConstraints.None;
+        }
     }
 
     void HandleScaleInput()
     {
-        float scaleSpeed = 0.1f;
         float scrollWheel = Input.GetAxis("Mouse ScrollWheel");
 
         selectedObject.transform.localScale += new Vector3(scrollWheel, scrollWheel, scrollWheel) * scaleSpeed;
     }
     public void SpawnObject(GameObject associatedObject)
     {
-        Instantiate(associatedObject, new Vector3(0f, associatedObject.GetComponent<Renderer>().bounds.extents.y, 0f), transform.rotation);
+        if (Physics.Raycast(Vector3.zero, Vector3.up, out RaycastHit hit, Mathf.Infinity))
+        {
+            GameObject hitObject = hit.collider.gameObject;
+
+            Instantiate(associatedObject, new Vector3(0f, associatedObject.GetComponent<Renderer>().bounds.extents.y + hitObject.GetComponent<Renderer>().bounds.size.y, 0f), transform.rotation);
+        }
+        else
+        {
+            Instantiate(associatedObject, new Vector3(0f, associatedObject.GetComponent<Renderer>().bounds.extents.y, 0f), transform.rotation);
+        }
     }
     public void Reset()
     {
-        if (selectedObject != null)
-        {
-            selectedRb.useGravity = true;
-            selectedRb.velocity = Vector3.zero;
-            Physics.IgnoreCollision(selectedObject.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
-            selectedObject.transform.position = new Vector3(0f, selectedObject.GetComponent<Renderer>().bounds.extents.y, 0f);
-            selectedObject.transform.rotation = Quaternion.identity;
-            selectedObject.transform.localScale = Vector3.one;
-        }
+        if (!selectedObject) return;
+
+        selectedRb.useGravity = true;
+        selectedRb.velocity = Vector3.zero;
+        selectedRb.freezeRotation = false;
+        selectedRb.constraints = RigidbodyConstraints.None;
+        selectedRb.isKinematic = false;
+        Physics.IgnoreCollision(selectedObject.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
+        selectedObject.transform.position = new Vector3(0f, selectedObject.GetComponent<Renderer>().bounds.extents.y, 0f);
+        selectedObject.transform.rotation = Quaternion.identity;
+        selectedObject.transform.localScale = Vector3.one;
     }
     public void Delete()
     {
@@ -217,11 +232,16 @@ public class InteractionManager : MonoBehaviour
     }
     public void Bury()
     {
-        if (selectedObject != null)
-        {
-            selectedRb.useGravity = false;
-            Physics.IgnoreCollision(selectedObject.GetComponent<Collider>(), sandbox.GetComponent<Collider>());
-            selectedObject.transform.position = new Vector3(selectedObject.transform.position.x, selectedObject.transform.position.y - buryDepth, selectedObject.transform.position.z);
-        }
+        if (selectedObject == null) return;
+        if (selectedObject.GetComponent<ObjectController>().IsOnGround() == false) return;
+
+        selectedRb.velocity = Vector3.zero;
+        selectedRb.freezeRotation = true;
+        selectedRb.constraints = RigidbodyConstraints.FreezePosition;
+        selectedRb.useGravity = false;
+        selectedRb.isKinematic = true;
+
+        Physics.IgnoreCollision(selectedObject.GetComponent<Collider>(), sandbox.GetComponent<Collider>());
+        selectedObject.transform.position = new Vector3(selectedObject.transform.position.x, selectedObject.transform.position.y - buryDepth, selectedObject.transform.position.z);
     }
 }
