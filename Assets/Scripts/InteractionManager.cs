@@ -67,7 +67,7 @@ public class InteractionManager : MonoBehaviour
         //Set the world position based on the mouse position in screen space
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        //BUG: Ray origin changes to center of object when hovering over an object???
+        //NOTE: Ray origin changes to center of object when hovering over an object???
         //The above mentioned may be a non issue
 
         if (Physics.Raycast(ray, out hit, Mathf.Infinity)) //Removed the layer mask so it reacts to other objects
@@ -141,11 +141,13 @@ public class InteractionManager : MonoBehaviour
     }
     private IEnumerator DragObject(GameObject selectedObject)
     {
+        // TODO: Every time when the object is dragged and immediately released, the object will jump very high up
         //Freeze the object and change its settings, as to allow for smoother dragging
         if (selectedRb)
         {
             selectedRb.freezeRotation = true;
             selectedRb.useGravity = true;
+            selectedRb.isKinematic = false;
             Physics.IgnoreCollision(selectedObject.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
         }
 
@@ -196,7 +198,16 @@ public class InteractionManager : MonoBehaviour
     }
     public void SpawnObject(GameObject associatedObject)
     {
-        Instantiate(associatedObject, new Vector3(0f, associatedObject.GetComponent<Renderer>().bounds.extents.y, 0f), transform.rotation);
+        if (Physics.Raycast(Vector3.zero, Vector3.up, out RaycastHit hit, Mathf.Infinity))
+        {
+            GameObject hitObject = hit.collider.gameObject;
+
+            Instantiate(associatedObject, new Vector3(0f, associatedObject.GetComponent<Renderer>().bounds.extents.y + hitObject.GetComponent<Renderer>().bounds.size.y, 0f), transform.rotation);
+        }
+        else
+        {
+            Instantiate(associatedObject, new Vector3(0f, associatedObject.GetComponent<Renderer>().bounds.extents.y, 0f), transform.rotation);
+        }
     }
     public void Reset()
     {
@@ -204,6 +215,9 @@ public class InteractionManager : MonoBehaviour
 
         selectedRb.useGravity = true;
         selectedRb.velocity = Vector3.zero;
+        selectedRb.freezeRotation = false;
+        selectedRb.constraints = RigidbodyConstraints.None;
+        selectedRb.isKinematic = false;
         Physics.IgnoreCollision(selectedObject.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
         selectedObject.transform.position = new Vector3(0f, selectedObject.GetComponent<Renderer>().bounds.extents.y, 0f);
         selectedObject.transform.rotation = Quaternion.identity;
@@ -223,7 +237,9 @@ public class InteractionManager : MonoBehaviour
 
         selectedRb.velocity = Vector3.zero;
         selectedRb.freezeRotation = true;
+        selectedRb.constraints = RigidbodyConstraints.FreezePosition;
         selectedRb.useGravity = false;
+        selectedRb.isKinematic = true;
 
         Physics.IgnoreCollision(selectedObject.GetComponent<Collider>(), sandbox.GetComponent<Collider>());
         selectedObject.transform.position = new Vector3(selectedObject.transform.position.x, selectedObject.transform.position.y - buryDepth, selectedObject.transform.position.z);
