@@ -212,9 +212,14 @@ public class InteractionManager : MonoBehaviour
     }
     public void Bury()
     {
+        //BUG: If user attempts to bury while on top of another object, it jumps into the air
+        //Proposed solution - Only allow burring if on the sandtray and not on other objects
         if (selectedObject == null) return;
-        
+
+        selectedRb.velocity = Vector3.zero;
+        selectedRb.freezeRotation = true;
         selectedRb.useGravity = false;
+        
         Physics.IgnoreCollision(selectedObject.GetComponent<Collider>(), sandbox.GetComponent<Collider>());
         selectedObject.transform.position = new Vector3(selectedObject.transform.position.x, selectedObject.transform.position.y - buryDepth, selectedObject.transform.position.z);
     }
