@@ -141,7 +141,6 @@ public class InteractionManager : MonoBehaviour
     }
     private IEnumerator DragObject(GameObject selectedObject)
     {
-        // TODO: Every time when the object is dragged and immediately released, the object will jump very high up
         //Freeze the object and change its settings, as to allow for smoother dragging
         if (selectedRb)
         {
