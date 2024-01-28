@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 public class GamemodeManager : MonoBehaviour
 {
     //Properties
-    [SerializeField] public GameObject playerContainer;
+    [SerializeField] public CharacterManager CharacterManager;
     
     //Fields
     private bool playModeEnabled;
@@ -36,14 +36,14 @@ public class GamemodeManager : MonoBehaviour
         switch (playModeEnabled)
         {
             case true:
-                playerContainer.SetActive(false);
+                CharacterManager.DisableCharacter();
                 playModeEnabled = false;
                 
                 ResetCameraTransform();
                 
                 break;
             case false:
-                playerContainer.SetActive(true);
+                CharacterManager.EnableCharacter();
                 playModeEnabled = true;
 
                 break;
