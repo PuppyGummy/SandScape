@@ -289,18 +289,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 1468996418}
-        m_TargetAssemblyTypeName: CharacterManager, Assembly-CSharp
-        m_MethodName: ToggleCharacter
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
 --- !u!114 &119023582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -606,11 +594,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 242250913}
   m_CullTransparentMesh: 1
---- !u!4 &302325619 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 959992435556627171, guid: 35584173447f56c4788baea11f8b757a, type: 3}
-  m_PrefabInstance: {fileID: 528693105}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &309122664
 GameObject:
   m_ObjectHideFlags: 3
@@ -990,7 +973,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3152572805866576806, guid: 35584173447f56c4788baea11f8b757a, type: 3}
       propertyPath: m_Constraints
-      value: 80
+      value: 112
+      objectReference: {fileID: 0}
+    - target: {fileID: 3152572805866576806, guid: 35584173447f56c4788baea11f8b757a, type: 3}
+      propertyPath: m_IsKinematic
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3775691924291795148, guid: 35584173447f56c4788baea11f8b757a, type: 3}
       propertyPath: m_Layer
@@ -1036,6 +1023,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6404339007552973856, guid: 35584173447f56c4788baea11f8b757a, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7254542627168685072, guid: 35584173447f56c4788baea11f8b757a, type: 3}
       propertyPath: m_Layer
       value: 6
@@ -1048,7 +1039,12 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Interactable
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 7738044380830830220, guid: 35584173447f56c4788baea11f8b757a, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 6404339007552973856, guid: 35584173447f56c4788baea11f8b757a, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -1480,7 +1476,7 @@ MonoBehaviour:
   m_StreamingVersion: 20170927
   m_Priority: 10
   m_StandbyUpdate: 2
-  m_LookAt: {fileID: 1477740552}
+  m_LookAt: {fileID: 1139618429}
   m_Follow: {fileID: 1477740552}
   m_CommonLens: 1
   m_Lens:
@@ -1504,7 +1500,7 @@ MonoBehaviour:
   m_YAxis:
     Value: 0.5
     m_SpeedMode: 0
-    m_MaxSpeed: 2
+    m_MaxSpeed: 3
     m_AccelTime: 0.2
     m_DecelTime: 0.1
     m_InputAxisName: Mouse Y
@@ -1528,7 +1524,7 @@ MonoBehaviour:
   m_XAxis:
     Value: 0
     m_SpeedMode: 0
-    m_MaxSpeed: 300
+    m_MaxSpeed: 500
     m_AccelTime: 0.1
     m_DecelTime: 0.1
     m_InputAxisName: Mouse X
@@ -1599,8 +1595,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   orientation: {fileID: 1139618429}
   player: {fileID: 1477740552}
-  playerObject: {fileID: 302325619}
-  rigidBody: {fileID: 0}
+  playerObject: {fileID: 1477740552}
+  rigidBody: {fileID: 1477740557}
   rotationSpeed: 10
 --- !u!114 &911994178
 MonoBehaviour:
@@ -2149,7 +2145,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1376865893}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.1704143, y: -0.000000016954695, z: 0.0000000029322134, w: 0.98537254}
+  m_LocalRotation: {x: 0.1704143, y: 0.000000016954697, z: -0.0000000029322136, w: 0.98537254}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2203,6 +2199,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ee36035db3bdde42871b3feb09bd6de, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerObject: {fileID: 913716218}
   playerMovementController: {fileID: 1477740554}
   cameraObject: {fileID: 911994174}
 --- !u!4 &1477740552 stripped
@@ -2233,6 +2230,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5a59a71ad15b403693e95d66331e722, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lockRotation: 1
   isOnGround: 0
 --- !u!114 &1477740556
 MonoBehaviour:
@@ -2241,7 +2239,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 913716218}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
   m_Name: 
@@ -2277,7 +2275,7 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
-  m_Height: 1
+  m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1477740559
@@ -2515,7 +2513,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1694001362}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.14751202, y: -0.00000001701815, z: 0.000000002538148, w: 0.9890603}
+  m_LocalRotation: {x: 0.14751202, y: 0.00000001701815, z: -0.000000002538148, w: 0.9890603}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

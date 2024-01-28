@@ -56,9 +56,6 @@ public class PlayerMovementController : MonoBehaviour
 
     void HandleInput()
     {
-        if (Input.GetKey(KeyCode.Escape))
-            Application.Quit();
-        
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 

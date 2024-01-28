@@ -167,7 +167,7 @@ public class InteractionManager : MonoBehaviour
 
         //Reset velocity to prevent it from smashing down too hard
         selectedRb.velocity = Vector3.zero;
-        selectedRb.freezeRotation = false;
+        UnlockRotation();
     }
 
     void HandleRotationInput()
@@ -185,7 +185,7 @@ public class InteractionManager : MonoBehaviour
         }
         else if (!Input.GetMouseButtonUp(1))
         {
-            selectedRb.constraints = RigidbodyConstraints.None;
+            UnlockRotation();
         }
     }
 
@@ -214,8 +214,9 @@ public class InteractionManager : MonoBehaviour
 
         selectedRb.useGravity = true;
         selectedRb.velocity = Vector3.zero;
-        selectedRb.freezeRotation = false;
-        selectedRb.constraints = RigidbodyConstraints.None;
+        
+        UnlockRotation();
+        
         selectedRb.isKinematic = false;
         Physics.IgnoreCollision(selectedObject.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
         selectedObject.transform.position = new Vector3(0f, selectedObject.GetComponent<Renderer>().bounds.extents.y, 0f);
@@ -242,5 +243,14 @@ public class InteractionManager : MonoBehaviour
 
         Physics.IgnoreCollision(selectedObject.GetComponent<Collider>(), sandbox.GetComponent<Collider>());
         selectedObject.transform.position = new Vector3(selectedObject.transform.position.x, selectedObject.transform.position.y - buryDepth, selectedObject.transform.position.z);
+    }
+
+    private void UnlockRotation()
+    {
+        selectedRb.constraints = RigidbodyConstraints.None;
+        
+        if (!selectedObject.GetComponent<ObjectController>().lockRotation) return;
+
+        selectedRb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
     }
 }
