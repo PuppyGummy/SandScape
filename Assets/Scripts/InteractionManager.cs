@@ -35,6 +35,7 @@ public class InteractionManager : MonoBehaviour
     public GameObject sandbox;
     public float destroyYValue = -5f;
     public float scaleSpeed = 0.1f;
+    public bool selectMode = true;
 
     #endregion
 
@@ -55,6 +56,9 @@ public class InteractionManager : MonoBehaviour
 
     void Update()
     {
+        if(!selectMode)
+            return;
+        
         HandleSelectionInput();
         if (selectedObject)
         {
@@ -123,15 +127,7 @@ public class InteractionManager : MonoBehaviour
             }
             else
             {
-                if (!selectedObject) return;
-
-                Outline outline = selectedObject.GetComponent<Outline>();
-
-                if (!outline) return;
-
-                outline.enabled = false;
-                selectedObject.layer = LayerMask.NameToLayer("Objects");
-                selectedObject = null;
+                DeselctObject();
             }
         }
         else if (Input.GetMouseButtonUp(0) && selectedObject) //If we release mouse button and there is a selected object
@@ -139,6 +135,20 @@ public class InteractionManager : MonoBehaviour
             selectedObject.layer = LayerMask.NameToLayer("Objects"); //Reenable raycasts on the object
         }
     }
+
+    public void DeselctObject()
+    {
+        if (!selectedObject) return;
+
+        Outline outline = selectedObject.GetComponent<Outline>();
+
+        if (!outline) return;
+
+        outline.enabled = false;
+        selectedObject.layer = LayerMask.NameToLayer("Objects");
+        selectedObject = null;
+    }
+
     private IEnumerator DragObject(GameObject selectedObject)
     {
         //Freeze the object and change its settings, as to allow for smoother dragging
