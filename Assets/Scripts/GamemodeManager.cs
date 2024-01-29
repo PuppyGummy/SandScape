@@ -36,23 +36,33 @@ public class GamemodeManager : MonoBehaviour
         switch (playModeEnabled)
         {
             case true:
-                CharacterManager.DisableCharacter();
-                playModeEnabled = false;
-                
-                GetComponent<InteractionManager>().selectMode = false;
-
-                ResetCameraTransform();
+                DisableCharacter();
 
                 break;
             case false:
-                CharacterManager.EnableCharacter();
-                playModeEnabled = true;
-
-                GetComponent<InteractionManager>().selectMode = false;
-                GetComponent<InteractionManager>().DeselctObject();
+                EnableCharacter();
 
                 break;
         }
+    }
+
+    private void EnableCharacter()
+    {
+        CharacterManager.EnableCharacter();
+        playModeEnabled = true;
+
+        GetComponent<InteractionManager>().selectMode = false;
+        GetComponent<InteractionManager>().DeselctObject();
+    }
+
+    private void DisableCharacter()
+    {
+        CharacterManager.DisableCharacter();
+        playModeEnabled = false;
+                
+        GetComponent<InteractionManager>().selectMode = true;
+
+        ResetCameraTransform();
     }
 
     private void ResetCameraTransform()
