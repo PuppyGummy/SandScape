@@ -36,6 +36,7 @@ public class InteractionManager : MonoBehaviour
     public float destroyYValue = -5f;
     public float scaleSpeed = 0.1f;
     public bool selectMode = true;
+    public GameObject objectIndicator;
     public GameObject playerObject;
 
     #endregion
@@ -153,10 +154,14 @@ public class InteractionManager : MonoBehaviour
         selectedObject.layer = LayerMask.NameToLayer("Objects");
         selectedObject = null;
         playerObject = null;
+        
+        objectIndicator.gameObject.SetActive(false);
     }
 
     private IEnumerator DragObject(GameObject selectedObject)
     {
+        objectIndicator.SetActive(true);
+        
         //Freeze the object and change its settings, as to allow for smoother dragging
         if (selectedRb)
         {
@@ -175,6 +180,7 @@ public class InteractionManager : MonoBehaviour
 
                 bottomToCenterDistance = selectedObject.GetComponent<Collider>().bounds.extents.y + pos.y;
                 selectedObject.transform.position = new Vector3(pos.x, Mathf.Max(pos.y + bottomToCenterDistance, minYValue), pos.z);
+                objectIndicator.transform.position = pos;
             }
             yield return waitForFixedUpdate;
         }
@@ -183,6 +189,7 @@ public class InteractionManager : MonoBehaviour
 
         //Reset velocity to prevent it from smashing down too hard
         selectedRb.velocity = Vector3.zero;
+        objectIndicator.gameObject.SetActive(false);
         UnlockRotation();
     }
 
