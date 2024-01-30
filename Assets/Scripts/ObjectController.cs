@@ -9,6 +9,7 @@ public class ObjectController : MonoBehaviour
         if (transform.position.y < InteractionManager.Instance.destroyYValue)
         {
             Destroy(gameObject);
+            // InteractionManager.Instance.RemoveObjects(gameObject);
         }
     }
     private void OnCollisionEnter(Collision other)
@@ -22,13 +23,6 @@ public class ObjectController : MonoBehaviour
             isOnGround = false;
         }
     }
-    // private void OnCollisionExit(Collision other)
-    // {
-    //     if (other.gameObject.tag == "Sandbox")
-    //     {
-    //         isOnGround = false;
-    //     }
-    // }
     public bool IsOnGround()
     {
         return isOnGround;

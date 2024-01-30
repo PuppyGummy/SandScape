@@ -2,8 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
-using System.Linq;
-// using RTG;
+
 
 public class InteractionManager : MonoBehaviour
 {
@@ -22,7 +21,9 @@ public class InteractionManager : MonoBehaviour
 
     private float bottomToCenterDistance;
     private bool useGizmo = false;
-    private List<GameObject> objs;
+    // private List<GameObject> objs;
+    private Vector3 cameraPos;
+    private Vector3 cameraRotation;
 
     /// <summary>
     /// Rigidbody of the selected object
@@ -59,7 +60,9 @@ public class InteractionManager : MonoBehaviour
     }
     void Start()
     {
-        objs = new List<GameObject>();
+        // objs = new List<GameObject>();
+        cameraPos = Camera.main.transform.position;
+        cameraRotation = Camera.main.transform.rotation.eulerAngles;
     }
 
     void Update()
@@ -69,6 +72,14 @@ public class InteractionManager : MonoBehaviour
         {
             HandleRotationInput();
             HandleScaleInput();
+        }
+        // if (selectedObject && Input.GetMouseButton(0) && !useGizmo)
+        // {
+        //     StartCoroutine(DragObject(selectedObject));
+        // }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            ResetCamera();
         }
     }
     void FixedUpdate()
@@ -91,6 +102,7 @@ public class InteractionManager : MonoBehaviour
     /// <summary>
     /// Handles selection of objects, and starts dragging the object if held
     /// </summary>
+    // TODO: Stop lifting the object when selecting it
     void HandleSelectionInput()
     {
         if (EventSystem.current.IsPointerOverGameObject())
@@ -187,6 +199,7 @@ public class InteractionManager : MonoBehaviour
         //Only rotate object if the right mouse button is held
         if (Input.GetMouseButton(1))
         {
+
             selectedRb.constraints = RigidbodyConstraints.FreezePosition;
 
             float mouseX = Input.GetAxis("Mouse X") * rotationSpeed;
@@ -213,11 +226,13 @@ public class InteractionManager : MonoBehaviour
         {
             GameObject hitObject = hit.collider.gameObject;
 
-            objs.Add(Instantiate(associatedObject, new Vector3(0f, associatedObject.GetComponent<Renderer>().bounds.extents.y + hitObject.GetComponent<Renderer>().bounds.size.y, 0f), transform.rotation));
+            // objs.Add(Instantiate(associatedObject, new Vector3(0f, associatedObject.GetComponent<Renderer>().bounds.extents.y + hitObject.GetComponent<Renderer>().bounds.size.y, 0f), transform.rotation));
+            Instantiate(associatedObject, new Vector3(0f, associatedObject.GetComponent<Renderer>().bounds.extents.y + hitObject.GetComponent<Renderer>().bounds.size.y, 0f), transform.rotation);
         }
         else
         {
-            objs.Add(Instantiate(associatedObject, new Vector3(0f, associatedObject.GetComponent<Renderer>().bounds.extents.y, 0f), transform.rotation));
+            // objs.Add(Instantiate(associatedObject, new Vector3(0f, associatedObject.GetComponent<Renderer>().bounds.extents.y, 0f), transform.rotation));
+            Instantiate(associatedObject, new Vector3(0f, associatedObject.GetComponent<Renderer>().bounds.extents.y, 0f), transform.rotation);
         }
     }
     public void Reset()
@@ -238,7 +253,7 @@ public class InteractionManager : MonoBehaviour
     {
         if (selectedObject != null)
         {
-            objs.Remove(selectedObject);
+            // objs.Remove(selectedObject);
             Destroy(selectedObject);
         }
     }
@@ -260,6 +275,9 @@ public class InteractionManager : MonoBehaviour
     public void SetUseGizmo()
     {
         useGizmo = !useGizmo;
+        if (useGizmo && !selectedObject) return;
+        GizmoController.Instance.EnableWorkGizmo(useGizmo);
+        // GizmoController.Instance.RefreshGizmo();
     }
     public bool GetUseGizmo()
     {
@@ -269,4 +287,18 @@ public class InteractionManager : MonoBehaviour
     {
         return selectedObject;
     }
+    // public void RemoveObjects(GameObject obj)
+    // {
+    //     objs.Remove(obj);
+    // }
+    private void ResetCamera()
+    {
+        Camera.main.transform.position = cameraPos;
+        Camera.main.transform.rotation = Quaternion.Euler(cameraRotation);
+        Camera.main.orthographic = false;
+    }
+    // public bool SelectedObject()
+    // {
+    //     return selectedObject;
+    // }
 }
