@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cinemachine;
@@ -8,11 +9,17 @@ public class CharacterManager : MonoBehaviour
 {
     [Header("Components")] 
     public GameObject playerObject;
-    public PlayerMovementController playerMovementController;
     public GameObject cameraObject;
 
-    private bool isEnabled;
+    private PlayerMovementController playerMovementController;
     
+    private bool isEnabled;
+
+    public void Start()
+    {
+        playerMovementController = playerObject.GetComponent<PlayerMovementController>();
+    }
+
     public void ToggleCharacter()
     {
         if (isEnabled)
@@ -30,10 +37,13 @@ public class CharacterManager : MonoBehaviour
     /// </summary>
     public void EnableCharacter()
     {
+        if(playerMovementController == null)
+            return;
+        
         //Reset rotation
         playerObject.transform.rotation = new Quaternion(0.0f, playerObject.transform.rotation.y, 0.0f, 0.0f);
-        //Enable camera
         playerMovementController.enabled = true;
+        //Enable camera
         cameraObject.SetActive(true);
     }
 
@@ -42,6 +52,9 @@ public class CharacterManager : MonoBehaviour
     /// </summary>
     public void DisableCharacter()
     {
+        if(playerMovementController == null)
+            return;
+        
         playerMovementController.enabled = false;
         cameraObject.SetActive(false);
     }

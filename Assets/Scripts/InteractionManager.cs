@@ -108,9 +108,11 @@ public class InteractionManager : MonoBehaviour
                     Outline priorOutline = selectedObject.GetComponent<Outline>();
                     if (priorOutline)
                     {
-                        priorOutline.enabled = false;
+                        /*priorOutline.enabled = false;
                         selectedObject.layer = LayerMask.NameToLayer("Objects");
-                        selectedObject = null;
+                        selectedObject = null;*/
+                        
+                        DeselctObject();
                     }
                 }
                 selectedObject = hitObject;
@@ -121,6 +123,7 @@ public class InteractionManager : MonoBehaviour
                     outline.enabled = true;
                 }
                 selectedObject.TryGetComponent(out selectedRb);
+                //TODO: Set player object, if selected object is a player
 
                 StartCoroutine(DragObject(selectedObject));
                 selectedObject.layer = LayerMask.NameToLayer("Ignore Raycast");

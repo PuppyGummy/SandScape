@@ -60,8 +60,7 @@ public class PlayerMovementController : MonoBehaviour
         verticalInput = Input.GetAxisRaw("Vertical");
 
         if (!Input.GetKey(jumpKey) || !readyToJump || !grounded) return;
-
-
+        
         readyToJump = false;
         Jump();
 

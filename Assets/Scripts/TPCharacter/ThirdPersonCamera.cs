@@ -6,10 +6,8 @@ using UnityEngine;
 public class ThirdPersonCamera : MonoBehaviour
 {
     [Header("Properties")] 
-    public Transform orientation;
-    public Transform player;
-    public Transform playerObject;
-    public Rigidbody rigidBody;
+    public GameObject player;
+    private Transform orientation;
 
     public float rotationSpeed;
 
@@ -18,6 +16,8 @@ public class ThirdPersonCamera : MonoBehaviour
     private void Start()
     {
         SetupCursor();
+
+        orientation = player.transform.GetChild(1).transform;
     }
 
     /// <summary>
@@ -36,7 +36,7 @@ public class ThirdPersonCamera : MonoBehaviour
     {
         //Set forward rotation ot view direction
         var transformPosition = transform.position;
-        var playerPosition = player.position;
+        var playerPosition = player.transform.position;
         Vector3 viewDirection = playerPosition - new Vector3(transformPosition.x, playerPosition.y, transformPosition.z);
 
         orientation.forward = viewDirection.normalized;
@@ -47,7 +47,7 @@ public class ThirdPersonCamera : MonoBehaviour
         Vector3 inputDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
         
         if(inputDirection != Vector3.zero)
-            playerObject.forward = Vector3.Slerp(playerObject.forward, inputDirection.normalized, Time.deltaTime * rotationSpeed);
+            player.transform.forward = Vector3.Slerp(player.transform.forward, inputDirection.normalized, Time.deltaTime * rotationSpeed);
 
         if (!Input.GetKey(KeyCode.Tab)) return;
         
