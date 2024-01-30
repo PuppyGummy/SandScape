@@ -58,10 +58,7 @@ public class GizmoController : MonoBehaviour
                 GameObject pickedObject = InteractionManager.Instance.GetSelectedObject();
                 if (pickedObject != _targetObject) OnTargetObjectChanged(pickedObject);
             }
-            if (RTInput.WasKeyPressedThisFrame(KeyCode.W))
-            {
-                SetWorkGizmoId(GizmoId.Move);
-            }
+            if (RTInput.WasKeyPressedThisFrame(KeyCode.W)) SetWorkGizmoId(GizmoId.Move);
             else if (RTInput.WasKeyPressedThisFrame(KeyCode.E)) SetWorkGizmoId(GizmoId.Rotate);
             else if (RTInput.WasKeyPressedThisFrame(KeyCode.R)) SetWorkGizmoId(GizmoId.Scale);
             else if (RTInput.WasKeyPressedThisFrame(KeyCode.T)) SetWorkGizmoId(GizmoId.Universal);
@@ -83,9 +80,9 @@ public class GizmoController : MonoBehaviour
         if (_targetObject != null)
         {
             _workGizmo.Gizmo.SetEnabled(true);
+            _workGizmo.SetTargetObject(_targetObject);
             _workGizmo.RefreshPositionAndRotation();
         }
-
     }
 
     private void OnTargetObjectChanged(GameObject newTargetObject)
@@ -94,10 +91,7 @@ public class GizmoController : MonoBehaviour
 
         if (_targetObject != null)
         {
-            _objectMoveGizmo.SetTargetObject(_targetObject);
-            _objectRotationGizmo.SetTargetObject(_targetObject);
-            _objectScaleGizmo.SetTargetObject(_targetObject);
-            _objectUniversalGizmo.SetTargetObject(_targetObject);
+            SetTargetObject(_targetObject);
 
             _workGizmo.Gizmo.SetEnabled(true);
         }
@@ -116,8 +110,16 @@ public class GizmoController : MonoBehaviour
     }
     public void EnableWorkGizmo(bool enable)
     {
+        _targetObject = InteractionManager.Instance.GetSelectedObject();
         _workGizmo.SetTargetObject(InteractionManager.Instance.GetSelectedObject());
         _workGizmo.Gizmo.SetEnabled(enable);
+    }
+    public void SetTargetObject(GameObject targetObject)
+    {
+        _objectMoveGizmo.SetTargetObject(_targetObject);
+        _objectRotationGizmo.SetTargetObject(_targetObject);
+        _objectScaleGizmo.SetTargetObject(_targetObject);
+        _objectUniversalGizmo.SetTargetObject(_targetObject);
     }
     public void RefreshGizmo()
     {
@@ -126,5 +128,13 @@ public class GizmoController : MonoBehaviour
         // _objectScaleGizmo.RefreshPositionAndRotation();
         // _objectUniversalGizmo.RefreshPositionAndRotation();
         _workGizmo.RefreshPositionAndRotation();
+    }
+    // public bool IsGizmoDragged()
+    // {
+    //     return _workGizmo.Gizmo.IsDragged;
+    // }
+    public bool IsHoveringGizmo()
+    {
+        return _workGizmo.Gizmo.IsHovered;
     }
 }

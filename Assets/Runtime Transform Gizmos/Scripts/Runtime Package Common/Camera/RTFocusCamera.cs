@@ -351,7 +351,7 @@ namespace RTG
                     }
                     // Rotate Camera
                     else
-                    if (_lookAroundSettings.IsLookAroundEnabled && Hotkeys.LookAround.IsActive() && InteractionManager.Instance.GetSelectedObject() != null)
+                    if (_lookAroundSettings.IsLookAroundEnabled && Hotkeys.LookAround.IsActive() && InteractionManager.Instance.GetSelectedObject() == null)
                     {
                         if (_lookAroundSettings.LookAroundMode == CameraLookAroundMode.Standard)
                         {
@@ -367,7 +367,7 @@ namespace RTG
                 }
             }
             // Zoom Camera
-            if (CanUseMouseScrollWheel() && InteractionManager.Instance.GetSelectedObject() != null)
+            if (CanUseMouseScrollWheel() && InteractionManager.Instance.GetSelectedObject() == null)
             {
                 float mouseScroll = RTInput.MouseScroll();
                 if (mouseScroll != 0.0f && _zoomSettings.IsZoomEnabled)

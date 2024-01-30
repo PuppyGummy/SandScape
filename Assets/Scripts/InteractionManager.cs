@@ -60,7 +60,6 @@ public class InteractionManager : MonoBehaviour
     }
     void Start()
     {
-        // objs = new List<GameObject>();
         cameraPos = Camera.main.transform.position;
         cameraRotation = Camera.main.transform.rotation.eulerAngles;
     }
@@ -146,6 +145,7 @@ public class InteractionManager : MonoBehaviour
             else
             {
                 if (!selectedObject) return;
+                if (GizmoController.Instance.IsHoveringGizmo()) return;
 
                 Outline outline = selectedObject.GetComponent<Outline>();
 
@@ -226,12 +226,10 @@ public class InteractionManager : MonoBehaviour
         {
             GameObject hitObject = hit.collider.gameObject;
 
-            // objs.Add(Instantiate(associatedObject, new Vector3(0f, associatedObject.GetComponent<Renderer>().bounds.extents.y + hitObject.GetComponent<Renderer>().bounds.size.y, 0f), transform.rotation));
             Instantiate(associatedObject, new Vector3(0f, associatedObject.GetComponent<Renderer>().bounds.extents.y + hitObject.GetComponent<Renderer>().bounds.size.y, 0f), transform.rotation);
         }
         else
         {
-            // objs.Add(Instantiate(associatedObject, new Vector3(0f, associatedObject.GetComponent<Renderer>().bounds.extents.y, 0f), transform.rotation));
             Instantiate(associatedObject, new Vector3(0f, associatedObject.GetComponent<Renderer>().bounds.extents.y, 0f), transform.rotation);
         }
     }
@@ -253,7 +251,6 @@ public class InteractionManager : MonoBehaviour
     {
         if (selectedObject != null)
         {
-            // objs.Remove(selectedObject);
             Destroy(selectedObject);
         }
     }
@@ -277,6 +274,7 @@ public class InteractionManager : MonoBehaviour
         useGizmo = !useGizmo;
         if (useGizmo && !selectedObject) return;
         GizmoController.Instance.EnableWorkGizmo(useGizmo);
+        // GizmoController.Instance.SetTargetObject(selectedObject);
         // GizmoController.Instance.RefreshGizmo();
     }
     public bool GetUseGizmo()
@@ -287,18 +285,10 @@ public class InteractionManager : MonoBehaviour
     {
         return selectedObject;
     }
-    // public void RemoveObjects(GameObject obj)
-    // {
-    //     objs.Remove(obj);
-    // }
     private void ResetCamera()
     {
         Camera.main.transform.position = cameraPos;
         Camera.main.transform.rotation = Quaternion.Euler(cameraRotation);
         Camera.main.orthographic = false;
     }
-    // public bool SelectedObject()
-    // {
-    //     return selectedObject;
-    // }
 }
