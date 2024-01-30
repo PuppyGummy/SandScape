@@ -109,10 +109,6 @@ public class InteractionManager : MonoBehaviour
                     Outline priorOutline = selectedObject.GetComponent<Outline>();
                     if (priorOutline)
                     {
-                        /*priorOutline.enabled = false;
-                        selectedObject.layer = LayerMask.NameToLayer("Objects");
-                        selectedObject = null;*/
-                        
                         DeselectObject();
                     }
                 }
@@ -156,7 +152,7 @@ public class InteractionManager : MonoBehaviour
         outline.enabled = false;
         selectedObject.layer = LayerMask.NameToLayer("Objects");
         selectedObject = null;
-        // playerObject = null;
+        playerObject = null;
     }
 
     private IEnumerator DragObject(GameObject selectedObject)

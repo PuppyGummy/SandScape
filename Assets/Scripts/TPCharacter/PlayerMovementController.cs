@@ -43,10 +43,8 @@ public class PlayerMovementController : MonoBehaviour
         HandleInput();
         LimitVelocity();
 
-        if (grounded)
-            rigidbody.drag = groundDrag;
-        else
-            rigidbody.drag = 0.0f;
+        //Selector for choosing drag / friction
+        rigidbody.drag = grounded ? groundDrag : 0.0f;
     }
 
     private void FixedUpdate()

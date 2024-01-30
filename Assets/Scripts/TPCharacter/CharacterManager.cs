@@ -20,7 +20,7 @@ namespace TPCharacter
 
         private void SetPlayer()
         {
-            if (!playerObject && !InteractionManager.Instance.playerObject) return;
+            if (!InteractionManager.Instance.playerObject) return;
 
             playerObject = InteractionManager.Instance.playerObject;
             playerMovementController = playerObject.GetComponent<PlayerMovementController>();

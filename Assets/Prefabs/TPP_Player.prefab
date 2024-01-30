@@ -68,8 +68,8 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
-  m_Constraints: 112
-  m_CollisionDetection: 1
+  m_Constraints: 0
+  m_CollisionDetection: 2
 --- !u!33 &1360294372963000766
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -238,9 +238,9 @@ GameObject:
   - component: {fileID: 3875088859403415798}
   - component: {fileID: 1688333989214940879}
   - component: {fileID: 7220359207717848513}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Hair
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -321,9 +321,9 @@ GameObject:
   - component: {fileID: 5187555510516143453}
   - component: {fileID: 5550501047571525076}
   - component: {fileID: 2992664285466323358}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Beak
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -402,9 +402,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2793468026237694666}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Orientation
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -435,10 +435,9 @@ GameObject:
   - component: {fileID: 959992435556627171}
   - component: {fileID: 2470772516700347350}
   - component: {fileID: 8886711873719970302}
-  - component: {fileID: 7738044380830830220}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Mesh
-  m_TagString: Interactable
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -473,7 +472,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7254542627168685072}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -508,26 +507,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &7738044380830830220
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7254542627168685072}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}

@@ -26,21 +26,7 @@ public class ThirdPersonCamera : MonoBehaviour
 
         cinemachineFreeLook.LookAt = player.transform;
         cinemachineFreeLook.Follow = player.transform;
-        
-        // SetupCursor();
     }
-
-    /*/// <summary>
-    /// Hides cursor and limits it to the game frame.
-    /// Useful for when in the 'playing' state.
-    /// </summary>
-    private void SetupCursor()
-    {
-        if (!canChangeMouseState) return;
-        
-        Cursor.lockState = Cursor.lockState == CursorLockMode.Locked ? CursorLockMode.Confined : CursorLockMode.Locked;
-        Cursor.visible = !Cursor.visible;
-    }*/
 
     void Update()
     {
@@ -58,17 +44,5 @@ public class ThirdPersonCamera : MonoBehaviour
         
         if(inputDirection != Vector3.zero)
             player.transform.forward = Vector3.Slerp(player.transform.forward, inputDirection.normalized, Time.deltaTime * rotationSpeed);
-
-        /*if (!Input.GetKey(KeyCode.Tab)) return;
-        
-        SetupCursor();
-        canChangeMouseState = false;
-        
-        Invoke(nameof(EnableChangeMouseState), 0.25f);*/
     }
-
-    /*void EnableChangeMouseState()
-    {
-        canChangeMouseState = true;
-    }*/
 }
