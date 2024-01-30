@@ -60,7 +60,7 @@ public class GamemodeManager : MonoBehaviour
         playModeEnabled = true;
 
         InteractionManager.Instance.selectMode = false;
-        InteractionManager.Instance.DeselctObject();
+        InteractionManager.Instance.DeselectObject();
     }
 
     private void DisableCharacter()

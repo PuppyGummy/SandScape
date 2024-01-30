@@ -113,7 +113,7 @@ public class InteractionManager : MonoBehaviour
                         selectedObject.layer = LayerMask.NameToLayer("Objects");
                         selectedObject = null;*/
                         
-                        DeselctObject();
+                        DeselectObject();
                     }
                 }
                 selectedObject = hitObject;
@@ -136,7 +136,7 @@ public class InteractionManager : MonoBehaviour
             }
             else
             {
-                DeselctObject();
+                DeselectObject();
             }
         }
         else if (Input.GetMouseButtonUp(0) && selectedObject) //If we release mouse button and there is a selected object
@@ -145,7 +145,7 @@ public class InteractionManager : MonoBehaviour
         }
     }
 
-    public void DeselctObject()
+    public void DeselectObject()
     {
         if (!selectedObject) return;
 
