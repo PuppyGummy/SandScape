@@ -1,6 +1,9 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.EventSystems;
+using System.Linq;
+// using RTG;
 
 public class InteractionManager : MonoBehaviour
 {
@@ -18,6 +21,8 @@ public class InteractionManager : MonoBehaviour
     private Vector3 pos;
 
     private float bottomToCenterDistance;
+    private bool useGizmo = false;
+    private List<GameObject> objs;
 
     /// <summary>
     /// Rigidbody of the selected object
@@ -40,23 +45,27 @@ public class InteractionManager : MonoBehaviour
 
     private WaitForFixedUpdate waitForFixedUpdate = new WaitForFixedUpdate();
 
-    private static InteractionManager instance;
-    public static InteractionManager Instance
+    public static InteractionManager Instance;
+    void Awake()
     {
-        get
+        if (Instance != null)
         {
-            if (!instance)
-            {
-                instance = FindObjectOfType<InteractionManager>();
-            }
-            return instance;
+            Destroy(this.gameObject);
+            return;
         }
+
+        Instance = this;
+        GameObject.DontDestroyOnLoad(this.gameObject);
+    }
+    void Start()
+    {
+        objs = new List<GameObject>();
     }
 
     void Update()
     {
         HandleSelectionInput();
-        if (selectedObject)
+        if (selectedObject && !useGizmo)
         {
             HandleRotationInput();
             HandleScaleInput();
@@ -118,7 +127,8 @@ public class InteractionManager : MonoBehaviour
                 }
                 selectedObject.TryGetComponent(out selectedRb);
 
-                StartCoroutine(DragObject(selectedObject));
+                if (!useGizmo)
+                    StartCoroutine(DragObject(selectedObject));
                 selectedObject.layer = LayerMask.NameToLayer("Ignore Raycast");
             }
             else
@@ -143,6 +153,7 @@ public class InteractionManager : MonoBehaviour
     {
         // TODO: Every time when the object is dragged and immediately released, the object will jump very high up
         //Freeze the object and change its settings, as to allow for smoother dragging
+        if (useGizmo) yield return null;
         if (selectedRb)
         {
             selectedRb.freezeRotation = true;
@@ -202,11 +213,11 @@ public class InteractionManager : MonoBehaviour
         {
             GameObject hitObject = hit.collider.gameObject;
 
-            Instantiate(associatedObject, new Vector3(0f, associatedObject.GetComponent<Renderer>().bounds.extents.y + hitObject.GetComponent<Renderer>().bounds.size.y, 0f), transform.rotation);
+            objs.Add(Instantiate(associatedObject, new Vector3(0f, associatedObject.GetComponent<Renderer>().bounds.extents.y + hitObject.GetComponent<Renderer>().bounds.size.y, 0f), transform.rotation));
         }
         else
         {
-            Instantiate(associatedObject, new Vector3(0f, associatedObject.GetComponent<Renderer>().bounds.extents.y, 0f), transform.rotation);
+            objs.Add(Instantiate(associatedObject, new Vector3(0f, associatedObject.GetComponent<Renderer>().bounds.extents.y, 0f), transform.rotation));
         }
     }
     public void Reset()
@@ -227,6 +238,7 @@ public class InteractionManager : MonoBehaviour
     {
         if (selectedObject != null)
         {
+            objs.Remove(selectedObject);
             Destroy(selectedObject);
         }
     }
@@ -243,5 +255,18 @@ public class InteractionManager : MonoBehaviour
 
         Physics.IgnoreCollision(selectedObject.GetComponent<Collider>(), sandbox.GetComponent<Collider>());
         selectedObject.transform.position = new Vector3(selectedObject.transform.position.x, selectedObject.transform.position.y - buryDepth, selectedObject.transform.position.z);
+    }
+
+    public void SetUseGizmo()
+    {
+        useGizmo = !useGizmo;
+    }
+    public bool GetUseGizmo()
+    {
+        return useGizmo;
+    }
+    public GameObject GetSelectedObject()
+    {
+        return selectedObject;
     }
 }
