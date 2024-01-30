@@ -1,26 +1,36 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 
 public class ThirdPersonCamera : MonoBehaviour
 {
-    [Header("Properties")] 
-    public GameObject player;
+    private GameObject player;
     private Transform orientation;
-
+    private CinemachineFreeLook cinemachineFreeLook;
+    
     public float rotationSpeed;
 
     private bool canChangeMouseState = true;
-    
-    private void Start()
-    {
-        SetupCursor();
 
+    private void OnEnable()
+    {
+        if (!cinemachineFreeLook)
+        {
+            cinemachineFreeLook = gameObject.GetComponent<CinemachineFreeLook>();
+        }
+        
+        player = InteractionManager.Instance.playerObject;
         orientation = player.transform.GetChild(1).transform;
+
+        cinemachineFreeLook.LookAt = player.transform;
+        cinemachineFreeLook.Follow = player.transform;
+        
+        // SetupCursor();
     }
 
-    /// <summary>
+    /*/// <summary>
     /// Hides cursor and limits it to the game frame.
     /// Useful for when in the 'playing' state.
     /// </summary>
@@ -30,7 +40,7 @@ public class ThirdPersonCamera : MonoBehaviour
         
         Cursor.lockState = Cursor.lockState == CursorLockMode.Locked ? CursorLockMode.Confined : CursorLockMode.Locked;
         Cursor.visible = !Cursor.visible;
-    }
+    }*/
 
     void Update()
     {
@@ -49,16 +59,16 @@ public class ThirdPersonCamera : MonoBehaviour
         if(inputDirection != Vector3.zero)
             player.transform.forward = Vector3.Slerp(player.transform.forward, inputDirection.normalized, Time.deltaTime * rotationSpeed);
 
-        if (!Input.GetKey(KeyCode.Tab)) return;
+        /*if (!Input.GetKey(KeyCode.Tab)) return;
         
         SetupCursor();
         canChangeMouseState = false;
         
-        Invoke(nameof(EnableChangeMouseState), 0.25f);
+        Invoke(nameof(EnableChangeMouseState), 0.25f);*/
     }
 
-    void EnableChangeMouseState()
+    /*void EnableChangeMouseState()
     {
         canChangeMouseState = true;
-    }
+    }*/
 }

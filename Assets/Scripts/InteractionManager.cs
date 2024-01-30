@@ -36,6 +36,7 @@ public class InteractionManager : MonoBehaviour
     public float destroyYValue = -5f;
     public float scaleSpeed = 0.1f;
     public bool selectMode = true;
+    public GameObject playerObject;
 
     #endregion
 
@@ -123,7 +124,12 @@ public class InteractionManager : MonoBehaviour
                     outline.enabled = true;
                 }
                 selectedObject.TryGetComponent(out selectedRb);
-                //TODO: Set player object, if selected object is a player
+                
+                //Set player if selected object is a player
+                if (selectedObject.gameObject.GetComponent<PlayerMovementController>())
+                {
+                    playerObject = selectedObject;
+                }
 
                 StartCoroutine(DragObject(selectedObject));
                 selectedObject.layer = LayerMask.NameToLayer("Ignore Raycast");
@@ -150,6 +156,7 @@ public class InteractionManager : MonoBehaviour
         outline.enabled = false;
         selectedObject.layer = LayerMask.NameToLayer("Objects");
         selectedObject = null;
+        // playerObject = null;
     }
 
     private IEnumerator DragObject(GameObject selectedObject)
