@@ -37,6 +37,7 @@ namespace TPCharacter
             //Reset rotation
             playerObject.transform.rotation = new Quaternion(0.0f, playerObject.transform.rotation.y, 0.0f, 0.0f);
             playerMovementController.enabled = true;
+            playerMovementController.active = true;
             //Enable camera
             cameraObject.SetActive(true);
         }
@@ -50,6 +51,7 @@ namespace TPCharacter
                 return;
         
             playerMovementController.enabled = false;
+            playerMovementController.active = false;
             cameraObject.SetActive(false);
         }
     }

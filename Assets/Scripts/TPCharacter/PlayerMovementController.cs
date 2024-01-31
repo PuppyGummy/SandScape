@@ -30,6 +30,12 @@ public class PlayerMovementController : MonoBehaviour
     private float horizontalInput;
     private float verticalInput;
 
+    /// <summary>
+    /// Determines whether or not the current player is being possessed.
+    /// True = possessed, false = not possessed.
+    /// </summary>
+    public bool active;
+
     private Vector3 moveDirection;
     private void Start()
     {
@@ -99,5 +105,14 @@ public class PlayerMovementController : MonoBehaviour
     void ResetJump()
     {
         readyToJump = true;
+    }
+
+    //If active player is destroyed, we want to exit play mode
+    private void OnDestroy()
+    {
+        if(!active)
+            return;
+        
+        GamemodeManager.Instance.TogglePlayMode();
     }
 }

@@ -16,7 +16,20 @@ public class GamemodeManager : MonoBehaviour
     private Vector3 cameraStartLocation;
     private Quaternion cameraStartRotation;
     private Camera mainCamera;
+    private static GamemodeManager instance;
 
+    public static GamemodeManager Instance
+    {
+        get
+        {
+            if (!instance)
+            {
+                instance = FindObjectOfType<GamemodeManager>();
+            }
+            return instance;
+        }
+    }
+    
     //Methods
     private void Start()
     {
