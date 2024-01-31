@@ -47,6 +47,10 @@ public class GamemodeManager : MonoBehaviour
         {
             DisableCharacter();
         }
+        else if(Input.GetKeyDown(KeyCode.Escape) && !playModeEnabled)
+        {
+            Application.Quit();
+        }
     }
 
     public void TogglePlayMode()
