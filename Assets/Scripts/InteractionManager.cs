@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.EventSystems;
+
 
 public class InteractionManager : MonoBehaviour
 {
@@ -18,6 +20,10 @@ public class InteractionManager : MonoBehaviour
     private Vector3 pos;
 
     private float bottomToCenterDistance;
+    private bool useGizmo = false;
+    // private List<GameObject> objs;
+    private Vector3 cameraPos;
+    private Vector3 cameraRotation;
 
     /// <summary>
     /// Rigidbody of the selected object
@@ -43,17 +49,22 @@ public class InteractionManager : MonoBehaviour
 
     private WaitForFixedUpdate waitForFixedUpdate = new WaitForFixedUpdate();
 
-    private static InteractionManager instance;
-    public static InteractionManager Instance
+    public static InteractionManager Instance;
+    void Awake()
     {
-        get
+        if (Instance != null)
         {
-            if (!instance)
-            {
-                instance = FindObjectOfType<InteractionManager>();
-            }
-            return instance;
+            Destroy(this.gameObject);
+            return;
         }
+
+        Instance = this;
+        GameObject.DontDestroyOnLoad(this.gameObject);
+    }
+    void Start()
+    {
+        cameraPos = Camera.main.transform.position;
+        cameraRotation = Camera.main.transform.rotation.eulerAngles;
     }
 
     void Update()
@@ -62,10 +73,18 @@ public class InteractionManager : MonoBehaviour
             return;
         
         HandleSelectionInput();
-        if (selectedObject)
+        if (selectedObject && !useGizmo)
         {
             HandleRotationInput();
             HandleScaleInput();
+        }
+        // if (selectedObject && Input.GetMouseButton(0) && !useGizmo)
+        // {
+        //     StartCoroutine(DragObject(selectedObject));
+        // }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            ResetCamera();
         }
     }
     void FixedUpdate()
@@ -88,6 +107,7 @@ public class InteractionManager : MonoBehaviour
     /// <summary>
     /// Handles selection of objects, and starts dragging the object if held
     /// </summary>
+    // TODO: Stop lifting the object when selecting it
     void HandleSelectionInput()
     {
         if (EventSystem.current.IsPointerOverGameObject())
@@ -128,12 +148,23 @@ public class InteractionManager : MonoBehaviour
                     playerObject = selectedObject;
                 }
 
-                StartCoroutine(DragObject(selectedObject));
+                if (!useGizmo)
+                    StartCoroutine(DragObject(selectedObject));
                 selectedObject.layer = LayerMask.NameToLayer("Ignore Raycast");
             }
             else
             {
                 DeselectObject();
+                if (!selectedObject) return;
+                if (GizmoController.Instance.IsHoveringGizmo()) return;
+
+                Outline outline = selectedObject.GetComponent<Outline>();
+
+                if (!outline) return;
+
+                outline.enabled = false;
+                selectedObject.layer = LayerMask.NameToLayer("Objects");
+                selectedObject = null;
             }
         }
         else if (Input.GetMouseButtonUp(0) && selectedObject) //If we release mouse button and there is a selected object
@@ -163,6 +194,7 @@ public class InteractionManager : MonoBehaviour
         objectIndicator.SetActive(true);
         
         //Freeze the object and change its settings, as to allow for smoother dragging
+        if (useGizmo) yield return null;
         if (selectedRb)
         {
             selectedRb.freezeRotation = true;
@@ -198,6 +230,7 @@ public class InteractionManager : MonoBehaviour
         //Only rotate object if the right mouse button is held
         if (Input.GetMouseButton(1))
         {
+
             selectedRb.constraints = RigidbodyConstraints.FreezePosition;
 
             float mouseX = Input.GetAxis("Mouse X") * rotationSpeed;
@@ -275,5 +308,28 @@ public class InteractionManager : MonoBehaviour
         if (!selectedObject.GetComponent<ObjectController>().lockRotation) return;
 
         selectedRb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+    }
+}
+    public void SetUseGizmo()
+    {
+        useGizmo = !useGizmo;
+        if (useGizmo && !selectedObject) return;
+        GizmoController.Instance.EnableWorkGizmo(useGizmo);
+        // GizmoController.Instance.SetTargetObject(selectedObject);
+        // GizmoController.Instance.RefreshGizmo();
+    }
+    public bool GetUseGizmo()
+    {
+        return useGizmo;
+    }
+    public GameObject GetSelectedObject()
+    {
+        return selectedObject;
+    }
+    private void ResetCamera()
+    {
+        Camera.main.transform.position = cameraPos;
+        Camera.main.transform.rotation = Quaternion.Euler(cameraRotation);
+        Camera.main.orthographic = false;
     }
 }
