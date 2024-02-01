@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class ObjectController : MonoBehaviour
 {
+    public bool lockRotation;
     public bool isOnGround;
 
     void Update()

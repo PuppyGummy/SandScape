@@ -41,6 +41,9 @@ public class InteractionManager : MonoBehaviour
     public GameObject sandbox;
     public float destroyYValue = -5f;
     public float scaleSpeed = 0.1f;
+    public bool selectMode = true;
+    public GameObject objectIndicator;
+    public GameObject playerObject;
 
     #endregion
 
@@ -66,6 +69,9 @@ public class InteractionManager : MonoBehaviour
 
     void Update()
     {
+        if(!selectMode)
+            return;
+        
         HandleSelectionInput();
         if (selectedObject && !useGizmo)
         {
@@ -124,9 +130,7 @@ public class InteractionManager : MonoBehaviour
                     Outline priorOutline = selectedObject.GetComponent<Outline>();
                     if (priorOutline)
                     {
-                        priorOutline.enabled = false;
-                        selectedObject.layer = LayerMask.NameToLayer("Objects");
-                        selectedObject = null;
+                        DeselectObject();
                     }
                 }
                 selectedObject = hitObject;
@@ -137,6 +141,12 @@ public class InteractionManager : MonoBehaviour
                     outline.enabled = true;
                 }
                 selectedObject.TryGetComponent(out selectedRb);
+                
+                //Set player if selected object is a player
+                if (selectedObject.gameObject.GetComponent<PlayerMovementController>())
+                {
+                    playerObject = selectedObject;
+                }
 
                 if (!useGizmo)
                     StartCoroutine(DragObject(selectedObject));
@@ -144,6 +154,7 @@ public class InteractionManager : MonoBehaviour
             }
             else
             {
+                DeselectObject();
                 if (!selectedObject) return;
                 if (GizmoController.Instance.IsHoveringGizmo()) return;
 
@@ -161,9 +172,27 @@ public class InteractionManager : MonoBehaviour
             selectedObject.layer = LayerMask.NameToLayer("Objects"); //Reenable raycasts on the object
         }
     }
+
+    public void DeselectObject()
+    {
+        if (!selectedObject) return;
+
+        Outline outline = selectedObject.GetComponent<Outline>();
+
+        if (!outline) return;
+
+        outline.enabled = false;
+        selectedObject.layer = LayerMask.NameToLayer("Objects");
+        selectedObject = null;
+        playerObject = null;
+        
+        objectIndicator.gameObject.SetActive(false);
+    }
+
     private IEnumerator DragObject(GameObject selectedObject)
     {
-        // TODO: Every time when the object is dragged and immediately released, the object will jump very high up
+        objectIndicator.SetActive(true);
+        
         //Freeze the object and change its settings, as to allow for smoother dragging
         if (useGizmo) yield return null;
         if (selectedRb)
@@ -183,6 +212,7 @@ public class InteractionManager : MonoBehaviour
 
                 bottomToCenterDistance = selectedObject.GetComponent<Collider>().bounds.extents.y + pos.y;
                 selectedObject.transform.position = new Vector3(pos.x, Mathf.Max(pos.y + bottomToCenterDistance, minYValue), pos.z);
+                objectIndicator.transform.position = pos;
             }
             yield return waitForFixedUpdate;
         }
@@ -191,7 +221,8 @@ public class InteractionManager : MonoBehaviour
 
         //Reset velocity to prevent it from smashing down too hard
         selectedRb.velocity = Vector3.zero;
-        selectedRb.freezeRotation = false;
+        objectIndicator.gameObject.SetActive(false);
+        UnlockRotation();
     }
 
     void HandleRotationInput()
@@ -210,7 +241,7 @@ public class InteractionManager : MonoBehaviour
         }
         else if (!Input.GetMouseButtonUp(1))
         {
-            selectedRb.constraints = RigidbodyConstraints.None;
+            UnlockRotation();
         }
     }
 
@@ -239,8 +270,9 @@ public class InteractionManager : MonoBehaviour
 
         selectedRb.useGravity = true;
         selectedRb.velocity = Vector3.zero;
-        selectedRb.freezeRotation = false;
-        selectedRb.constraints = RigidbodyConstraints.None;
+        
+        UnlockRotation();
+        
         selectedRb.isKinematic = false;
         Physics.IgnoreCollision(selectedObject.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
         selectedObject.transform.position = new Vector3(0f, selectedObject.GetComponent<Renderer>().bounds.extents.y, 0f);
@@ -269,6 +301,15 @@ public class InteractionManager : MonoBehaviour
         selectedObject.transform.position = new Vector3(selectedObject.transform.position.x, selectedObject.transform.position.y - buryDepth, selectedObject.transform.position.z);
     }
 
+    private void UnlockRotation()
+    {
+        selectedRb.constraints = RigidbodyConstraints.None;
+        
+        if (!selectedObject.GetComponent<ObjectController>().lockRotation) return;
+
+        selectedRb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+    }
+}
     public void SetUseGizmo()
     {
         useGizmo = !useGizmo;
