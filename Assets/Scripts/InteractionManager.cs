@@ -69,9 +69,9 @@ public class InteractionManager : MonoBehaviour
 
     void Update()
     {
-        if(!selectMode)
+        if (!selectMode)
             return;
-        
+
         HandleSelectionInput();
         if (selectedObject && !useGizmo)
         {
@@ -141,7 +141,7 @@ public class InteractionManager : MonoBehaviour
                     outline.enabled = true;
                 }
                 selectedObject.TryGetComponent(out selectedRb);
-                
+
                 //Set player if selected object is a player
                 if (selectedObject.gameObject.GetComponent<PlayerMovementController>())
                 {
@@ -185,14 +185,14 @@ public class InteractionManager : MonoBehaviour
         selectedObject.layer = LayerMask.NameToLayer("Objects");
         selectedObject = null;
         playerObject = null;
-        
+
         objectIndicator.gameObject.SetActive(false);
     }
 
     private IEnumerator DragObject(GameObject selectedObject)
     {
         objectIndicator.SetActive(true);
-        
+
         //Freeze the object and change its settings, as to allow for smoother dragging
         if (useGizmo) yield return null;
         if (selectedRb)
@@ -270,9 +270,9 @@ public class InteractionManager : MonoBehaviour
 
         selectedRb.useGravity = true;
         selectedRb.velocity = Vector3.zero;
-        
+
         UnlockRotation();
-        
+
         selectedRb.isKinematic = false;
         Physics.IgnoreCollision(selectedObject.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
         selectedObject.transform.position = new Vector3(0f, selectedObject.GetComponent<Renderer>().bounds.extents.y, 0f);
@@ -304,19 +304,16 @@ public class InteractionManager : MonoBehaviour
     private void UnlockRotation()
     {
         selectedRb.constraints = RigidbodyConstraints.None;
-        
+
         if (!selectedObject.GetComponent<ObjectController>().lockRotation) return;
 
         selectedRb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
     }
-}
     public void SetUseGizmo()
     {
         useGizmo = !useGizmo;
         if (useGizmo && !selectedObject) return;
         GizmoController.Instance.EnableWorkGizmo(useGizmo);
-        // GizmoController.Instance.SetTargetObject(selectedObject);
-        // GizmoController.Instance.RefreshGizmo();
     }
     public bool GetUseGizmo()
     {
