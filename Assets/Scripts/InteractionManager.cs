@@ -8,8 +8,6 @@ public class InteractionManager : MonoBehaviour
 {
     #region Fields
 
-    private Vector3 offset;
-    private Vector3 rotationOrigin;
     private GameObject selectedObject;
 
     private RaycastHit hit;
@@ -253,16 +251,40 @@ public class InteractionManager : MonoBehaviour
     }
     public void SpawnObject(GameObject associatedObject)
     {
+        GameObject spawnedObject = new GameObject();
         if (Physics.Raycast(Vector3.zero, Vector3.up, out RaycastHit hit, Mathf.Infinity))
         {
             GameObject hitObject = hit.collider.gameObject;
 
-            Instantiate(associatedObject, new Vector3(0f, associatedObject.GetComponent<Renderer>().bounds.extents.y + hitObject.GetComponent<Renderer>().bounds.size.y, 0f), transform.rotation);
+            spawnedObject = Instantiate(associatedObject, new Vector3(0f, associatedObject.GetComponent<Renderer>().bounds.extents.y + hitObject.GetComponent<Renderer>().bounds.size.y, 0f), transform.rotation);
         }
         else
         {
-            Instantiate(associatedObject, new Vector3(0f, associatedObject.GetComponent<Renderer>().bounds.extents.y, 0f), transform.rotation);
+            spawnedObject = Instantiate(associatedObject, new Vector3(0f, associatedObject.GetComponent<Renderer>().bounds.extents.y, 0f), transform.rotation);
         }
+        if (selectedObject)
+        {
+            Outline priorOutline = selectedObject.GetComponent<Outline>();
+            if (priorOutline)
+            {
+                DeselectObject();
+            }
+        }
+        selectedObject = spawnedObject;
+
+        Outline outline = selectedObject.GetComponent<Outline>();
+        if (outline)
+        {
+            outline.enabled = true;
+        }
+        selectedObject.TryGetComponent(out selectedRb);
+
+        //Set player if selected object is a player
+        if (selectedObject.gameObject.GetComponent<PlayerMovementController>())
+        {
+            playerObject = selectedObject;
+        }
+        selectedObject.layer = LayerMask.NameToLayer("Objects");
     }
     public void Reset()
     {
@@ -284,6 +306,7 @@ public class InteractionManager : MonoBehaviour
         if (selectedObject != null)
         {
             Destroy(selectedObject);
+            GizmoController.Instance.EnableWorkGizmo(false);
         }
     }
     public void Bury()
