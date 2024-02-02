@@ -10,7 +10,8 @@ public class ObjectController : MonoBehaviour
         if (transform.position.y < InteractionManager.Instance.destroyYValue)
         {
             Destroy(gameObject);
-            // InteractionManager.Instance.RemoveObjects(gameObject);
+            if (InteractionManager.Instance.GetUseGizmo())
+                GizmoController.Instance.EnableGizmo(false);
         }
     }
     private void OnCollisionEnter(Collision other)

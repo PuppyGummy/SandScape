@@ -10,7 +10,7 @@ public class GamemodeManager : MonoBehaviour
 {
     //Properties
     [SerializeField] public CharacterManager CharacterManager;
-    
+
     //Fields
     private bool playModeEnabled;
     private Vector3 cameraStartLocation;
@@ -29,14 +29,14 @@ public class GamemodeManager : MonoBehaviour
             return instance;
         }
     }
-    
+
     //Methods
     private void Start()
     {
         mainCamera = Camera.main;
         //Save camera transform for later use
         if (mainCamera == null) return;
-        
+
         cameraStartLocation = mainCamera.transform.position;
         cameraStartRotation = mainCamera.transform.rotation;
     }
@@ -47,7 +47,7 @@ public class GamemodeManager : MonoBehaviour
         {
             DisableCharacter();
         }
-        else if(Input.GetKeyDown(KeyCode.Escape) && !playModeEnabled)
+        else if (Input.GetKeyDown(KeyCode.Escape) && !playModeEnabled)
         {
             Application.Quit();
         }
@@ -72,21 +72,23 @@ public class GamemodeManager : MonoBehaviour
     private void EnableCharacter()
     {
         SetupCursor();
-        
+
         CharacterManager.EnableCharacter();
         playModeEnabled = true;
 
         InteractionManager.Instance.selectMode = false;
         InteractionManager.Instance.DeselectObject();
+        if (InteractionManager.Instance.GetUseGizmo())
+            GizmoController.Instance.EnableGizmo(false);
     }
 
     private void DisableCharacter()
     {
         SetupCursor();
-        
+
         CharacterManager.DisableCharacter();
         playModeEnabled = false;
-                
+
         InteractionManager.Instance.selectMode = true;
 
         ResetCameraTransform();
@@ -95,11 +97,11 @@ public class GamemodeManager : MonoBehaviour
     private void ResetCameraTransform()
     {
         if (!mainCamera) return;
-        
+
         mainCamera.transform.position = cameraStartLocation;
         mainCamera.transform.rotation = cameraStartRotation;
     }
-    
+
     /// <summary>
     /// Hides cursor and limits it to the game frame.
     /// Useful for when in the 'playing' state.

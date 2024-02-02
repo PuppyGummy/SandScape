@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using RTG;
 
@@ -102,7 +100,6 @@ public class GizmoController : MonoBehaviour
     }
     public void EnableGizmo(bool enable)
     {
-        // OnTargetObjectChanged(InteractionManager.Instance.GetSelectedObject());
         _objectMoveGizmo.Gizmo.SetEnabled(enable);
         _objectRotationGizmo.Gizmo.SetEnabled(enable);
         _objectScaleGizmo.Gizmo.SetEnabled(enable);
@@ -123,16 +120,8 @@ public class GizmoController : MonoBehaviour
     }
     public void RefreshGizmo()
     {
-        // _objectMoveGizmo.RefreshPositionAndRotation();
-        // _objectRotationGizmo.RefreshPositionAndRotation();
-        // _objectScaleGizmo.RefreshPositionAndRotation();
-        // _objectUniversalGizmo.RefreshPositionAndRotation();
         _workGizmo.RefreshPositionAndRotation();
     }
-    // public bool IsGizmoDragged()
-    // {
-    //     return _workGizmo.Gizmo.IsDragged;
-    // }
     public bool IsHoveringGizmo()
     {
         return _workGizmo.Gizmo.IsHovered;
