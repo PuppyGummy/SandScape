@@ -107,7 +107,7 @@ public class InteractionManager : MonoBehaviour
     /// <summary>
     /// Handles selection of objects, and starts dragging the object if held
     /// </summary>
-    // TODO: Stop lifting the object when selecting it
+    // TODO: Stop lifting the object when selecting it?
     void HandleSelectionInput()
     {
         if (EventSystem.current.IsPointerOverGameObject())
