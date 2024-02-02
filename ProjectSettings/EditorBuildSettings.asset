@@ -11,4 +11,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Alexander_TPC_Scene.unity
     guid: e106e16c7d28cff44beeb46b3816e368
+  - enabled: 1
+    path: Assets/Scenes/Alexander_Desert.unity
+    guid: 800f487751f6253448b5b77bedacd73d
+  - enabled: 1
+    path: Assets/Scenes/Alexander_Desert 1.unity
+    guid: f8e31821e84870e429535480827787d4
   m_configObjects: {}
