@@ -6,10 +6,10 @@ using UnityEngine.SceneManagement;
 
 public class SceneLoader : MonoBehaviour
 {
-    [Header("Scenarios")]
-    public List<string> scenes;
+    private int loadedScenario;
 
-    private string loadedScenario;
+    public GameObject scenePanel;
+    public GameObject gameUIPanel;
     
     /// <summary>
     /// Loads the scene based on the chosen ID.
@@ -18,12 +18,15 @@ public class SceneLoader : MonoBehaviour
     public void LoadScene(int sceneID)
     {
         //Always unload the loaded scenario first to avoid unintended overlaps
-        if (SceneManager.GetSceneByName(loadedScenario).isLoaded)
+        if (SceneManager.GetSceneByBuildIndex(loadedScenario).isLoaded)
             UnloadCurrentScenario();
         
         //Load scene
-        SceneManager.LoadScene(scenes[sceneID], LoadSceneMode.Additive);
-        loadedScenario = scenes[sceneID];
+        SceneManager.LoadScene(sceneID, LoadSceneMode.Additive);
+        loadedScenario = sceneID;
+        
+        scenePanel.SetActive(false);
+        gameUIPanel.SetActive(true);
     }
 
     /// <summary>
@@ -31,7 +34,15 @@ public class SceneLoader : MonoBehaviour
     /// </summary>
     public void UnloadCurrentScenario()
     {
+        if(loadedScenario == 0)
+            return;
+        
         InteractionManager.Instance.ClearAll();
         SceneManager.UnloadSceneAsync(loadedScenario);
+        
+        scenePanel.SetActive(true);
+        gameUIPanel.SetActive(false);
+
+        loadedScenario = 0;
     }
 }
