@@ -123,28 +123,7 @@ public class InteractionManager : MonoBehaviour
 
             if (hitObject.CompareTag("Interactable"))
             {
-                if (selectedObject)
-                {
-                    Outline priorOutline = selectedObject.GetComponent<Outline>();
-                    if (priorOutline)
-                    {
-                        DeselectObject();
-                    }
-                }
-                selectedObject = hitObject;
-
-                Outline outline = selectedObject.GetComponent<Outline>();
-                if (outline)
-                {
-                    outline.enabled = true;
-                }
-                selectedObject.TryGetComponent(out selectedRb);
-
-                //Set player if selected object is a player
-                if (selectedObject.gameObject.GetComponent<PlayerMovementController>())
-                {
-                    playerObject = selectedObject;
-                }
+                SelectObject(hitObject);
 
                 if (!useGizmo)
                     StartCoroutine(DragObject(selectedObject));
@@ -168,6 +147,37 @@ public class InteractionManager : MonoBehaviour
         else if (Input.GetMouseButtonUp(0) && selectedObject) //If we release mouse button and there is a selected object
         {
             selectedObject.layer = LayerMask.NameToLayer("Objects"); //Reenable raycasts on the object
+        }
+    }
+
+    private void SelectObject(GameObject objectToSelct)
+    {
+        if (selectedObject)
+        {
+            Outline priorOutline = selectedObject.GetComponent<Outline>();
+            if (priorOutline)
+            {
+                DeselectObject();
+            }
+        }
+        selectedObject = objectToSelct;
+
+        Outline outline = selectedObject.GetComponent<Outline>();
+        if (outline)
+        {
+            outline.enabled = true;
+        }
+        selectedObject.TryGetComponent(out selectedRb);
+
+        //Set player if selected object is a player
+        if (selectedObject.gameObject.GetComponent<PlayerMovementController>())
+        {
+            playerObject = selectedObject;
+        }
+
+        if (useGizmo)
+        {
+            GizmoController.Instance.EnableWorkGizmo(true);
         }
     }
 
@@ -262,28 +272,9 @@ public class InteractionManager : MonoBehaviour
         {
             spawnedObject = Instantiate(associatedObject, new Vector3(0f, associatedObject.GetComponent<Renderer>().bounds.extents.y, 0f), transform.rotation);
         }
-        if (selectedObject)
-        {
-            Outline priorOutline = selectedObject.GetComponent<Outline>();
-            if (priorOutline)
-            {
-                DeselectObject();
-            }
-        }
-        selectedObject = spawnedObject;
-
-        Outline outline = selectedObject.GetComponent<Outline>();
-        if (outline)
-        {
-            outline.enabled = true;
-        }
-        selectedObject.TryGetComponent(out selectedRb);
-
-        //Set player if selected object is a player
-        if (selectedObject.gameObject.GetComponent<PlayerMovementController>())
-        {
-            playerObject = selectedObject;
-        }
+        
+        SelectObject(spawnedObject);
+        
         selectedObject.layer = LayerMask.NameToLayer("Objects");
     }
     public void Reset()

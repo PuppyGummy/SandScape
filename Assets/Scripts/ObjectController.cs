@@ -10,7 +10,8 @@ public class ObjectController : MonoBehaviour
         if (transform.position.y < InteractionManager.Instance.destroyYValue)
         {
             Destroy(gameObject);
-            if (InteractionManager.Instance.GetUseGizmo())
+            //Fixed an issue here; Have to check that the object being destroyed is also the one selected
+            if (InteractionManager.Instance.GetSelectedObject() == gameObject && InteractionManager.Instance.GetUseGizmo())
                 GizmoController.Instance.EnableGizmo(false);
         }
     }
