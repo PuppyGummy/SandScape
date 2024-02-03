@@ -31,6 +31,7 @@ public class SceneLoader : MonoBehaviour
     /// </summary>
     public void UnloadCurrentScenario()
     {
+        InteractionManager.Instance.ClearAll();
         SceneManager.UnloadSceneAsync(loadedScenario);
     }
 }

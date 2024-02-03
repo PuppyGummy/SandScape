@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class ObjectController : MonoBehaviour
@@ -13,6 +14,12 @@ public class ObjectController : MonoBehaviour
             // InteractionManager.Instance.RemoveObjects(gameObject);
         }
     }
+
+    private void Start()
+    {
+        InteractionManager.Instance.AddObject(gameObject);
+    }
+
     private void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.tag == "Sandbox")

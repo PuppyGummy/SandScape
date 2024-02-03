@@ -11,6 +11,11 @@ public class InteractionManager : MonoBehaviour
     private Vector3 offset;
     private Vector3 rotationOrigin;
     private GameObject selectedObject;
+    
+    /// <summary>
+    /// List of spawned objects used to clear all
+    /// </summary>
+    private List<GameObject> spawnedObjects = new List<GameObject>();
 
     private RaycastHit hit;
 
@@ -264,6 +269,14 @@ public class InteractionManager : MonoBehaviour
             Instantiate(associatedObject, new Vector3(0f, associatedObject.GetComponent<Renderer>().bounds.extents.y, 0f), transform.rotation);
         }
     }
+
+    //Called in ObjectController.Start(), as it has to be the concrete game object, and not a reference to the prefab that is added to the list.
+    //If associated object is used, it throws an exception
+    public void AddObject(GameObject spawnedObject)
+    {
+        spawnedObjects.Add(spawnedObject);
+    }
+    
     public void Reset()
     {
         if (!selectedObject) return;
@@ -283,9 +296,21 @@ public class InteractionManager : MonoBehaviour
     {
         if (selectedObject != null)
         {
+            spawnedObjects.Remove(selectedObject);
             Destroy(selectedObject);
         }
     }
+    
+    public void ClearAll()
+    {
+        foreach (var miniature in spawnedObjects)
+        {
+            Destroy(miniature);
+        }
+        
+        spawnedObjects.Clear();
+    }
+    
     public void Bury()
     {
         if (selectedObject == null) return;
