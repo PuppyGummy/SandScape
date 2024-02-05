@@ -9,6 +9,11 @@ public class InteractionManager : MonoBehaviour
     #region Fields
 
     private GameObject selectedObject;
+    
+    /// <summary>
+    /// List of spawned objects used to clear all
+    /// </summary>
+    private List<GameObject> spawnedObjects = new List<GameObject>();
 
     private RaycastHit hit;
 
@@ -277,6 +282,14 @@ public class InteractionManager : MonoBehaviour
         
         selectedObject.layer = LayerMask.NameToLayer("Objects");
     }
+
+    //Called in ObjectController.Start(), as it has to be the concrete game object, and not a reference to the prefab that is added to the list.
+    //If associated object is used, it throws an exception
+    public void AddObject(GameObject spawnedObject)
+    {
+        spawnedObjects.Add(spawnedObject);
+    }
+    
     public void Reset()
     {
         if (!selectedObject) return;
@@ -296,10 +309,22 @@ public class InteractionManager : MonoBehaviour
     {
         if (selectedObject != null)
         {
+            spawnedObjects.Remove(selectedObject);
             Destroy(selectedObject);
             GizmoController.Instance.EnableWorkGizmo(false);
         }
     }
+    
+    public void ClearAll()
+    {
+        foreach (var miniature in spawnedObjects)
+        {
+            Destroy(miniature);
+        }
+        
+        spawnedObjects.Clear();
+    }
+    
     public void Bury()
     {
         if (selectedObject == null) return;

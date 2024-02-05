@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class ObjectController : MonoBehaviour
@@ -15,6 +16,12 @@ public class ObjectController : MonoBehaviour
                 GizmoController.Instance.EnableGizmo(false);
         }
     }
+
+    private void Start()
+    {
+        InteractionManager.Instance.AddObject(gameObject);
+    }
+
     private void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.tag == "Sandbox")
