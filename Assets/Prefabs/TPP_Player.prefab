@@ -170,6 +170,7 @@ MonoBehaviour:
   groundDrag: 5
   rigidbody: {fileID: 3152572805866576806}
   orientation: {fileID: 2793468026237694666}
+  active: 0
 --- !u!114 &511399631396984559
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -225,8 +226,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   outlineMode: 0
-  outlineColor: {r: 1, g: 0, b: 0, a: 1}
-  outlineWidth: 2
+  outlineColor: {r: 0.30588236, g: 0.7294118, b: 0.8, a: 1}
+  outlineWidth: 3
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
