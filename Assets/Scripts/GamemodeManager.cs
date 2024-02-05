@@ -77,7 +77,7 @@ public class GamemodeManager : MonoBehaviour
         playModeEnabled = true;
 
         InteractionManager.Instance.selectMode = false;
-        InteractionManager.Instance.DeselectObject();
+        InteractionManager.Instance.DeselectAllObjects();
         if (InteractionManager.Instance.GetUseGizmo())
             GizmoController.Instance.EnableGizmo(false);
     }

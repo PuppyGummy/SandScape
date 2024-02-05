@@ -8,7 +8,7 @@ public class InteractionManager : MonoBehaviour
 {
     #region Fields
 
-    private GameObject selectedObject;
+    public GameObject selectedObject;
 
     private RaycastHit hit;
 
@@ -19,8 +19,8 @@ public class InteractionManager : MonoBehaviour
 
     private float bottomToCenterDistance;
     private bool useGizmo = false;
-    private List<GameObject> objs;
-    private List<GameObject> selectedObjects;
+    public List<GameObject> objs;
+    public List<GameObject> selectedObjects;
     private Vector3 cameraPos;
     private Vector3 cameraRotation;
 
@@ -74,7 +74,7 @@ public class InteractionManager : MonoBehaviour
             return;
 
         HandleSelectionInput();
-        if (selectedObject && !useGizmo)
+        if (selectedObjects.Count != 0 && !useGizmo)
         {
             HandleRotationInput();
             HandleScaleInput();
@@ -111,6 +111,7 @@ public class InteractionManager : MonoBehaviour
     // TODO: Stop lifting the object when selecting it?
     void HandleSelectionInput()
     {
+        //If the mouse is over a UI element, return
         if (EventSystem.current.IsPointerOverGameObject())
         {
             return;
@@ -121,31 +122,55 @@ public class InteractionManager : MonoBehaviour
             RaycastHit raycastHit;
 
             if (!Physics.Raycast(ray, out raycastHit)) return;
-
             GameObject hitObject = raycastHit.collider.gameObject;
 
             if (hitObject.CompareTag("Interactable"))
             {
-                DeselectObject();
-
-                SelectObject(hitObject);
-
+                if (Input.GetKey(KeyCode.LeftShift))
+                {
+                    //multi select
+                    if (selectedObjects.Contains(hitObject))
+                    {
+                        DeselectObject(hitObject);
+                    }
+                    else
+                    {
+                        SelectObject(hitObject);
+                    }
+                }
+                else
+                {
+                    //single select
+                    DeselectAllObjects();
+                    SelectObject(hitObject);
+                    // selectedObject = hitObject;
+                }
+                //start dragging
                 if (!useGizmo)
                     StartCoroutine(DragObject(selectedObject));
                 selectedObject.layer = LayerMask.NameToLayer("Ignore Raycast");
             }
             else
             {
-                DeselectObject();
+                if (!Input.GetKey(KeyCode.LeftShift))
+                {
+                    DeselectAllObjects();
+                }
             }
         }
-        else if (Input.GetMouseButtonUp(0) && selectedObject) //If we release mouse button and there is a selected object
+        //If we release mouse button and there is a selected object
+        else if (Input.GetMouseButtonUp(0) && selectedObjects.Count != 0)
         {
-            selectedObject.layer = LayerMask.NameToLayer("Objects"); //Reenable raycasts on the object
+            foreach (GameObject obj in selectedObjects)
+            {
+                obj.layer = LayerMask.NameToLayer("Objects");
+            }
         }
     }
     public void SelectObject(GameObject objectToSelect)
     {
+        selectedObjects.Add(objectToSelect);
+
         selectedObject = objectToSelect;
 
         Outline outline = selectedObject.GetComponent<Outline>();
@@ -157,7 +182,6 @@ public class InteractionManager : MonoBehaviour
         {
             selectedObject.AddComponent<Outline>();
         }
-        selectedObject.TryGetComponent(out selectedRb);
 
         //Set player if selected object is a player
         if (selectedObject.gameObject.GetComponent<PlayerMovementController>())
@@ -166,26 +190,37 @@ public class InteractionManager : MonoBehaviour
         }
     }
 
-    public void DeselectObject()
+    public void DeselectObject(GameObject obj)
     {
-        if (!selectedObject) return;
+        //if the object is not selected, return
+        if (!selectedObjects.Contains(obj)) return;
+        //if is dragging gizmo, return
         if (GizmoController.Instance.IsHoveringGizmo()) return;
 
-        Outline outline = selectedObject.GetComponent<Outline>();
+        Outline outline = obj.GetComponent<Outline>();
 
         if (!outline) return;
 
         outline.enabled = false;
-        selectedObject.layer = LayerMask.NameToLayer("Objects");
+        obj.layer = LayerMask.NameToLayer("Objects");
         selectedObject = null;
         playerObject = null;
-
         objectIndicator.gameObject.SetActive(false);
+
+        selectedObjects.Remove(obj);
+    }
+    public void DeselectAllObjects()
+    {
+        foreach (GameObject obj in selectedObjects)
+        {
+            DeselectObject(obj);
+        }
     }
 
-    private IEnumerator DragObject(GameObject selectedObject)
+    private IEnumerator DragObject(GameObject objectToDrag)
     {
         objectIndicator.SetActive(true);
+        objectToDrag.TryGetComponent(out selectedRb);
 
         //Freeze the object and change its settings, as to allow for smoother dragging
         if (useGizmo) yield return null;
@@ -194,7 +229,7 @@ public class InteractionManager : MonoBehaviour
             selectedRb.freezeRotation = true;
             selectedRb.useGravity = true;
             selectedRb.isKinematic = false;
-            Physics.IgnoreCollision(selectedObject.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
+            Physics.IgnoreCollision(objectToDrag.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
         }
 
         //Move object as long as mouse button is held and the rigid body is valid
@@ -204,8 +239,8 @@ public class InteractionManager : MonoBehaviour
             {
                 selectedRb.constraints = RigidbodyConstraints.FreezeRotation;
 
-                bottomToCenterDistance = selectedObject.GetComponent<Collider>().bounds.extents.y + pos.y;
-                selectedObject.transform.position = new Vector3(pos.x, Mathf.Max(pos.y + bottomToCenterDistance, minYValue), pos.z);
+                bottomToCenterDistance = objectToDrag.GetComponent<Collider>().bounds.extents.y + pos.y;
+                objectToDrag.transform.position = new Vector3(pos.x, Mathf.Max(pos.y + bottomToCenterDistance, minYValue), pos.z);
                 objectIndicator.transform.position = pos;
             }
             yield return waitForFixedUpdate;
@@ -259,13 +294,14 @@ public class InteractionManager : MonoBehaviour
             spawnedObject = Instantiate(associatedObject, new Vector3(0f, associatedObject.GetComponent<Renderer>().bounds.extents.y, 0f), transform.rotation);
         }
         objs.Add(spawnedObject);
-        DeselectObject();
+        DeselectAllObjects();
         SelectObject(spawnedObject);
+        selectedObject = spawnedObject;
         selectedObject.layer = LayerMask.NameToLayer("Objects");
     }
     public void Reset()
     {
-        if (!selectedObject) return;
+        if (selectedObjects.Count == 0) return;
 
         selectedRb.useGravity = true;
         selectedRb.velocity = Vector3.zero;

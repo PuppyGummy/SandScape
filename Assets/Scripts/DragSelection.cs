@@ -62,7 +62,7 @@ public class DragSelection : MonoBehaviour
             Vector3 screenPos = Camera.main.WorldToScreenPoint(go.transform.position);
             if (screenPos.x > min.x && screenPos.x < max.x && screenPos.y > min.y && screenPos.y < max.y)
             {
-                Debug.Log(go.name);
+                InteractionManager.Instance.SelectObject(go);
             }
         }
     }

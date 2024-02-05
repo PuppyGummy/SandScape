@@ -6807,6 +6807,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 169b39cc3b6e94617b2cddef15bf5ee5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  selectedObject: {fileID: 0}
+  objs: []
+  selectedObjects: []
   dragSpeed: 10
   rotationSpeed: 10
   minYValue: 1
