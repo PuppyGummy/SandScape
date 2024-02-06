@@ -8,7 +8,7 @@ public class InteractionManager : MonoBehaviour
 {
     #region Fields
 
-    public GameObject selectedObject;
+    // public GameObject selectedObject;
 
     private RaycastHit hit;
 
@@ -21,13 +21,14 @@ public class InteractionManager : MonoBehaviour
     private bool useGizmo = false;
     public List<GameObject> objs;
     public List<GameObject> selectedObjects;
+    private List<Rigidbody> selectedRbs;
     private Vector3 cameraPos;
     private Vector3 cameraRotation;
 
     /// <summary>
     /// Rigidbody of the selected object
     /// </summary>
-    private Rigidbody selectedRb;
+    // private Rigidbody selectedRb;
 
     #endregion
 
@@ -66,6 +67,7 @@ public class InteractionManager : MonoBehaviour
         cameraRotation = Camera.main.transform.rotation.eulerAngles;
         objs = new List<GameObject>();
         selectedObjects = new List<GameObject>();
+        selectedRbs = new List<Rigidbody>();
     }
 
     void Update()
@@ -79,9 +81,13 @@ public class InteractionManager : MonoBehaviour
             HandleRotationInput();
             HandleScaleInput();
         }
-        // if (selectedObject && Input.GetMouseButton(0) && !useGizmo)
+        // if (selectedObjects.Count != 0 && Input.GetMouseButton(0) && !useGizmo)
         // {
-        //     StartCoroutine(DragObject(selectedObject));
+        //     StartCoroutine(DragMultiObjects(selectedObjects));
+        //     foreach (GameObject obj in selectedObjects)
+        //     {
+        //         obj.layer = LayerMask.NameToLayer("Ignore Raycast");
+        //     }
         // }
         if (Input.GetKeyDown(KeyCode.R))
         {
@@ -147,8 +153,12 @@ public class InteractionManager : MonoBehaviour
                 }
                 //start dragging
                 if (!useGizmo)
-                    StartCoroutine(DragObject(selectedObject));
-                selectedObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+                    StartCoroutine(DragMultiObjects(selectedObjects));
+                foreach (GameObject obj in selectedObjects)
+                {
+                    obj.layer = LayerMask.NameToLayer("Ignore Raycast");
+                }
+                // selectedObject.layer = LayerMask.NameToLayer("Ignore Raycast");
             }
             else
             {
@@ -171,22 +181,26 @@ public class InteractionManager : MonoBehaviour
     {
         selectedObjects.Add(objectToSelect);
 
-        selectedObject = objectToSelect;
+        // selectedObject = objectToSelect;
 
-        Outline outline = selectedObject.GetComponent<Outline>();
+        Outline outline = objectToSelect.GetComponent<Outline>();
         if (outline)
         {
             outline.enabled = true;
         }
         else
         {
-            selectedObject.AddComponent<Outline>();
+            objectToSelect.AddComponent<Outline>();
         }
 
         //Set player if selected object is a player
-        if (selectedObject.gameObject.GetComponent<PlayerMovementController>())
+        if (objectToSelect.gameObject.GetComponent<PlayerMovementController>())
         {
-            playerObject = selectedObject;
+            playerObject = objectToSelect;
+        }
+        if (useGizmo)
+        {
+            GizmoController.Instance.EnableWorkGizmo(true);
         }
     }
 
@@ -203,7 +217,7 @@ public class InteractionManager : MonoBehaviour
 
         outline.enabled = false;
         obj.layer = LayerMask.NameToLayer("Objects");
-        selectedObject = null;
+        // selectedObject = null;
         playerObject = null;
         objectIndicator.gameObject.SetActive(false);
 
@@ -211,46 +225,97 @@ public class InteractionManager : MonoBehaviour
     }
     public void DeselectAllObjects()
     {
+        if (selectedObjects.Count == 0) return;
         foreach (GameObject obj in selectedObjects)
         {
             DeselectObject(obj);
         }
     }
 
-    private IEnumerator DragObject(GameObject objectToDrag)
-    {
-        objectIndicator.SetActive(true);
-        objectToDrag.TryGetComponent(out selectedRb);
+    // private IEnumerator DragObject(GameObject objectToDrag)
+    // {
+    //     objectIndicator.SetActive(true);
+    //     objectToDrag.TryGetComponent(out selectedRb);
 
-        //Freeze the object and change its settings, as to allow for smoother dragging
-        if (useGizmo) yield return null;
-        if (selectedRb)
+    //     //Freeze the object and change its settings, as to allow for smoother dragging
+    //     if (useGizmo) yield return null;
+    //     if (selectedRb)
+    //     {
+    //         selectedRb.freezeRotation = true;
+    //         selectedRb.useGravity = true;
+    //         selectedRb.isKinematic = false;
+    //         Physics.IgnoreCollision(objectToDrag.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
+    //     }
+
+    //     //Move object as long as mouse button is held and the rigid body is valid
+    //     while (Input.GetMouseButton(0))
+    //     {
+    //         if (selectedRb)
+    //         {
+    //             selectedRb.constraints = RigidbodyConstraints.FreezeRotation;
+
+    //             bottomToCenterDistance = objectToDrag.GetComponent<Collider>().bounds.extents.y + pos.y;
+    //             objectToDrag.transform.position = new Vector3(pos.x, Mathf.Max(pos.y + bottomToCenterDistance, minYValue), pos.z);
+    //             objectIndicator.transform.position = pos;
+    //         }
+    //         yield return waitForFixedUpdate;
+    //     }
+
+    //     if (!selectedRb) yield break;
+
+    //     //Reset velocity to prevent it from smashing down too hard
+    //     selectedRb.velocity = Vector3.zero;
+    //     objectIndicator.gameObject.SetActive(false);
+    //     UnlockRotation();
+    // }
+    IEnumerator DragMultiObjects(List<GameObject> objectsToDrag)
+    {
+        // objectIndicator.SetActive(true);
+
+        List<Vector3> relativeOffsets = new List<Vector3>();
+
+        foreach (GameObject objectToDrag in objectsToDrag)
         {
-            selectedRb.freezeRotation = true;
-            selectedRb.useGravity = true;
-            selectedRb.isKinematic = false;
-            Physics.IgnoreCollision(objectToDrag.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
+            Rigidbody selectedRb;
+            objectToDrag.TryGetComponent(out selectedRb);
+
+            if (selectedRb)
+            {
+                selectedRb.freezeRotation = true;
+                selectedRb.useGravity = true;
+                selectedRb.isKinematic = false;
+                Physics.IgnoreCollision(objectToDrag.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
+
+                selectedRbs.Add(selectedRb);
+                Vector3 relativeOffset = selectedRb.transform.position - pos;
+                relativeOffsets.Add(relativeOffset);
+            }
         }
 
-        //Move object as long as mouse button is held and the rigid body is valid
         while (Input.GetMouseButton(0))
+        {
+            for (int i = 0; i < selectedRbs.Count; i++)
+            {
+                Rigidbody selectedRb = selectedRbs[i];
+                if (selectedRb)
+                {
+                    float bottomToCenterDistance = selectedRb.GetComponent<Collider>().bounds.extents.y + pos.y;
+
+                    selectedRb.transform.position = new Vector3(pos.x + relativeOffsets[i].x, Mathf.Max(pos.y + bottomToCenterDistance, minYValue) + relativeOffsets[i].y, pos.z + relativeOffsets[i].z);
+                }
+            }
+            yield return null;
+        }
+
+        foreach (Rigidbody selectedRb in selectedRbs)
         {
             if (selectedRb)
             {
-                selectedRb.constraints = RigidbodyConstraints.FreezeRotation;
-
-                bottomToCenterDistance = objectToDrag.GetComponent<Collider>().bounds.extents.y + pos.y;
-                objectToDrag.transform.position = new Vector3(pos.x, Mathf.Max(pos.y + bottomToCenterDistance, minYValue), pos.z);
-                objectIndicator.transform.position = pos;
+                selectedRb.velocity = Vector3.zero;
             }
-            yield return waitForFixedUpdate;
         }
 
-        if (!selectedRb) yield break;
-
-        //Reset velocity to prevent it from smashing down too hard
-        selectedRb.velocity = Vector3.zero;
-        objectIndicator.gameObject.SetActive(false);
+        // objectIndicator.SetActive(false);
         UnlockRotation();
     }
 
@@ -259,14 +324,21 @@ public class InteractionManager : MonoBehaviour
         //Only rotate object if the right mouse button is held
         if (Input.GetMouseButton(1))
         {
-
-            selectedRb.constraints = RigidbodyConstraints.FreezePosition;
-
             float mouseX = Input.GetAxis("Mouse X") * rotationSpeed;
             float mouseY = Input.GetAxis("Mouse Y") * rotationSpeed;
 
-            selectedObject.transform.Rotate(Vector3.up, -mouseX, Space.World);
-            selectedObject.transform.Rotate(Vector3.right, mouseY, Space.World);
+            foreach (GameObject obj in selectedObjects)
+            {
+                Rigidbody selectedRb;
+                obj.TryGetComponent(out selectedRb);
+                if (selectedRb)
+                {
+                    selectedRb.constraints = RigidbodyConstraints.FreezeRotation;
+                }
+
+                obj.transform.Rotate(Vector3.up, -mouseX, Space.World);
+                obj.transform.Rotate(Vector3.right, mouseY, Space.World);
+            }
         }
         else if (!Input.GetMouseButtonUp(1))
         {
@@ -278,7 +350,10 @@ public class InteractionManager : MonoBehaviour
     {
         float scrollWheel = Input.GetAxis("Mouse ScrollWheel");
 
-        selectedObject.transform.localScale += new Vector3(scrollWheel, scrollWheel, scrollWheel) * scaleSpeed;
+        foreach (GameObject obj in selectedObjects)
+        {
+            obj.transform.localScale += new Vector3(scrollWheel, scrollWheel, scrollWheel) * scaleSpeed;
+        }
     }
     public void SpawnObject(GameObject associatedObject)
     {
@@ -293,77 +368,107 @@ public class InteractionManager : MonoBehaviour
         {
             spawnedObject = Instantiate(associatedObject, new Vector3(0f, associatedObject.GetComponent<Renderer>().bounds.extents.y, 0f), transform.rotation);
         }
-        objs.Add(spawnedObject);
+        // objs.Add(spawnedObject);
         DeselectAllObjects();
         SelectObject(spawnedObject);
-        selectedObject = spawnedObject;
-        selectedObject.layer = LayerMask.NameToLayer("Objects");
+        // selectedObject = spawnedObject;
+        spawnedObject.layer = LayerMask.NameToLayer("Objects");
     }
     public void Reset()
     {
-        if (selectedObjects.Count == 0) return;
+        if (selectedObjects.Count != 1) return;
 
-        selectedRb.useGravity = true;
-        selectedRb.velocity = Vector3.zero;
+        Rigidbody rb = selectedObjects[0].GetComponent<Rigidbody>();
+        rb.useGravity = true;
+        rb.velocity = Vector3.zero;
 
         UnlockRotation();
 
-        selectedRb.isKinematic = false;
-        Physics.IgnoreCollision(selectedObject.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
-        selectedObject.transform.position = new Vector3(0f, selectedObject.GetComponent<Renderer>().bounds.extents.y, 0f);
-        selectedObject.transform.rotation = Quaternion.identity;
-        selectedObject.transform.localScale = Vector3.one;
+        rb.isKinematic = false;
+        Physics.IgnoreCollision(selectedObjects[0].GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
+        selectedObjects[0].transform.position = new Vector3(0f, selectedObjects[0].GetComponent<Renderer>().bounds.extents.y, 0f);
+        selectedObjects[0].transform.rotation = Quaternion.identity;
+        selectedObjects[0].transform.localScale = Vector3.one;
     }
     public void Delete()
     {
-        if (selectedObject != null)
+        if (selectedObjects.Count != 0)
         {
-            objs.Remove(selectedObject);
-            Destroy(selectedObject);
+            foreach (GameObject obj in selectedObjects)
+            {
+                objs.Remove(obj);
+                selectedObjects.Remove(obj);
+                Destroy(obj);
+            }
             GizmoController.Instance.EnableWorkGizmo(false);
         }
     }
     public void Bury()
     {
-        if (selectedObject == null) return;
-        if (selectedObject.GetComponent<ObjectController>().IsOnGround() == false) return;
+        if (selectedObjects.Count == 0) return;
+        foreach (GameObject obj in selectedObjects)
+        {
+            if (obj.GetComponent<ObjectController>().IsOnGround() == false) return;
+            Rigidbody rb = obj.GetComponent<Rigidbody>();
+            rb.velocity = Vector3.zero;
+            rb.freezeRotation = true;
+            rb.constraints = RigidbodyConstraints.FreezePosition;
+            rb.useGravity = false;
+            rb.isKinematic = true;
 
-        selectedRb.velocity = Vector3.zero;
-        selectedRb.freezeRotation = true;
-        selectedRb.constraints = RigidbodyConstraints.FreezePosition;
-        selectedRb.useGravity = false;
-        selectedRb.isKinematic = true;
-
-        Physics.IgnoreCollision(selectedObject.GetComponent<Collider>(), sandbox.GetComponent<Collider>());
-        selectedObject.transform.position = new Vector3(selectedObject.transform.position.x, selectedObject.transform.position.y - buryDepth, selectedObject.transform.position.z);
+            Physics.IgnoreCollision(obj.GetComponent<Collider>(), sandbox.GetComponent<Collider>());
+            obj.transform.position = new Vector3(obj.transform.position.x, obj.transform.position.y - buryDepth, obj.transform.position.z);
+        }
     }
 
     private void UnlockRotation()
     {
-        selectedRb.constraints = RigidbodyConstraints.None;
-
-        if (!selectedObject.GetComponent<ObjectController>().lockRotation) return;
-
-        selectedRb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+        foreach (GameObject obj in selectedObjects)
+        {
+            Rigidbody rb;
+            obj.TryGetComponent(out rb);
+            rb.constraints = RigidbodyConstraints.None;
+            if (!obj.GetComponent<ObjectController>().lockRotation) return;
+            obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+        }
     }
+    // private void UnlockRotation()
+    // {
+    //     selectedRb.constraints = RigidbodyConstraints.None;
+
+    //     if (!selectedObject.GetComponent<ObjectController>().lockRotation) return;
+
+    //     selectedRb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+    // }
     public void SetUseGizmo()
     {
         useGizmo = !useGizmo;
-        if (useGizmo && !selectedObject) return;
+        if (useGizmo && selectedObjects.Count == 0) return;
         GizmoController.Instance.EnableWorkGizmo(useGizmo);
     }
     public bool GetUseGizmo()
     {
         return useGizmo;
     }
-    public GameObject GetSelectedObject()
+    public List<GameObject> GetSelectedObjects()
     {
-        return selectedObject;
+        return selectedObjects;
     }
     private void ResetCamera()
     {
         Camera.main.transform.position = cameraPos;
         Camera.main.transform.rotation = Quaternion.Euler(cameraRotation);
         Camera.main.orthographic = false;
+    }
+    //Called in ObjectController.Start(), as it has to be the concrete game object, and not a reference to the prefab that is added to the list.
+    //If associated object is used, it throws an exception
+    public void AddObject(GameObject objectToAdd)
+    {
+        objs.Add(objectToAdd);
+    }
+    public void RemoveObject(GameObject objectToRemove)
+    {
+        objs.Remove(objectToRemove);
+        selectedObjects.Remove(objectToRemove);
     }
 }

@@ -4,11 +4,16 @@ public class ObjectController : MonoBehaviour
 {
     public bool lockRotation;
     public bool isOnGround;
+    private void Start()
+    {
+        InteractionManager.Instance.AddObject(gameObject);
+    }
 
     void Update()
     {
         if (transform.position.y < InteractionManager.Instance.destroyYValue)
         {
+            InteractionManager.Instance.RemoveObject(gameObject);
             Destroy(gameObject);
             if (InteractionManager.Instance.GetUseGizmo())
                 GizmoController.Instance.EnableGizmo(false);

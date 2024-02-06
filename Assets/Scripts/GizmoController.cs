@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 using RTG;
 
 public class GizmoController : MonoBehaviour
@@ -31,17 +32,21 @@ public class GizmoController : MonoBehaviour
 
     private GizmoId _workGizmoId;
     private ObjectTransformGizmo _workGizmo;
-    private GameObject _targetObject;
+    private List<GameObject> _targetObjects;
 
     private void Start()
     {
+        _targetObjects = new List<GameObject>();
         _objectMoveGizmo = RTGizmosEngine.Get.CreateObjectMoveGizmo();
         _objectRotationGizmo = RTGizmosEngine.Get.CreateObjectRotationGizmo();
         _objectScaleGizmo = RTGizmosEngine.Get.CreateObjectScaleGizmo();
         _objectUniversalGizmo = RTGizmosEngine.Get.CreateObjectUniversalGizmo();
 
         EnableGizmo(false);
-
+        _objectMoveGizmo.SetTargetObjects(_targetObjects);
+        _objectRotationGizmo.SetTargetObjects(_targetObjects);
+        _objectScaleGizmo.SetTargetObjects(_targetObjects);
+        _objectUniversalGizmo.SetTargetObjects(_targetObjects);
         _workGizmo = _objectMoveGizmo;
         _workGizmoId = GizmoId.Move;
     }
@@ -53,8 +58,9 @@ public class GizmoController : MonoBehaviour
             if (RTInput.WasLeftMouseButtonPressedThisFrame() &&
                 RTGizmosEngine.Get.HoveredGizmo == null)
             {
-                GameObject pickedObject = InteractionManager.Instance.GetSelectedObject();
-                if (pickedObject != _targetObject) OnTargetObjectChanged(pickedObject);
+                _targetObjects = InteractionManager.Instance.GetSelectedObjects();
+                // if (pickedObject != _targetObject) OnTargetObjectChanged(pickedObject);
+                OnSelectionChanged();
             }
             if (RTInput.WasKeyPressedThisFrame(KeyCode.W)) SetWorkGizmoId(GizmoId.Move);
             else if (RTInput.WasKeyPressedThisFrame(KeyCode.E)) SetWorkGizmoId(GizmoId.Rotate);
@@ -75,23 +81,20 @@ public class GizmoController : MonoBehaviour
         else if (gizmoId == GizmoId.Scale) _workGizmo = _objectScaleGizmo;
         else if (gizmoId == GizmoId.Universal) _workGizmo = _objectUniversalGizmo;
 
-        if (_targetObject != null)
+        if (_targetObjects.Count != 0)
         {
             _workGizmo.Gizmo.SetEnabled(true);
-            _workGizmo.SetTargetObject(_targetObject);
             _workGizmo.RefreshPositionAndRotation();
         }
     }
 
-    private void OnTargetObjectChanged(GameObject newTargetObject)
+    public void OnSelectionChanged()
     {
-        _targetObject = newTargetObject;
-
-        if (_targetObject != null)
+        if (_targetObjects.Count != 0)
         {
-            SetTargetObject(_targetObject);
 
             _workGizmo.Gizmo.SetEnabled(true);
+            _workGizmo.RefreshPositionAndRotation();
         }
         else
         {
@@ -107,16 +110,9 @@ public class GizmoController : MonoBehaviour
     }
     public void EnableWorkGizmo(bool enable)
     {
-        _targetObject = InteractionManager.Instance.GetSelectedObject();
-        _workGizmo.SetTargetObject(InteractionManager.Instance.GetSelectedObject());
+        // _targetObject = InteractionManager.Instance.GetSelectedObject();
+        // _workGizmo.SetTargetObject(InteractionManager.Instance.GetSelectedObject());
         _workGizmo.Gizmo.SetEnabled(enable);
-    }
-    public void SetTargetObject(GameObject targetObject)
-    {
-        _objectMoveGizmo.SetTargetObject(_targetObject);
-        _objectRotationGizmo.SetTargetObject(_targetObject);
-        _objectScaleGizmo.SetTargetObject(_targetObject);
-        _objectUniversalGizmo.SetTargetObject(_targetObject);
     }
     public void RefreshGizmo()
     {
