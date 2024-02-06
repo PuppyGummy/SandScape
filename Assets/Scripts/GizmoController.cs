@@ -59,7 +59,7 @@ public class GizmoController : MonoBehaviour
                 RTGizmosEngine.Get.HoveredGizmo == null)
             {
                 targetObjects = InteractionManager.Instance.GetSelectedObjects();
-                OnSelectionChanged();
+                // OnSelectionChanged();
             }
             if (RTInput.WasKeyPressedThisFrame(KeyCode.W)) SetWorkGizmoId(GizmoId.Move);
             else if (RTInput.WasKeyPressedThisFrame(KeyCode.E)) SetWorkGizmoId(GizmoId.Rotate);

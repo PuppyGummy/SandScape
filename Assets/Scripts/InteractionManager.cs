@@ -24,6 +24,13 @@ public class InteractionManager : MonoBehaviour
 
     private bool isDragging = false;
     private bool isHoveringObject = false;
+    // private class SelectedObject
+    // {
+    //     public GameObject obj;
+    //     public Vector3 relativeOffset;
+    //     public Rigidbody rb;
+    //     public GameObject indicator;
+    // }
 
     /// <summary>
     /// Rigidbody of the selected object
@@ -153,17 +160,25 @@ public class InteractionManager : MonoBehaviour
                     if (selectedObjects.Contains(hitObject))
                     {
                         DeselectObject(hitObject);
+                        selectedObjects.Remove(hitObject);
+                        selectedRbs.Remove(hitObject.GetComponent<Rigidbody>());
+                        GizmoController.Instance.OnSelectionChanged();
                     }
                     else
                     {
                         SelectObject(hitObject);
+                        GizmoController.Instance.OnSelectionChanged();
                     }
                 }
                 else
                 {
                     //single select
-                    DeselectAllObjects();
-                    SelectObject(hitObject);
+                    if (!selectedObjects.Contains(hitObject))
+                    {
+                        DeselectAllObjects();
+                        SelectObject(hitObject);
+                        GizmoController.Instance.OnSelectionChanged();
+                    }
                 }
             }
             else
@@ -224,22 +239,20 @@ public class InteractionManager : MonoBehaviour
         outline.enabled = false;
         obj.layer = LayerMask.NameToLayer("Objects");
         playerObject = null;
-        objectIndicator.gameObject.SetActive(false);
-        selectedObjects.Remove(obj);
-        selectedRbs.Remove(obj.GetComponent<Rigidbody>());
+        // objectIndicator.gameObject.SetActive(false);
     }
     public void DeselectAllObjects()
     {
         if (selectedObjects.Count == 0) return;
-        for (int i = 0; i < selectedObjects.Count; i++)
+        foreach (GameObject obj in selectedObjects)
         {
-            DeselectObject(selectedObjects[i]);
+            DeselectObject(obj);
         }
+        selectedObjects.Clear();
+        selectedRbs.Clear();
     }
     IEnumerator DragMultiObjects(List<GameObject> objectsToDrag)
     {
-        // objectIndicator.SetActive(true);
-
         List<Vector3> relativeOffsets = new List<Vector3>();
 
         foreach (GameObject objectToDrag in objectsToDrag)
@@ -257,6 +270,13 @@ public class InteractionManager : MonoBehaviour
                 selectedRbs.Add(selectedRb);
                 Vector3 relativeOffset = selectedRb.transform.position - pos;
                 relativeOffsets.Add(relativeOffset);
+                GameObject indicator = Instantiate(objectIndicator, Vector3.zero, Quaternion.identity);
+
+                //cast a ray down the object and place the object indicator at the hit point
+                if (Physics.Raycast(selectedRb.transform.position, Vector3.down, out hit, Mathf.Infinity))
+                {
+                    indicator.transform.position = hit.point;
+                }
             }
         }
 
@@ -280,10 +300,10 @@ public class InteractionManager : MonoBehaviour
             if (selectedRb)
             {
                 selectedRb.velocity = Vector3.zero;
+                selectedRb.GetComponentInChildren<GameObject>().SetActive(false);
             }
         }
 
-        // objectIndicator.SetActive(false);
         UnlockRotation();
     }
 
@@ -339,6 +359,9 @@ public class InteractionManager : MonoBehaviour
         DeselectAllObjects();
         SelectObject(spawnedObject);
         spawnedObject.layer = LayerMask.NameToLayer("Objects");
+        // GameObject indicator = Instantiate(objectIndicator, hit.point, Quaternion.identity);
+        // indicator.transform.SetParent(spawnedObject.transform);
+        // indicator.SetActive(false);
     }
     public void Reset()
     {
@@ -360,13 +383,12 @@ public class InteractionManager : MonoBehaviour
     {
         if (selectedObjects.Count != 0)
         {
-            for (int i = 0; i < selectedObjects.Count; i++)
+            foreach (GameObject obj in selectedObjects)
             {
-                GameObject obj = selectedObjects[i];
                 objs.Remove(obj);
-                selectedObjects.Remove(obj);
                 Destroy(obj);
             }
+            selectedObjects.Clear();
 
             GizmoController.Instance.EnableWorkGizmo(false);
         }

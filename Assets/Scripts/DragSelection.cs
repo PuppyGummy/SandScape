@@ -20,7 +20,7 @@ public class DragSelection : MonoBehaviour
             startPos = Input.mousePosition;
             selectionBox.gameObject.SetActive(true);
         }
-        if (Input.GetMouseButton(0) && !InteractionManager.Instance.IsDragging())
+        if (Input.GetMouseButton(0) && !InteractionManager.Instance.IsDragging() && !GizmoController.Instance.IsHoveringGizmo())
         {
             endPos = Input.mousePosition;
             InteractionManager.Instance.IgnoreAllRaycasts();
@@ -36,17 +36,17 @@ public class DragSelection : MonoBehaviour
         }
 
     }
-    public void DrawBox()
-    {
-        Vector2 boxStart = startPos;
-        Vector2 boxEnd = endPos;
+    // public void DrawBox()
+    // {
+    //     Vector2 boxStart = startPos;
+    //     Vector2 boxEnd = endPos;
 
-        Vector2 boxCenter = (boxStart + boxEnd) / 2;
-        selectionBox.position = boxCenter;
+    //     Vector2 boxCenter = (boxStart + boxEnd) / 2;
+    //     selectionBox.position = boxCenter;
 
-        Vector2 boxSize = new Vector2(Mathf.Abs(boxStart.x - boxEnd.x), Mathf.Abs(boxStart.y - boxEnd.y));
-        selectionBox.sizeDelta = boxSize;
-    }
+    //     Vector2 boxSize = new Vector2(Mathf.Abs(boxStart.x - boxEnd.x), Mathf.Abs(boxStart.y - boxEnd.y));
+    //     selectionBox.sizeDelta = boxSize;
+    // }
     public void BoxSelect()
     {
         Vector2 boxStart = startPos;
