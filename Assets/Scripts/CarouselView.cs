@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class CarouselView : MonoBehaviour {
     
     public RectTransform viewWindow;
-    public List<RectTransform> images;
+    [FormerlySerializedAs("images")] public List<RectTransform> elements;
     
     private bool  canSwipe;
     private float imageWidth;
@@ -39,20 +39,20 @@ public class CarouselView : MonoBehaviour {
         //Add all children of the carousel to the list automatically
         for (var i = 0; i < viewWindow.childCount; i++)
         {
-            images.Add((RectTransform)viewWindow.GetChild(i));
+            elements.Add((RectTransform)viewWindow.GetChild(i));
         }
         
         imageWidth = viewWindow.rect.width;
-        for (int i = 1; i < images.Count; i++)
+        for (int i = 1; i < elements.Count; i++)
         {
-            images[i].anchoredPosition = new Vector2(((imageWidth + imageGap) * i), 0);
+            elements[i].anchoredPosition = new Vector2(((imageWidth + imageGap) * i), 0);
         }
     }
 
     // Update is called once per frame
     void Update ()
     {
-        UpdateCarouselView();        
+        UpdateCarouselView();
     }
     #endregion
 
@@ -89,24 +89,24 @@ public class CarouselView : MonoBehaviour {
         {
             canSwipe = false;
             lastScreenPosition = screenPosition;
-            if (currentIndex < images.Count)
+            if (currentIndex < elements.Count)
                 OnSwipeComplete();
-            else if (currentIndex == images.Count && dragAmount < 0)
+            else if (currentIndex == elements.Count && dragAmount < 0)
                 lerpTimer = 0;
-            else if (currentIndex == images.Count && dragAmount > 0)
+            else if (currentIndex == elements.Count && dragAmount > 0)
                 OnSwipeComplete();
         }
 
-        for (int i = 0; i < images.Count; i++)
+        for (int i = 0; i < elements.Count; i++)
         {
-            images[i].anchoredPosition = new Vector2(screenPosition + ((imageWidth + imageGap) * i), 0);
+            elements[i].anchoredPosition = new Vector2(screenPosition + ((imageWidth + imageGap) * i), 0);
             if (i == currentIndex)
             {
-                images[i].localScale = Vector3.Lerp(images[i].localScale, new Vector3(1.2f, 1.2f, 1.2f), Time.deltaTime * 5);
+                elements[i].localScale = Vector3.Lerp(elements[i].localScale, new Vector3(1.2f, 1.2f, 1.2f), Time.deltaTime * 5);
             }
             else
             {
-                images[i].localScale = Vector3.Lerp(images[i].localScale, new Vector3(0.7f, 0.7f, 0.7f), Time.deltaTime * 5);
+                elements[i].localScale = Vector3.Lerp(elements[i].localScale, new Vector3(0.7f, 0.7f, 0.7f), Time.deltaTime * 5);
             }
         }
     }
@@ -141,7 +141,7 @@ public class CarouselView : MonoBehaviour {
         {
             if (Mathf.Abs(dragAmount) >= swipeThrustHold)
             {
-                if (currentIndex == images.Count-1)
+                if (currentIndex == elements.Count-1)
                 {
                     lerpTimer = 0;
                     lerpPosition = (imageWidth + imageGap) * currentIndex;
@@ -170,9 +170,10 @@ public class CarouselView : MonoBehaviour {
         lerpPosition = (imageWidth + imageGap) * currentIndex;
         screenPosition = lerpPosition * -1;
         lastScreenPosition = screenPosition;
-        for (int i = 0; i < images.Count; i++)
+        
+        for (int i = 0; i < elements.Count; i++)
         {
-            images[i].anchoredPosition = new Vector2(screenPosition + ((imageWidth + imageGap) * i), 0);
+            elements[i].anchoredPosition = new Vector2(screenPosition + ((imageWidth + imageGap) * i), 0);
         }
     }
 
@@ -181,6 +182,31 @@ public class CarouselView : MonoBehaviour {
         currentIndex = value;
         lerpTimer = 0;
         lerpPosition = (imageWidth + imageGap) * currentIndex;
+    }
+    
+    public void ClickEvent(int ID)
+    {
+        //Subtracted 1 from the IDs, as they have to be 0 indexed
+        if (ID - 1 != currentIndex)
+        {
+            GoToIndexSmooth(ID - 1);
+        }
+        else if(ID - 1 == currentIndex)
+        {
+            SceneLoader.Instance.LoadScene(ID);
+        }
+    }
+
+    public void GoToNextIndex()
+    {
+        if(currentIndex + 1 <= elements.Count - 1)
+            GoToIndexSmooth(currentIndex + 1);
+    }
+    
+    public void GoToPreviousIndex()
+    {
+        if(currentIndex - 1 >= 0)
+            GoToIndexSmooth(currentIndex - 1);
     }
     #endregion
 }
