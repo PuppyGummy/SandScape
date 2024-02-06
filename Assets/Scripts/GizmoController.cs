@@ -59,7 +59,6 @@ public class GizmoController : MonoBehaviour
                 RTGizmosEngine.Get.HoveredGizmo == null)
             {
                 targetObjects = InteractionManager.Instance.GetSelectedObjects();
-                // if (pickedObject != _targetObject) OnTargetObjectChanged(pickedObject);
                 OnSelectionChanged();
             }
             if (RTInput.WasKeyPressedThisFrame(KeyCode.W)) SetWorkGizmoId(GizmoId.Move);
@@ -92,7 +91,6 @@ public class GizmoController : MonoBehaviour
     {
         if (targetObjects.Count != 0)
         {
-
             workGizmo.Gizmo.SetEnabled(true);
             workGizmo.RefreshPositionAndRotation();
         }

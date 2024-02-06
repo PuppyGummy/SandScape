@@ -10,6 +10,7 @@ public class DragSelection : MonoBehaviour
     {
         startPos = Vector2.zero;
         endPos = Vector2.zero;
+        selectionBox.sizeDelta = Vector2.zero;
     }
 
     void Update()
@@ -19,17 +20,19 @@ public class DragSelection : MonoBehaviour
             startPos = Input.mousePosition;
             selectionBox.gameObject.SetActive(true);
         }
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0) && !InteractionManager.Instance.IsDragging())
         {
             endPos = Input.mousePosition;
-            // DrawBox();
+            InteractionManager.Instance.IgnoreAllRaycasts();
             BoxSelect();
         }
         if (Input.GetMouseButtonUp(0))
         {
+            InteractionManager.Instance.RecoverAllRaycasts();
             startPos = Vector2.zero;
             endPos = Vector2.zero;
             selectionBox.gameObject.SetActive(false);
+            selectionBox.sizeDelta = Vector2.zero;
         }
 
     }
@@ -57,12 +60,12 @@ public class DragSelection : MonoBehaviour
         Vector2 min = boxCenter - (boxSize / 2);
         Vector2 max = boxCenter + (boxSize / 2);
 
-        foreach (GameObject go in GameObject.FindGameObjectsWithTag("Interactable"))
+        foreach (GameObject obj in InteractionManager.Instance.GetObjects())
         {
-            Vector3 screenPos = Camera.main.WorldToScreenPoint(go.transform.position);
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(obj.transform.position);
             if (screenPos.x > min.x && screenPos.x < max.x && screenPos.y > min.y && screenPos.y < max.y)
             {
-                InteractionManager.Instance.SelectObject(go);
+                InteractionManager.Instance.SelectObject(obj);
             }
         }
     }

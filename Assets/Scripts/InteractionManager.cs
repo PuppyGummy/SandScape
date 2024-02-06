@@ -23,6 +23,7 @@ public class InteractionManager : MonoBehaviour
     private Vector3 cameraRotation;
 
     private bool isDragging = false;
+    private bool isHoveringObject = false;
 
     /// <summary>
     /// Rigidbody of the selected object
@@ -84,7 +85,7 @@ public class InteractionManager : MonoBehaviour
         {
             ResetCamera();
         }
-        if (Input.GetMouseButton(0) && !EventSystem.current.IsPointerOverGameObject())
+        if (Input.GetMouseButton(0) && isHoveringObject && selectedObjects.Count != 0)
         {
             isDragging = true;
         }
@@ -112,7 +113,14 @@ public class InteractionManager : MonoBehaviour
         if (Physics.Raycast(ray, out hit, Mathf.Infinity)) //Removed the layer mask so it reacts to other objects
         {
             pos = hit.point;
-
+            if (hit.collider.CompareTag("Interactable"))
+            {
+                isHoveringObject = true;
+            }
+            else
+            {
+                isHoveringObject = false;
+            }
             // Debug.DrawLine(ray.origin, hit.transform.position, Color.red, 1.0f); //Debug ray pos
             // Debug.Log("Distance: " + hit.distance);
         }
@@ -178,6 +186,7 @@ public class InteractionManager : MonoBehaviour
     }
     public void SelectObject(GameObject objectToSelect)
     {
+        if (selectedObjects.Contains(objectToSelect)) return;
         selectedObjects.Add(objectToSelect);
 
         Outline outline = objectToSelect.GetComponent<Outline>();
@@ -411,6 +420,7 @@ public class InteractionManager : MonoBehaviour
         Camera.main.transform.rotation = Quaternion.Euler(cameraRotation);
         Camera.main.orthographic = false;
     }
+
     //Called in ObjectController.Start(), as it has to be the concrete game object, and not a reference to the prefab that is added to the list.
     //If associated object is used, it throws an exception
     public void AddObject(GameObject objectToAdd)
@@ -421,5 +431,27 @@ public class InteractionManager : MonoBehaviour
     {
         objs.Remove(objectToRemove);
         selectedObjects.Remove(objectToRemove);
+    }
+    public List<GameObject> GetObjects()
+    {
+        return objs;
+    }
+    public bool IsDragging()
+    {
+        return isDragging;
+    }
+    public void IgnoreAllRaycasts()
+    {
+        foreach (GameObject obj in objs)
+        {
+            obj.layer = LayerMask.NameToLayer("Ignore Raycast");
+        }
+    }
+    public void RecoverAllRaycasts()
+    {
+        foreach (GameObject obj in objs)
+        {
+            obj.layer = LayerMask.NameToLayer("Objects");
+        }
     }
 }
