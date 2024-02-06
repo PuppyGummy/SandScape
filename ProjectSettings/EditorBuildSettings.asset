@@ -26,4 +26,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/World_Indoors.unity
     guid: 87650a8e885837b4c888952a03344196
+  - enabled: 1
+    path: Assets/Scenes/World_Farm.unity
+    guid: d3805bc294baba447a9357ff69bcb3af
   m_configObjects: {}
