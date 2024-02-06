@@ -24,13 +24,6 @@ public class InteractionManager : MonoBehaviour
 
     private bool isDragging = false;
     private bool isHoveringObject = false;
-    // private class SelectedObject
-    // {
-    //     public GameObject obj;
-    //     public Vector3 relativeOffset;
-    //     public Rigidbody rb;
-    //     public GameObject indicator;
-    // }
 
     /// <summary>
     /// Rigidbody of the selected object
@@ -270,13 +263,6 @@ public class InteractionManager : MonoBehaviour
                 selectedRbs.Add(selectedRb);
                 Vector3 relativeOffset = selectedRb.transform.position - pos;
                 relativeOffsets.Add(relativeOffset);
-                GameObject indicator = Instantiate(objectIndicator, Vector3.zero, Quaternion.identity);
-
-                //cast a ray down the object and place the object indicator at the hit point
-                if (Physics.Raycast(selectedRb.transform.position, Vector3.down, out hit, Mathf.Infinity))
-                {
-                    indicator.transform.position = hit.point;
-                }
             }
         }
 
@@ -290,6 +276,13 @@ public class InteractionManager : MonoBehaviour
                     float bottomToCenterDistance = rb.GetComponent<Collider>().bounds.extents.y + pos.y;
 
                     rb.transform.position = new Vector3(pos.x + relativeOffsets[i].x, Mathf.Max(pos.y + bottomToCenterDistance, minYValue), pos.z + relativeOffsets[i].z);
+                    GameObject indicator = rb.transform.Find("Indicator(Clone)").gameObject;
+                    indicator.SetActive(true);
+                    //cast a ray down the object and place the object indicator at the hit point
+                    if (Physics.Raycast(rb.transform.position, Vector3.down, out hit, Mathf.Infinity))
+                    {
+                        indicator.transform.position = hit.point;
+                    }
                 }
             }
             yield return waitForFixedUpdate;
@@ -300,7 +293,7 @@ public class InteractionManager : MonoBehaviour
             if (selectedRb)
             {
                 selectedRb.velocity = Vector3.zero;
-                selectedRb.GetComponentInChildren<GameObject>().SetActive(false);
+                selectedRb.transform.Find("Indicator(Clone)").gameObject.SetActive(false);
             }
         }
 
@@ -359,9 +352,9 @@ public class InteractionManager : MonoBehaviour
         DeselectAllObjects();
         SelectObject(spawnedObject);
         spawnedObject.layer = LayerMask.NameToLayer("Objects");
-        // GameObject indicator = Instantiate(objectIndicator, hit.point, Quaternion.identity);
-        // indicator.transform.SetParent(spawnedObject.transform);
-        // indicator.SetActive(false);
+        GameObject indicator = Instantiate(objectIndicator, Vector3.zero, Quaternion.identity);
+        indicator.transform.SetParent(spawnedObject.transform);
+        indicator.SetActive(false);
     }
     public void Reset()
     {

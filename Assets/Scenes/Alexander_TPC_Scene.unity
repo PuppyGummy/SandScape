@@ -6739,7 +6739,7 @@ MonoBehaviour:
   destroyYValue: -5
   scaleSpeed: 0.1
   selectMode: 1
-  objectIndicator: {fileID: 1521069232243536, guid: 6e8b0bac9062df542b1eee7dfd4e18aa, type: 3}
+  objectIndicator: {fileID: 1521069232243536, guid: 3d70d3a3371de497a840b5641fd46a4e, type: 3}
   playerObject: {fileID: 0}
 --- !u!114 &1746339298
 MonoBehaviour:
