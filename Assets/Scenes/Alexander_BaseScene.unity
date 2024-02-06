@@ -318,6 +318,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 105392264}
+  - component: {fileID: 105392265}
   m_Layer: 5
   m_Name: Container
   m_TagString: Untagged
@@ -346,6 +347,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &105392265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 105392263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2fc6b82dcb018748a216b7ef9149a3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  viewWindow: {fileID: 1844871356}
+  elements: []
+  imageGap: 30
+  swipeThrustHold: 30
 --- !u!1 &119023579
 GameObject:
   m_ObjectHideFlags: 0
@@ -1131,7 +1148,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2007501323}
+      - m_Target: {fileID: 105392265}
         m_TargetAssemblyTypeName: CarouselView, Assembly-CSharp
         m_MethodName: ClickEvent
         m_Mode: 3
@@ -1264,7 +1281,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2007501323}
+      - m_Target: {fileID: 105392265}
         m_TargetAssemblyTypeName: CarouselView, Assembly-CSharp
         m_MethodName: ClickEvent
         m_Mode: 3
@@ -5044,7 +5061,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2007501323}
+      - m_Target: {fileID: 105392265}
         m_TargetAssemblyTypeName: CarouselView, Assembly-CSharp
         m_MethodName: GoToPreviousIndex
         m_Mode: 1
@@ -6368,7 +6385,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2007501323}
+      - m_Target: {fileID: 105392265}
         m_TargetAssemblyTypeName: CarouselView, Assembly-CSharp
         m_MethodName: ClickEvent
         m_Mode: 3
@@ -7903,7 +7920,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2007501323}
+      - m_Target: {fileID: 105392265}
         m_TargetAssemblyTypeName: CarouselView, Assembly-CSharp
         m_MethodName: GoToNextIndex
         m_Mode: 1
@@ -8229,7 +8246,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2007501323}
+      - m_Target: {fileID: 105392265}
         m_TargetAssemblyTypeName: CarouselView, Assembly-CSharp
         m_MethodName: ClickEvent
         m_Mode: 3
@@ -8425,7 +8442,6 @@ GameObject:
   - component: {fileID: 2007501321}
   - component: {fileID: 2007501320}
   - component: {fileID: 2007501319}
-  - component: {fileID: 2007501323}
   m_Layer: 5
   m_Name: SceneLoadCanvas
   m_TagString: Untagged
@@ -8517,22 +8533,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &2007501323
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2007501318}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2fc6b82dcb018748a216b7ef9149a3c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  viewWindow: {fileID: 1844871356}
-  elements: []
-  imageGap: 30
-  swipeThrustHold: 30
 --- !u!1 &2021611016
 GameObject:
   m_ObjectHideFlags: 0

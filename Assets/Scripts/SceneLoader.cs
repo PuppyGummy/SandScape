@@ -37,6 +37,7 @@ public class SceneLoader : MonoBehaviour
         loadedScenario = sceneID;
         
         scenePanel.SetActive(false);
+        // scenePanel.GetComponentInParent(typeof(CarouselView)).gameObject.SetActive(false);
         gameUIPanel.SetActive(true);
     }
 
@@ -52,6 +53,7 @@ public class SceneLoader : MonoBehaviour
         SceneManager.UnloadSceneAsync(loadedScenario);
         
         scenePanel.SetActive(true);
+        // scenePanel.GetComponentInParent(typeof(CarouselView)).gameObject.SetActive(true);
         gameUIPanel.SetActive(false);
 
         loadedScenario = 0;
