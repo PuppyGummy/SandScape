@@ -29,4 +29,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/World_Farm.unity
     guid: d3805bc294baba447a9357ff69bcb3af
+  - enabled: 1
+    path: Assets/Scenes/World_Beach.unity
+    guid: a789d5205747ed3458295de46824f959
   m_configObjects: {}

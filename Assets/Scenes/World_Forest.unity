@@ -268,12 +268,17 @@ PrefabInstance:
     - target: {fileID: 5674983601950410190, guid: cc7db8317b44dd248ae32e30cb7b777d, type: 3}
       propertyPath: m_Materials.Array.data[2]
       value: 
-      objectReference: {fileID: 2100000, guid: af804dd4e1737a14b926683562378f63, type: 2}
+      objectReference: {fileID: 2100000, guid: d0054e2826ae0cc4e8abb517bd8d7ac5, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cc7db8317b44dd248ae32e30cb7b777d, type: 3}
+--- !u!1 &193061057 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3483909049974700998, guid: cc7db8317b44dd248ae32e30cb7b777d, type: 3}
+  m_PrefabInstance: {fileID: 193061056}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &305953492
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1322,7 +1327,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0180cdb6c89bdb4699f904bedc31534, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  scenarioSandbox: {fileID: 0}
+  scenarioSandbox: {fileID: 193061057}
 --- !u!4 &1363787599
 Transform:
   m_ObjectHideFlags: 0
