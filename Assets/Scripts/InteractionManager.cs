@@ -357,6 +357,7 @@ public class InteractionManager : MonoBehaviour
         indicator.transform.SetParent(spawnedObject.transform);
         indicator.SetActive(false);
     }
+
     public void Reset()
     {
         //you can only reset if there is one object selected
@@ -388,6 +389,17 @@ public class InteractionManager : MonoBehaviour
             GizmoController.Instance.EnableWorkGizmo(false);
         }
     }
+
+    public void ClearAll()
+    {
+        foreach (var miniature in objs)
+        {
+            Destroy(miniature);
+        }
+
+        objs.Clear();
+    }
+
     public void Bury()
     {
         if (selectedObjects.Count == 0) return;

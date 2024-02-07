@@ -90,16 +90,17 @@ public class GizmoController : MonoBehaviour
 
     public void OnSelectionChanged()
     {
-        if (InteractionManager.Instance.GetSelectedObjects().Count != 0)
-        {
-            workGizmo.Gizmo.SetEnabled(true);
-            // workGizmo.SetTargetObjects(InteractionManager.Instance.GetSelectedObjects());
-            workGizmo.RefreshPositionAndRotation();
-        }
-        else
-        {
-            EnableGizmo(false);
-        }
+        if (InteractionManager.Instance.GetUseGizmo())
+            if (InteractionManager.Instance.GetSelectedObjects().Count != 0)
+            {
+                workGizmo.Gizmo.SetEnabled(true);
+                // workGizmo.SetTargetObjects(InteractionManager.Instance.GetSelectedObjects());
+                workGizmo.RefreshPositionAndRotation();
+            }
+            else
+            {
+                EnableGizmo(false);
+            }
     }
     public void EnableGizmo(bool enable)
     {

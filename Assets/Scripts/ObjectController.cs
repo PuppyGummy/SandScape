@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class ObjectController : MonoBehaviour
@@ -15,10 +16,12 @@ public class ObjectController : MonoBehaviour
         {
             InteractionManager.Instance.RemoveObject(gameObject);
             Destroy(gameObject);
-            if (InteractionManager.Instance.GetUseGizmo())
+            //Fixed an issue here; Have to check that the object being destroyed is also the one selected
+            if (InteractionManager.Instance.GetSelectedObjects().Contains(gameObject) && InteractionManager.Instance.GetUseGizmo())
                 GizmoController.Instance.EnableGizmo(false);
         }
     }
+
     private void OnCollisionEnter(Collision other)
     {
         if (other.gameObject.tag == "Sandbox")
