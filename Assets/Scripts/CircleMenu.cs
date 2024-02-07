@@ -16,7 +16,7 @@ public class CircleMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!InteractionManager.Instance.GetSelectedObject())
+        if (InteractionManager.Instance.GetSelectedObjects().Count == 0)
         {
             actionMenu.gameObject.SetActive(false);
             return;
@@ -24,7 +24,7 @@ public class CircleMenu : MonoBehaviour
 
         actionMenu.gameObject.SetActive(true);
         
-        selectedObject = InteractionManager.Instance.GetSelectedObject();
+        selectedObject = InteractionManager.Instance.GetSelectedObjects()[0];
         Vector3 screenPos = Camera.main.WorldToScreenPoint(selectedObject.gameObject.transform.position);
 
         actionMenu.transform.position = screenPos;

@@ -132,27 +132,32 @@ public class InteractionManager : MonoBehaviour
     void HandleSelectionInput()
     {
         //If the mouse is over a UI element, return
-        if (EventSystem.current.IsPointerOverGameObject())
-        {
-            return;
-        }
+        // if (EventSystem.current.IsPointerOverGameObject())
+        // {
+        //     return;
+        // }
         if (Input.GetMouseButtonDown(0))
         {
             GameObject hitObject = GetHitObject();
+            if(hitObject)
+                Debug.Log(hitObject + hitObject.tag);
 
             if (hitObject != null && hitObject.CompareTag("Interactable"))
             {
                 if (Input.GetKey(KeyCode.LeftShift))
                 {
                     //multi select
+                    Debug.Log("multi select");
                     if (selectedObjects.Contains(hitObject))
                     {
+                        Debug.Log("object already selected");
                         DeselectObject(hitObject);
                         selectedObjects.Remove(hitObject);
                         selectedRbs.Remove(hitObject.GetComponent<Rigidbody>());
                     }
                     else
                     {
+                        Debug.Log("select object");
                         SelectObject(hitObject);
                     }
                     GizmoController.Instance.OnSelectionChanged();
@@ -160,8 +165,11 @@ public class InteractionManager : MonoBehaviour
                 else
                 {
                     //single select
+                    Debug.Log("single select");
+
                     if (!selectedObjects.Contains(hitObject))
                     {
+                        Debug.Log("select object");
                         DeselectAllObjects();
                         SelectObject(hitObject);
                         GizmoController.Instance.OnSelectionChanged();
@@ -170,6 +178,7 @@ public class InteractionManager : MonoBehaviour
             }
             else
             {
+                Debug.Log("deselect");
                 DeselectAllObjects();
                 GizmoController.Instance.OnSelectionChanged();
             }
