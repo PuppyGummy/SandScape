@@ -1643,9 +1643,65 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 355112734718011900, guid: 5bed6f73501438040952509eac99f6fa, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 355112734718011900, guid: 5bed6f73501438040952509eac99f6fa, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 1744939315711216350, guid: 5bed6f73501438040952509eac99f6fa, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1744939315711216350, guid: 5bed6f73501438040952509eac99f6fa, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 2610133911021568517, guid: 5bed6f73501438040952509eac99f6fa, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2610133911021568517, guid: 5bed6f73501438040952509eac99f6fa, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 3437170594284828560, guid: 5bed6f73501438040952509eac99f6fa, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3437170594284828560, guid: 5bed6f73501438040952509eac99f6fa, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 3703006747217983446, guid: 5bed6f73501438040952509eac99f6fa, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3703006747217983446, guid: 5bed6f73501438040952509eac99f6fa, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 6807608165937859738, guid: 5bed6f73501438040952509eac99f6fa, type: 3}
       propertyPath: m_Name
       value: world-beach
+      objectReference: {fileID: 0}
+    - target: {fileID: 6807608165937859738, guid: 5bed6f73501438040952509eac99f6fa, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6807608165937859738, guid: 5bed6f73501438040952509eac99f6fa, type: 3}
+      propertyPath: m_TagString
+      value: Sandbox
+      objectReference: {fileID: 0}
+    - target: {fileID: 7215933507658116933, guid: 5bed6f73501438040952509eac99f6fa, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7215933507658116933, guid: 5bed6f73501438040952509eac99f6fa, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 8705934365532978393, guid: 5bed6f73501438040952509eac99f6fa, type: 3}
       propertyPath: m_LocalPosition.x

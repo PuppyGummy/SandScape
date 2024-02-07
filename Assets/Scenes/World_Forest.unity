@@ -265,6 +265,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: world-forest
       objectReference: {fileID: 0}
+    - target: {fileID: 3483909049974700998, guid: cc7db8317b44dd248ae32e30cb7b777d, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3483909049974700998, guid: cc7db8317b44dd248ae32e30cb7b777d, type: 3}
+      propertyPath: m_TagString
+      value: Sandbox
+      objectReference: {fileID: 0}
     - target: {fileID: 5674983601950410190, guid: cc7db8317b44dd248ae32e30cb7b777d, type: 3}
       propertyPath: m_Materials.Array.data[2]
       value: 
