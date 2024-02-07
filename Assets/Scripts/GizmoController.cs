@@ -122,9 +122,4 @@ public class GizmoController : MonoBehaviour
     {
         return workGizmo.Gizmo.IsHovered;
     }
-    // public void UpdateTartgetObjects()
-    // {
-    //     targetObjects = InteractionManager.Instance.GetSelectedObjects();
-    //     workGizmo.SetTargetObjects(targetObjects);
-    // }
 }
