@@ -36,17 +36,6 @@ public class DragSelection : MonoBehaviour
         }
 
     }
-    // public void DrawBox()
-    // {
-    //     Vector2 boxStart = startPos;
-    //     Vector2 boxEnd = endPos;
-
-    //     Vector2 boxCenter = (boxStart + boxEnd) / 2;
-    //     selectionBox.position = boxCenter;
-
-    //     Vector2 boxSize = new Vector2(Mathf.Abs(boxStart.x - boxEnd.x), Mathf.Abs(boxStart.y - boxEnd.y));
-    //     selectionBox.sizeDelta = boxSize;
-    // }
     public void BoxSelect()
     {
         Vector2 boxStart = startPos;

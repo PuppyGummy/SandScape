@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
+using RTG;
 
 
 public class InteractionManager : MonoBehaviour
@@ -18,17 +19,15 @@ public class InteractionManager : MonoBehaviour
     private bool useGizmo = false;
     public List<GameObject> objs;
     public List<GameObject> selectedObjects;
+    /// <summary>
+    /// Rigidbody of the selected object
+    /// </summary>
     private List<Rigidbody> selectedRbs;
     private Vector3 cameraPos;
     private Vector3 cameraRotation;
 
     private bool isDragging = false;
     private bool isHoveringObject = false;
-
-    /// <summary>
-    /// Rigidbody of the selected object
-    /// </summary>
-    // private Rigidbody selectedRb;
 
     #endregion
 
@@ -139,13 +138,9 @@ public class InteractionManager : MonoBehaviour
         }
         if (Input.GetMouseButtonDown(0))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit raycastHit;
+            GameObject hitObject = GetHitObject();
 
-            if (!Physics.Raycast(ray, out raycastHit)) return;
-            GameObject hitObject = raycastHit.collider.gameObject;
-
-            if (hitObject.CompareTag("Interactable"))
+            if (hitObject != null && hitObject.CompareTag("Interactable"))
             {
                 if (Input.GetKey(KeyCode.LeftShift))
                 {
@@ -155,13 +150,12 @@ public class InteractionManager : MonoBehaviour
                         DeselectObject(hitObject);
                         selectedObjects.Remove(hitObject);
                         selectedRbs.Remove(hitObject.GetComponent<Rigidbody>());
-                        GizmoController.Instance.OnSelectionChanged();
                     }
                     else
                     {
                         SelectObject(hitObject);
-                        GizmoController.Instance.OnSelectionChanged();
                     }
+                    GizmoController.Instance.OnSelectionChanged();
                 }
                 else
                 {
@@ -176,10 +170,8 @@ public class InteractionManager : MonoBehaviour
             }
             else
             {
-                if (!Input.GetKey(KeyCode.LeftShift))
-                {
-                    DeselectAllObjects();
-                }
+                DeselectAllObjects();
+                GizmoController.Instance.OnSelectionChanged();
             }
         }
         //If we release mouse button and there is a selected object
@@ -191,6 +183,14 @@ public class InteractionManager : MonoBehaviour
                     obj.layer = LayerMask.NameToLayer("Objects");
             }
         }
+    }
+    public GameObject GetHitObject()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit raycastHit;
+
+        if (!Physics.Raycast(ray, out raycastHit)) return null;
+        return raycastHit.collider.gameObject;
     }
     public void SelectObject(GameObject objectToSelect)
     {
@@ -232,11 +232,12 @@ public class InteractionManager : MonoBehaviour
         outline.enabled = false;
         obj.layer = LayerMask.NameToLayer("Objects");
         playerObject = null;
-        // objectIndicator.gameObject.SetActive(false);
     }
     public void DeselectAllObjects()
     {
         if (selectedObjects.Count == 0) return;
+        if (GizmoController.Instance.IsHoveringGizmo()) return;
+
         foreach (GameObject obj in selectedObjects)
         {
             DeselectObject(obj);
@@ -338,7 +339,7 @@ public class InteractionManager : MonoBehaviour
     }
     public void SpawnObject(GameObject associatedObject)
     {
-        GameObject spawnedObject = new GameObject();
+        GameObject spawnedObject;
         if (Physics.Raycast(Vector3.zero, Vector3.up, out RaycastHit hit, Mathf.Infinity))
         {
             GameObject hitObject = hit.collider.gameObject;
@@ -358,6 +359,7 @@ public class InteractionManager : MonoBehaviour
     }
     public void Reset()
     {
+        //you can only reset if there is one object selected
         if (selectedObjects.Count != 1) return;
 
         Rigidbody rb = selectedObjects[0].GetComponent<Rigidbody>();

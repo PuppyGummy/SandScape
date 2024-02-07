@@ -32,21 +32,21 @@ public class GizmoController : MonoBehaviour
 
     private GizmoId workGizmoId;
     private ObjectTransformGizmo workGizmo;
-    private List<GameObject> targetObjects;
+    // private List<GameObject> targetObjects;
 
     private void Start()
     {
-        targetObjects = new List<GameObject>();
+        // targetObjects = new List<GameObject>();
         objectMoveGizmo = RTGizmosEngine.Get.CreateObjectMoveGizmo();
         objectRotationGizmo = RTGizmosEngine.Get.CreateObjectRotationGizmo();
         objectScaleGizmo = RTGizmosEngine.Get.CreateObjectScaleGizmo();
         objectUniversalGizmo = RTGizmosEngine.Get.CreateObjectUniversalGizmo();
 
         EnableGizmo(false);
-        objectMoveGizmo.SetTargetObjects(targetObjects);
-        objectRotationGizmo.SetTargetObjects(targetObjects);
-        objectScaleGizmo.SetTargetObjects(targetObjects);
-        objectUniversalGizmo.SetTargetObjects(targetObjects);
+        objectMoveGizmo.SetTargetObjects(InteractionManager.Instance.GetSelectedObjects());
+        objectRotationGizmo.SetTargetObjects(InteractionManager.Instance.GetSelectedObjects());
+        objectScaleGizmo.SetTargetObjects(InteractionManager.Instance.GetSelectedObjects());
+        objectUniversalGizmo.SetTargetObjects(InteractionManager.Instance.GetSelectedObjects());
         workGizmo = objectMoveGizmo;
         workGizmoId = GizmoId.Move;
     }
@@ -58,8 +58,8 @@ public class GizmoController : MonoBehaviour
             if (RTInput.WasLeftMouseButtonPressedThisFrame() &&
                 RTGizmosEngine.Get.HoveredGizmo == null)
             {
-                targetObjects = InteractionManager.Instance.GetSelectedObjects();
-                // OnSelectionChanged();
+                workGizmo.SetTargetObjects(InteractionManager.Instance.GetSelectedObjects());
+                OnSelectionChanged();
             }
             if (RTInput.WasKeyPressedThisFrame(KeyCode.W)) SetWorkGizmoId(GizmoId.Move);
             else if (RTInput.WasKeyPressedThisFrame(KeyCode.E)) SetWorkGizmoId(GizmoId.Rotate);
@@ -80,18 +80,20 @@ public class GizmoController : MonoBehaviour
         else if (gizmoId == GizmoId.Scale) workGizmo = objectScaleGizmo;
         else if (gizmoId == GizmoId.Universal) workGizmo = objectUniversalGizmo;
 
-        if (targetObjects.Count != 0)
+        if (InteractionManager.Instance.GetSelectedObjects().Count != 0)
         {
             workGizmo.Gizmo.SetEnabled(true);
+            workGizmo.SetTargetObjects(InteractionManager.Instance.GetSelectedObjects());
             workGizmo.RefreshPositionAndRotation();
         }
     }
 
     public void OnSelectionChanged()
     {
-        if (targetObjects.Count != 0)
+        if (InteractionManager.Instance.GetSelectedObjects().Count != 0)
         {
             workGizmo.Gizmo.SetEnabled(true);
+            // workGizmo.SetTargetObjects(InteractionManager.Instance.GetSelectedObjects());
             workGizmo.RefreshPositionAndRotation();
         }
         else
@@ -108,7 +110,7 @@ public class GizmoController : MonoBehaviour
     }
     public void EnableWorkGizmo(bool enable)
     {
-        targetObjects = InteractionManager.Instance.GetSelectedObjects();
+        // targetObjects = InteractionManager.Instance.GetSelectedObjects();
         workGizmo.SetTargetObjects(InteractionManager.Instance.GetSelectedObjects());
         workGizmo.Gizmo.SetEnabled(enable);
     }
@@ -120,4 +122,9 @@ public class GizmoController : MonoBehaviour
     {
         return workGizmo.Gizmo.IsHovered;
     }
+    // public void UpdateTartgetObjects()
+    // {
+    //     targetObjects = InteractionManager.Instance.GetSelectedObjects();
+    //     workGizmo.SetTargetObjects(targetObjects);
+    // }
 }

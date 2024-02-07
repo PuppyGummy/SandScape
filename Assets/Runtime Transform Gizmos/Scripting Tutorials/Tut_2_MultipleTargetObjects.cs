@@ -119,7 +119,8 @@ namespace RTG
                         // The CTRL key is pressed; it means we find ourselves in 2 possible situations:
                         // a) the picked object is already selected, in which case we deselect it;
                         // b) the picked object is not selected, in which case we append it to the selection.
-                        if (_selectedObjects.Contains(pickedObject)) _selectedObjects.Remove(pickedObject);
+                        if (_selectedObjects.Contains(pickedObject))
+                            _selectedObjects.Remove(pickedObject);
                         else _selectedObjects.Add(pickedObject);
 
                         // The selection has changed
@@ -141,7 +142,7 @@ namespace RTG
                     // If we reach this point, it means no object was picked. This means that we clicked
                     // in thin air, so we just clear the selected objects list.
                     _selectedObjects.Clear();
-                    OnSelectionChanged();
+                    // OnSelectionChanged();
 
                     // The selection has changed
                     OnSelectionChanged();
