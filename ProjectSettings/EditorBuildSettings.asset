@@ -32,4 +32,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/World_Beach.unity
     guid: a789d5205747ed3458295de46824f959
+  - enabled: 1
+    path: Assets/Scenes/World_Urban.unity
+    guid: 35a5e4d2a4ab1d34691de369ecae3c2e
+  - enabled: 1
+    path: Assets/Scenes/World_Oasis.unity
+    guid: f39442430507f224a91ad235bd827f41
   m_configObjects: {}
