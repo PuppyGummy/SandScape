@@ -20,4 +20,22 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Alexander_Desert 1.unity
     guid: f8e31821e84870e429535480827787d4
+  - enabled: 1
+    path: Assets/Scenes/World_Forest.unity
+    guid: d7d0dec3338e7a74e9eebca80dfd4860
+  - enabled: 1
+    path: Assets/Scenes/World_Indoors.unity
+    guid: 87650a8e885837b4c888952a03344196
+  - enabled: 1
+    path: Assets/Scenes/World_Farm.unity
+    guid: d3805bc294baba447a9357ff69bcb3af
+  - enabled: 1
+    path: Assets/Scenes/World_Beach.unity
+    guid: a789d5205747ed3458295de46824f959
+  - enabled: 1
+    path: Assets/Scenes/World_Urban.unity
+    guid: 35a5e4d2a4ab1d34691de369ecae3c2e
+  - enabled: 1
+    path: Assets/Scenes/World_Oasis.unity
+    guid: f39442430507f224a91ad235bd827f41
   m_configObjects: {}
