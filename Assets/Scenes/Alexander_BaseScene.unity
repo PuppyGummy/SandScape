@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311924, g: 0.38073963, b: 0.3587269, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -123,11 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &14602033 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 100000, guid: 4a6f487dbd43de74483aec7a3462f715, type: 3}
-  m_PrefabInstance: {fileID: 1377332668}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &64177241
 GameObject:
   m_ObjectHideFlags: 0
@@ -1822,7 +1817,7 @@ MonoBehaviour:
       _text: Scale gizmo
     - _tooltip: Allows you to change universal gizmo settings.
       _text: Universal gizmo
-    _activeTabIndex: 0
+    _activeTabIndex: 5
   _settings:
     _canBeDisplayed: 1
     _isExpanded: 1
@@ -1841,10 +1836,10 @@ MonoBehaviour:
       _pyramidHeight: 1.65
       _pyramidWidth: 0.8
       _pyramidDepth: 0.8
-      _boxWidth: 1.01
-      _boxHeight: 1.01
-      _boxDepth: 1.01
-      _sphereRadius: 0.73
+      _boxWidth: 2.8055556
+      _boxHeight: 2.8055556
+      _boxDepth: 2.8055556
+      _sphereRadius: 2.027778
       _trPrismWidth: 1
       _trPrismHeight: 1
       _trPrismDepth: 1
@@ -1859,8 +1854,8 @@ MonoBehaviour:
       _shadeMode: 0
       _scale: 1
       _useZoomFactor: 1
-      _coneHeight: 1.65
-      _coneRadius: 0.5
+      _coneHeight: 4.5833335
+      _coneRadius: 1.388889
       _pyramidHeight: 1.65
       _pyramidWidth: 0.8
       _pyramidDepth: 0.8
@@ -1881,8 +1876,8 @@ MonoBehaviour:
       _shadeMode: 0
       _scale: 1
       _useZoomFactor: 1
-      _coneHeight: 1.65
-      _coneRadius: 0.5
+      _coneHeight: 4.5833335
+      _coneRadius: 1.388889
       _pyramidHeight: 1.65
       _pyramidWidth: 0.8
       _pyramidDepth: 0.8
@@ -1903,8 +1898,8 @@ MonoBehaviour:
       _shadeMode: 0
       _scale: 1
       _useZoomFactor: 1
-      _coneHeight: 1.65
-      _coneRadius: 0.5
+      _coneHeight: 4.5833335
+      _coneRadius: 1.388889
       _pyramidHeight: 1.65
       _pyramidWidth: 0.8
       _pyramidDepth: 0.8
@@ -1925,8 +1920,8 @@ MonoBehaviour:
       _shadeMode: 0
       _scale: 1
       _useZoomFactor: 1
-      _coneHeight: 1.65
-      _coneRadius: 0.5
+      _coneHeight: 4.5833335
+      _coneRadius: 1.388889
       _pyramidHeight: 1.65
       _pyramidWidth: 0.8
       _pyramidDepth: 0.8
@@ -1947,8 +1942,8 @@ MonoBehaviour:
       _shadeMode: 0
       _scale: 1
       _useZoomFactor: 1
-      _coneHeight: 1.65
-      _coneRadius: 0.5
+      _coneHeight: 4.5833335
+      _coneRadius: 1.388889
       _pyramidHeight: 1.65
       _pyramidWidth: 0.8
       _pyramidDepth: 0.8
@@ -1969,8 +1964,8 @@ MonoBehaviour:
       _shadeMode: 0
       _scale: 1
       _useZoomFactor: 1
-      _coneHeight: 1.65
-      _coneRadius: 0.5
+      _coneHeight: 4.5833335
+      _coneRadius: 1.388889
       _pyramidHeight: 1.65
       _pyramidWidth: 0.8
       _pyramidDepth: 0.8
@@ -1988,7 +1983,7 @@ MonoBehaviour:
       _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
     _screenCorner: 1
     _screenOffset: {x: 0, y: 0}
-    _screenSize: 90
+    _screenSize: 250
     _axesLabelTint: {r: 1, g: 1, b: 1, a: 1}
     _camPrjSwitchLabelTint: {r: 1, g: 1, b: 1, a: 0.7}
     _isCamPrjSwitchLabelVisible: 1
@@ -2311,13 +2306,13 @@ MonoBehaviour:
     _sglSliderCapVis: 01010000
   _moveGizmoLookAndFeel3D:
     _canBeDisplayed: 1
-    _isExpanded: 0
+    _isExpanded: 1
     _isMidCapVisible: 0
     _midCapLookAndFeel:
       _capType: 2
       _fillMode: 0
       _shadeMode: 0
-      _scale: 1
+      _scale: 2
       _useZoomFactor: 1
       _coneHeight: 1.65
       _coneRadius: 0.5
@@ -2357,7 +2352,7 @@ MonoBehaviour:
       _lineType: 0
       _fillMode: 0
       _length: 5.5
-      _scale: 1
+      _scale: 2
       _useZoomFactor: 1
       _boxHeight: 0.18
       _boxDepth: 0.18
@@ -2374,7 +2369,7 @@ MonoBehaviour:
         _capType: 0
         _fillMode: 0
         _shadeMode: 0
-        _scale: 1
+        _scale: 2
         _useZoomFactor: 1
         _coneHeight: 1.65
         _coneRadius: 0.5
@@ -2397,7 +2392,7 @@ MonoBehaviour:
       _lineType: 0
       _fillMode: 0
       _length: 5.5
-      _scale: 1
+      _scale: 2
       _useZoomFactor: 1
       _boxHeight: 0.18
       _boxDepth: 0.18
@@ -2414,7 +2409,7 @@ MonoBehaviour:
         _capType: 0
         _fillMode: 0
         _shadeMode: 0
-        _scale: 1
+        _scale: 2
         _useZoomFactor: 1
         _coneHeight: 1.65
         _coneRadius: 0.5
@@ -2437,7 +2432,7 @@ MonoBehaviour:
       _lineType: 0
       _fillMode: 0
       _length: 5.5
-      _scale: 1
+      _scale: 2
       _useZoomFactor: 1
       _boxHeight: 0.18
       _boxDepth: 0.18
@@ -2454,7 +2449,7 @@ MonoBehaviour:
         _capType: 0
         _fillMode: 0
         _shadeMode: 0
-        _scale: 1
+        _scale: 2
         _useZoomFactor: 1
         _coneHeight: 1.65
         _coneRadius: 0.5
@@ -2477,7 +2472,7 @@ MonoBehaviour:
       _lineType: 0
       _fillMode: 0
       _length: 5.5
-      _scale: 1
+      _scale: 2
       _useZoomFactor: 1
       _boxHeight: 0.18
       _boxDepth: 0.18
@@ -2494,7 +2489,7 @@ MonoBehaviour:
         _capType: 0
         _fillMode: 0
         _shadeMode: 0
-        _scale: 1
+        _scale: 2
         _useZoomFactor: 1
         _coneHeight: 1.65
         _coneRadius: 0.5
@@ -2517,7 +2512,7 @@ MonoBehaviour:
       _lineType: 0
       _fillMode: 0
       _length: 5.5
-      _scale: 1
+      _scale: 2
       _useZoomFactor: 1
       _boxHeight: 0.18
       _boxDepth: 0.18
@@ -2534,7 +2529,7 @@ MonoBehaviour:
         _capType: 0
         _fillMode: 0
         _shadeMode: 0
-        _scale: 1
+        _scale: 2
         _useZoomFactor: 1
         _coneHeight: 1.65
         _coneRadius: 0.5
@@ -2557,7 +2552,7 @@ MonoBehaviour:
       _lineType: 0
       _fillMode: 0
       _length: 5.5
-      _scale: 1
+      _scale: 2
       _useZoomFactor: 1
       _boxHeight: 0.18
       _boxDepth: 0.18
@@ -2574,7 +2569,7 @@ MonoBehaviour:
         _capType: 0
         _fillMode: 0
         _shadeMode: 0
-        _scale: 1
+        _scale: 2
         _useZoomFactor: 1
         _coneHeight: 1.65
         _coneRadius: 0.5
@@ -2595,7 +2590,7 @@ MonoBehaviour:
         _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
     _dblSlidersLookAndFeel:
     - _planeType: 0
-      _scale: 1
+      _scale: 2
       _useZoomFactor: 1
       _quadWidth: 1.5
       _quadHeight: 1.5
@@ -2626,7 +2621,7 @@ MonoBehaviour:
         _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
         _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
     - _planeType: 0
-      _scale: 1
+      _scale: 2
       _useZoomFactor: 1
       _quadWidth: 1.5
       _quadHeight: 1.5
@@ -2657,7 +2652,7 @@ MonoBehaviour:
         _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
         _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
     - _planeType: 0
-      _scale: 1
+      _scale: 2
       _useZoomFactor: 1
       _quadWidth: 1.5
       _quadHeight: 1.5
@@ -2813,13 +2808,13 @@ MonoBehaviour:
       _scaleSensitivity: 1
   _rotationGizmoLookAndFeel3D:
     _canBeDisplayed: 1
-    _isExpanded: 0
+    _isExpanded: 1
     _isMidCapVisible: 1
     _midCapLookAndFeel:
       _capType: 3
       _fillMode: 0
       _shadeMode: 0
-      _scale: 1
+      _scale: 1.4
       _useZoomFactor: 1
       _coneHeight: 1.65
       _coneRadius: 0.5
@@ -2841,7 +2836,7 @@ MonoBehaviour:
     _axesVis: 010101
     _axesLookAndFeel:
     - _planeType: 2
-      _scale: 1
+      _scale: 1.4
       _useZoomFactor: 1
       _quadWidth: 1
       _quadHeight: 1
@@ -2872,7 +2867,7 @@ MonoBehaviour:
         _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
         _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
     - _planeType: 2
-      _scale: 1
+      _scale: 1.4
       _useZoomFactor: 1
       _quadWidth: 1
       _quadHeight: 1
@@ -2903,7 +2898,7 @@ MonoBehaviour:
         _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
         _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
     - _planeType: 2
-      _scale: 1
+      _scale: 1.4
       _useZoomFactor: 1
       _quadWidth: 1
       _quadHeight: 1
@@ -3097,12 +3092,12 @@ MonoBehaviour:
       _scaleSensitivity: 1
   _scaleGizmoLookAndFeel3D:
     _canBeDisplayed: 1
-    _isExpanded: 0
+    _isExpanded: 1
     _midCapLookAndFeel:
       _capType: 2
       _fillMode: 0
       _shadeMode: 0
-      _scale: 1
+      _scale: 2
       _useZoomFactor: 1
       _coneHeight: 1.65
       _coneRadius: 0.5
@@ -3136,7 +3131,7 @@ MonoBehaviour:
       _lineType: 0
       _fillMode: 0
       _length: 5.5
-      _scale: 1
+      _scale: 2
       _useZoomFactor: 1
       _boxHeight: 0.18
       _boxDepth: 0.18
@@ -3153,7 +3148,7 @@ MonoBehaviour:
         _capType: 2
         _fillMode: 0
         _shadeMode: 0
-        _scale: 1
+        _scale: 2
         _useZoomFactor: 1
         _coneHeight: 1.65
         _coneRadius: 0.5
@@ -3176,7 +3171,7 @@ MonoBehaviour:
       _lineType: 0
       _fillMode: 0
       _length: 5.5
-      _scale: 1
+      _scale: 2
       _useZoomFactor: 1
       _boxHeight: 0.18
       _boxDepth: 0.18
@@ -3193,7 +3188,7 @@ MonoBehaviour:
         _capType: 2
         _fillMode: 0
         _shadeMode: 0
-        _scale: 1
+        _scale: 2
         _useZoomFactor: 1
         _coneHeight: 1.65
         _coneRadius: 0.5
@@ -3216,7 +3211,7 @@ MonoBehaviour:
       _lineType: 0
       _fillMode: 0
       _length: 5.5
-      _scale: 1
+      _scale: 2
       _useZoomFactor: 1
       _boxHeight: 0.18
       _boxDepth: 0.18
@@ -3233,7 +3228,7 @@ MonoBehaviour:
         _capType: 2
         _fillMode: 0
         _shadeMode: 0
-        _scale: 1
+        _scale: 2
         _useZoomFactor: 1
         _coneHeight: 1.65
         _coneRadius: 0.5
@@ -3256,7 +3251,7 @@ MonoBehaviour:
       _lineType: 0
       _fillMode: 0
       _length: 5.5
-      _scale: 1
+      _scale: 2
       _useZoomFactor: 1
       _boxHeight: 0.18
       _boxDepth: 0.18
@@ -3273,7 +3268,7 @@ MonoBehaviour:
         _capType: 2
         _fillMode: 0
         _shadeMode: 0
-        _scale: 1
+        _scale: 2
         _useZoomFactor: 1
         _coneHeight: 1.65
         _coneRadius: 0.5
@@ -3296,7 +3291,7 @@ MonoBehaviour:
       _lineType: 0
       _fillMode: 0
       _length: 5.5
-      _scale: 1
+      _scale: 2
       _useZoomFactor: 1
       _boxHeight: 0.18
       _boxDepth: 0.18
@@ -3313,7 +3308,7 @@ MonoBehaviour:
         _capType: 2
         _fillMode: 0
         _shadeMode: 0
-        _scale: 1
+        _scale: 2
         _useZoomFactor: 1
         _coneHeight: 1.65
         _coneRadius: 0.5
@@ -3336,7 +3331,7 @@ MonoBehaviour:
       _lineType: 0
       _fillMode: 0
       _length: 5.5
-      _scale: 1
+      _scale: 2
       _useZoomFactor: 1
       _boxHeight: 0.18
       _boxDepth: 0.18
@@ -3353,7 +3348,7 @@ MonoBehaviour:
         _capType: 2
         _fillMode: 0
         _shadeMode: 0
-        _scale: 1
+        _scale: 2
         _useZoomFactor: 1
         _coneHeight: 1.65
         _coneRadius: 0.5
@@ -3374,7 +3369,7 @@ MonoBehaviour:
         _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
     _dblSlidersLookAndFeel:
     - _planeType: 1
-      _scale: 1
+      _scale: 2
       _useZoomFactor: 1
       _quadWidth: 1
       _quadHeight: 1
@@ -3405,7 +3400,7 @@ MonoBehaviour:
         _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
         _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
     - _planeType: 1
-      _scale: 1
+      _scale: 2
       _useZoomFactor: 1
       _quadWidth: 1
       _quadHeight: 1
@@ -3436,7 +3431,7 @@ MonoBehaviour:
         _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
         _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
     - _planeType: 1
-      _scale: 1
+      _scale: 2
       _useZoomFactor: 1
       _quadWidth: 1
       _quadHeight: 1
@@ -4014,7 +4009,7 @@ MonoBehaviour:
     _mvSglSliderCapVis: 01010000
   _universalGizmoLookAndFeel3D:
     _canBeDisplayed: 1
-    _isExpanded: 0
+    _isExpanded: 1
     _displayCategory: 0
     _mvVertSnapCapLookAndFeel:
       _fillMode: 1
@@ -4037,7 +4032,7 @@ MonoBehaviour:
       _lineType: 0
       _fillMode: 0
       _length: 5.5
-      _scale: 1
+      _scale: 2
       _useZoomFactor: 1
       _boxHeight: 0.18
       _boxDepth: 0.18
@@ -4054,7 +4049,7 @@ MonoBehaviour:
         _capType: 0
         _fillMode: 0
         _shadeMode: 0
-        _scale: 1
+        _scale: 2
         _useZoomFactor: 1
         _coneHeight: 1.65
         _coneRadius: 0.5
@@ -4077,7 +4072,7 @@ MonoBehaviour:
       _lineType: 0
       _fillMode: 0
       _length: 5.5
-      _scale: 1
+      _scale: 2
       _useZoomFactor: 1
       _boxHeight: 0.18
       _boxDepth: 0.18
@@ -4094,7 +4089,7 @@ MonoBehaviour:
         _capType: 0
         _fillMode: 0
         _shadeMode: 0
-        _scale: 1
+        _scale: 2
         _useZoomFactor: 1
         _coneHeight: 1.65
         _coneRadius: 0.5
@@ -4117,7 +4112,7 @@ MonoBehaviour:
       _lineType: 0
       _fillMode: 0
       _length: 5.5
-      _scale: 1
+      _scale: 2
       _useZoomFactor: 1
       _boxHeight: 0.18
       _boxDepth: 0.18
@@ -4134,7 +4129,7 @@ MonoBehaviour:
         _capType: 0
         _fillMode: 0
         _shadeMode: 0
-        _scale: 1
+        _scale: 2
         _useZoomFactor: 1
         _coneHeight: 1.65
         _coneRadius: 0.5
@@ -4157,7 +4152,7 @@ MonoBehaviour:
       _lineType: 0
       _fillMode: 0
       _length: 5.5
-      _scale: 1
+      _scale: 2
       _useZoomFactor: 1
       _boxHeight: 0.18
       _boxDepth: 0.18
@@ -4174,7 +4169,7 @@ MonoBehaviour:
         _capType: 0
         _fillMode: 0
         _shadeMode: 0
-        _scale: 1
+        _scale: 2
         _useZoomFactor: 1
         _coneHeight: 1.65
         _coneRadius: 0.5
@@ -4197,7 +4192,7 @@ MonoBehaviour:
       _lineType: 0
       _fillMode: 0
       _length: 5.5
-      _scale: 1
+      _scale: 2
       _useZoomFactor: 1
       _boxHeight: 0.18
       _boxDepth: 0.18
@@ -4214,7 +4209,7 @@ MonoBehaviour:
         _capType: 0
         _fillMode: 0
         _shadeMode: 0
-        _scale: 1
+        _scale: 2
         _useZoomFactor: 1
         _coneHeight: 1.65
         _coneRadius: 0.5
@@ -4237,7 +4232,7 @@ MonoBehaviour:
       _lineType: 0
       _fillMode: 0
       _length: 5.5
-      _scale: 1
+      _scale: 2
       _useZoomFactor: 1
       _boxHeight: 0.18
       _boxDepth: 0.18
@@ -4254,7 +4249,7 @@ MonoBehaviour:
         _capType: 0
         _fillMode: 0
         _shadeMode: 0
-        _scale: 1
+        _scale: 2
         _useZoomFactor: 1
         _coneHeight: 1.65
         _coneRadius: 0.5
@@ -4275,7 +4270,7 @@ MonoBehaviour:
         _hoveredColor: {r: 0.96470594, g: 0.9490197, b: 0.19607845, a: 1}
     _mvDblSlidersLookAndFeel:
     - _planeType: 0
-      _scale: 1
+      _scale: 2
       _useZoomFactor: 1
       _quadWidth: 1.5
       _quadHeight: 1.5
@@ -4306,7 +4301,7 @@ MonoBehaviour:
         _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
         _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
     - _planeType: 0
-      _scale: 1
+      _scale: 2
       _useZoomFactor: 1
       _quadWidth: 1.5
       _quadHeight: 1.5
@@ -4337,7 +4332,7 @@ MonoBehaviour:
         _color: {r: 0.5, g: 0.5, b: 0.5, a: 0.1}
         _borderColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.8}
     - _planeType: 0
-      _scale: 1
+      _scale: 2
       _useZoomFactor: 1
       _quadWidth: 1.5
       _quadHeight: 1.5
@@ -6762,79 +6757,6 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 1424421193}
---- !u!1001 &1377332668
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 100000, guid: 4a6f487dbd43de74483aec7a3462f715, type: 3}
-      propertyPath: m_Name
-      value: OPT_PointerAdd
-      objectReference: {fileID: 0}
-    - target: {fileID: 100000, guid: 4a6f487dbd43de74483aec7a3462f715, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 4a6f487dbd43de74483aec7a3462f715, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 4a6f487dbd43de74483aec7a3462f715, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 4a6f487dbd43de74483aec7a3462f715, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 4a6f487dbd43de74483aec7a3462f715, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 4a6f487dbd43de74483aec7a3462f715, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 4a6f487dbd43de74483aec7a3462f715, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 4a6f487dbd43de74483aec7a3462f715, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 4a6f487dbd43de74483aec7a3462f715, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 4a6f487dbd43de74483aec7a3462f715, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 400000, guid: 4a6f487dbd43de74483aec7a3462f715, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 11100000, guid: 4a6f487dbd43de74483aec7a3462f715, type: 3}
-      propertyPath: m_Animation
-      value: 
-      objectReference: {fileID: 7400000, guid: c81c4c955223c4c4894f8cff15c7d47d, type: 2}
-    - target: {fileID: 11100000, guid: 4a6f487dbd43de74483aec7a3462f715, type: 3}
-      propertyPath: m_Animations.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11100000, guid: 4a6f487dbd43de74483aec7a3462f715, type: 3}
-      propertyPath: m_Animations.Array.data[0]
-      value: 
-      objectReference: {fileID: 7400000, guid: c81c4c955223c4c4894f8cff15c7d47d, type: 2}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 4a6f487dbd43de74483aec7a3462f715, type: 3}
 --- !u!1 &1384341130
 GameObject:
   m_ObjectHideFlags: 0
@@ -7729,6 +7651,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 169b39cc3b6e94617b2cddef15bf5ee5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objs: []
+  selectedObjects: []
   dragSpeed: 10
   rotationSpeed: 10
   minYValue: 1
@@ -7737,7 +7661,7 @@ MonoBehaviour:
   destroyYValue: -5
   scaleSpeed: 0.1
   selectMode: 1
-  objectIndicator: {fileID: 14602033}
+  objectIndicator: {fileID: 1521069232243536, guid: 3d70d3a3371de497a840b5641fd46a4e, type: 3}
   playerObject: {fileID: 0}
 --- !u!114 &1746339298
 MonoBehaviour:
@@ -9455,5 +9379,4 @@ SceneRoots:
   - {fileID: 1155334946}
   - {fileID: 1746339296}
   - {fileID: 911994176}
-  - {fileID: 1377332668}
   - {fileID: 2094359827}

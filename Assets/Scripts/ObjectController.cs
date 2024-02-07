@@ -17,14 +17,9 @@ public class ObjectController : MonoBehaviour
             InteractionManager.Instance.RemoveObject(gameObject);
             Destroy(gameObject);
             //Fixed an issue here; Have to check that the object being destroyed is also the one selected
-            if (InteractionManager.Instance.GetSelectedObject() == gameObject && InteractionManager.Instance.GetUseGizmo())
+            if (InteractionManager.Instance.GetSelectedObjects().Contains(gameObject) && InteractionManager.Instance.GetUseGizmo())
                 GizmoController.Instance.EnableGizmo(false);
         }
-    }
-
-    private void Start()
-    {
-        InteractionManager.Instance.AddObject(gameObject);
     }
 
     private void OnCollisionEnter(Collision other)

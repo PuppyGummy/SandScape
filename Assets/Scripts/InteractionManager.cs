@@ -225,32 +225,6 @@ public class InteractionManager : MonoBehaviour
         //if is dragging gizmo, return
         if (GizmoController.Instance.IsHoveringGizmo()) return;
 
-        Outline outline = selectedObject.GetComponent<Outline>();
-        if (outline)
-        {
-            outline.enabled = true;
-        }
-        selectedObject.TryGetComponent(out selectedRb);
-
-        //Set player if selected object is a player
-        if (selectedObject.gameObject.GetComponent<PlayerMovementController>())
-        {
-            playerObject = selectedObject;
-        }
-
-        if (useGizmo)
-        {
-            GizmoController.Instance.EnableWorkGizmo(true);
-        }
-    }
-
-    public void DeselectObject(GameObject obj)
-    {
-        //if the object is not selected, return
-        if (!selectedObjects.Contains(obj)) return;
-        //if is dragging gizmo, return
-        if (GizmoController.Instance.IsHoveringGizmo()) return;
-
         Outline outline = obj.GetComponent<Outline>();
 
         if (!outline) return;
@@ -384,13 +358,6 @@ public class InteractionManager : MonoBehaviour
         indicator.SetActive(false);
     }
 
-    //Called in ObjectController.Start(), as it has to be the concrete game object, and not a reference to the prefab that is added to the list.
-    //If associated object is used, it throws an exception
-    public void AddObject(GameObject spawnedObject)
-    {
-        spawnedObjects.Add(spawnedObject);
-    }
-    
     public void Reset()
     {
         //you can only reset if there is one object selected
@@ -422,17 +389,17 @@ public class InteractionManager : MonoBehaviour
             GizmoController.Instance.EnableWorkGizmo(false);
         }
     }
-    
+
     public void ClearAll()
     {
-        foreach (var miniature in spawnedObjects)
+        foreach (var miniature in objs)
         {
             Destroy(miniature);
         }
-        
-        spawnedObjects.Clear();
+
+        objs.Clear();
     }
-    
+
     public void Bury()
     {
         if (selectedObjects.Count == 0) return;
