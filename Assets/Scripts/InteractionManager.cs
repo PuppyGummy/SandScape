@@ -2,18 +2,12 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
+using RTG;
 
 
 public class InteractionManager : MonoBehaviour
 {
     #region Fields
-
-    private GameObject selectedObject;
-    
-    /// <summary>
-    /// List of spawned objects used to clear all
-    /// </summary>
-    private List<GameObject> spawnedObjects = new List<GameObject>();
 
     private RaycastHit hit;
 
@@ -22,16 +16,18 @@ public class InteractionManager : MonoBehaviour
     /// </summary>
     private Vector3 pos;
 
-    private float bottomToCenterDistance;
     private bool useGizmo = false;
-    // private List<GameObject> objs;
-    private Vector3 cameraPos;
-    private Vector3 cameraRotation;
-
+    public List<GameObject> objs;
+    public List<GameObject> selectedObjects;
     /// <summary>
     /// Rigidbody of the selected object
     /// </summary>
-    private Rigidbody selectedRb;
+    private List<Rigidbody> selectedRbs;
+    private Vector3 cameraPos;
+    private Vector3 cameraRotation;
+
+    private bool isDragging = false;
+    private bool isHoveringObject = false;
 
     #endregion
 
@@ -68,6 +64,9 @@ public class InteractionManager : MonoBehaviour
     {
         cameraPos = Camera.main.transform.position;
         cameraRotation = Camera.main.transform.rotation.eulerAngles;
+        objs = new List<GameObject>();
+        selectedObjects = new List<GameObject>();
+        selectedRbs = new List<Rigidbody>();
     }
 
     void Update()
@@ -76,18 +75,30 @@ public class InteractionManager : MonoBehaviour
             return;
 
         HandleSelectionInput();
-        if (selectedObject && !useGizmo)
+        if (selectedObjects.Count != 0 && !useGizmo)
         {
             HandleRotationInput();
             HandleScaleInput();
         }
-        // if (selectedObject && Input.GetMouseButton(0) && !useGizmo)
-        // {
-        //     StartCoroutine(DragObject(selectedObject));
-        // }
         if (Input.GetKeyDown(KeyCode.R))
         {
             ResetCamera();
+        }
+        if (Input.GetMouseButton(0) && isHoveringObject && selectedObjects.Count != 0)
+        {
+            isDragging = true;
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            isDragging = false;
+        }
+        if (isDragging && !Input.GetKey(KeyCode.LeftShift) && !useGizmo)
+        {
+            StartCoroutine(DragMultiObjects(selectedObjects));
+            foreach (GameObject obj in selectedObjects)
+            {
+                obj.layer = LayerMask.NameToLayer("Ignore Raycast");
+            }
         }
     }
     void FixedUpdate()
@@ -101,7 +112,14 @@ public class InteractionManager : MonoBehaviour
         if (Physics.Raycast(ray, out hit, Mathf.Infinity)) //Removed the layer mask so it reacts to other objects
         {
             pos = hit.point;
-
+            if (hit.collider.CompareTag("Interactable"))
+            {
+                isHoveringObject = true;
+            }
+            else
+            {
+                isHoveringObject = false;
+            }
             // Debug.DrawLine(ray.origin, hit.transform.position, Color.red, 1.0f); //Debug ray pos
             // Debug.Log("Distance: " + hit.distance);
         }
@@ -113,59 +131,99 @@ public class InteractionManager : MonoBehaviour
     // TODO: Stop lifting the object when selecting it?
     void HandleSelectionInput()
     {
+        //If the mouse is over a UI element, return
         if (EventSystem.current.IsPointerOverGameObject())
         {
             return;
         }
         if (Input.GetMouseButtonDown(0))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit raycastHit;
+            GameObject hitObject = GetHitObject();
 
-            if (!Physics.Raycast(ray, out raycastHit)) return;
-
-            GameObject hitObject = raycastHit.collider.gameObject;
-
-            if (hitObject.CompareTag("Interactable"))
+            if (hitObject != null && hitObject.CompareTag("Interactable"))
             {
-                SelectObject(hitObject);
-
-                if (!useGizmo)
-                    StartCoroutine(DragObject(selectedObject));
-                selectedObject.layer = LayerMask.NameToLayer("Ignore Raycast");
+                if (Input.GetKey(KeyCode.LeftShift))
+                {
+                    //multi select
+                    if (selectedObjects.Contains(hitObject))
+                    {
+                        DeselectObject(hitObject);
+                        selectedObjects.Remove(hitObject);
+                        selectedRbs.Remove(hitObject.GetComponent<Rigidbody>());
+                    }
+                    else
+                    {
+                        SelectObject(hitObject);
+                    }
+                    GizmoController.Instance.OnSelectionChanged();
+                }
+                else
+                {
+                    //single select
+                    if (!selectedObjects.Contains(hitObject))
+                    {
+                        DeselectAllObjects();
+                        SelectObject(hitObject);
+                        GizmoController.Instance.OnSelectionChanged();
+                    }
+                }
             }
             else
             {
-                DeselectObject();
-                if (!selectedObject) return;
-                if (GizmoController.Instance.IsHoveringGizmo()) return;
-
-                Outline outline = selectedObject.GetComponent<Outline>();
-
-                if (!outline) return;
-
-                outline.enabled = false;
-                selectedObject.layer = LayerMask.NameToLayer("Objects");
-                selectedObject = null;
+                DeselectAllObjects();
+                GizmoController.Instance.OnSelectionChanged();
             }
         }
-        else if (Input.GetMouseButtonUp(0) && selectedObject) //If we release mouse button and there is a selected object
+        //If we release mouse button and there is a selected object
+        else if (Input.GetMouseButtonUp(0) && selectedObjects.Count != 0)
         {
-            selectedObject.layer = LayerMask.NameToLayer("Objects"); //Reenable raycasts on the object
+            foreach (GameObject obj in selectedObjects)
+            {
+                if (obj != null)
+                    obj.layer = LayerMask.NameToLayer("Objects");
+            }
+        }
+    }
+    public GameObject GetHitObject()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit raycastHit;
+
+        if (!Physics.Raycast(ray, out raycastHit)) return null;
+        return raycastHit.collider.gameObject;
+    }
+    public void SelectObject(GameObject objectToSelect)
+    {
+        if (selectedObjects.Contains(objectToSelect)) return;
+        selectedObjects.Add(objectToSelect);
+
+        Outline outline = objectToSelect.GetComponent<Outline>();
+        if (outline)
+        {
+            outline.enabled = true;
+        }
+        else
+        {
+            objectToSelect.AddComponent<Outline>();
+        }
+
+        //Set player if selected object is a player
+        if (objectToSelect.gameObject.GetComponent<PlayerMovementController>())
+        {
+            playerObject = objectToSelect;
+        }
+        if (useGizmo)
+        {
+            GizmoController.Instance.EnableWorkGizmo(true);
         }
     }
 
-    private void SelectObject(GameObject objectToSelct)
+    public void DeselectObject(GameObject obj)
     {
-        if (selectedObject)
-        {
-            Outline priorOutline = selectedObject.GetComponent<Outline>();
-            if (priorOutline)
-            {
-                DeselectObject();
-            }
-        }
-        selectedObject = objectToSelct;
+        //if the object is not selected, return
+        if (!selectedObjects.Contains(obj)) return;
+        //if is dragging gizmo, return
+        if (GizmoController.Instance.IsHoveringGizmo()) return;
 
         Outline outline = selectedObject.GetComponent<Outline>();
         if (outline)
@@ -186,55 +244,86 @@ public class InteractionManager : MonoBehaviour
         }
     }
 
-    public void DeselectObject()
+    public void DeselectObject(GameObject obj)
     {
-        if (!selectedObject) return;
+        //if the object is not selected, return
+        if (!selectedObjects.Contains(obj)) return;
+        //if is dragging gizmo, return
+        if (GizmoController.Instance.IsHoveringGizmo()) return;
 
-        Outline outline = selectedObject.GetComponent<Outline>();
+        Outline outline = obj.GetComponent<Outline>();
 
         if (!outline) return;
 
         outline.enabled = false;
-        selectedObject.layer = LayerMask.NameToLayer("Objects");
-        selectedObject = null;
+        obj.layer = LayerMask.NameToLayer("Objects");
         playerObject = null;
-
-        objectIndicator.gameObject.SetActive(false);
     }
-
-    private IEnumerator DragObject(GameObject selectedObject)
+    public void DeselectAllObjects()
     {
-        objectIndicator.SetActive(true);
+        if (selectedObjects.Count == 0) return;
+        if (GizmoController.Instance.IsHoveringGizmo()) return;
 
-        //Freeze the object and change its settings, as to allow for smoother dragging
-        if (useGizmo) yield return null;
-        if (selectedRb)
+        foreach (GameObject obj in selectedObjects)
         {
-            selectedRb.freezeRotation = true;
-            selectedRb.useGravity = true;
-            selectedRb.isKinematic = false;
-            Physics.IgnoreCollision(selectedObject.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
+            DeselectObject(obj);
         }
+        selectedObjects.Clear();
+        selectedRbs.Clear();
+    }
+    IEnumerator DragMultiObjects(List<GameObject> objectsToDrag)
+    {
+        List<Vector3> relativeOffsets = new List<Vector3>();
 
-        //Move object as long as mouse button is held and the rigid body is valid
-        while (Input.GetMouseButton(0))
+        foreach (GameObject objectToDrag in objectsToDrag)
         {
+            Rigidbody selectedRb;
+            objectToDrag.TryGetComponent(out selectedRb);
+
             if (selectedRb)
             {
-                selectedRb.constraints = RigidbodyConstraints.FreezeRotation;
+                selectedRb.freezeRotation = true;
+                selectedRb.useGravity = true;
+                selectedRb.isKinematic = false;
+                Physics.IgnoreCollision(objectToDrag.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
 
-                bottomToCenterDistance = selectedObject.GetComponent<Collider>().bounds.extents.y + pos.y;
-                selectedObject.transform.position = new Vector3(pos.x, Mathf.Max(pos.y + bottomToCenterDistance, minYValue), pos.z);
-                objectIndicator.transform.position = pos;
+                selectedRbs.Add(selectedRb);
+                Vector3 relativeOffset = selectedRb.transform.position - pos;
+                relativeOffsets.Add(relativeOffset);
+            }
+        }
+
+        while (Input.GetMouseButton(0))
+        {
+            for (int i = 0; i < objectsToDrag.Count; i++)
+            {
+                Rigidbody rb = objectsToDrag[i].GetComponent<Rigidbody>();
+                if (rb)
+                {
+                    float bottomToCenterDistance = rb.GetComponent<Collider>().bounds.extents.y + pos.y;
+
+                    rb.transform.position = new Vector3(pos.x + relativeOffsets[i].x, Mathf.Max(pos.y + bottomToCenterDistance, minYValue), pos.z + relativeOffsets[i].z);
+                    GameObject indicator = rb.transform.Find("Indicator(Clone)").gameObject;
+                    indicator.SetActive(true);
+                    //cast a ray down the object and place the object indicator at the hit point
+                    if (Physics.Raycast(rb.transform.position, Vector3.down, out hit, Mathf.Infinity))
+                    {
+                        indicator.transform.position = hit.point;
+                    }
+                }
             }
             yield return waitForFixedUpdate;
         }
 
-        if (!selectedRb) yield break;
+        foreach (Rigidbody selectedRb in selectedRbs)
+        {
+            if (selectedRb)
+            {
+                selectedRb.velocity = Vector3.zero;
+                selectedRb.transform.Find("Indicator(Clone)").gameObject.SetActive(false);
+            }
+        }
 
-        //Reset velocity to prevent it from smashing down too hard
-        selectedRb.velocity = Vector3.zero;
-        objectIndicator.gameObject.SetActive(false);
         UnlockRotation();
     }
 
@@ -243,14 +332,21 @@ public class InteractionManager : MonoBehaviour
         //Only rotate object if the right mouse button is held
         if (Input.GetMouseButton(1))
         {
-
-            selectedRb.constraints = RigidbodyConstraints.FreezePosition;
-
             float mouseX = Input.GetAxis("Mouse X") * rotationSpeed;
             float mouseY = Input.GetAxis("Mouse Y") * rotationSpeed;
 
-            selectedObject.transform.Rotate(Vector3.up, -mouseX, Space.World);
-            selectedObject.transform.Rotate(Vector3.right, mouseY, Space.World);
+            foreach (GameObject obj in selectedObjects)
+            {
+                Rigidbody selectedRb;
+                obj.TryGetComponent(out selectedRb);
+                if (selectedRb)
+                {
+                    selectedRb.constraints = RigidbodyConstraints.FreezeRotation;
+                }
+
+                obj.transform.Rotate(Vector3.up, -mouseX, Space.World);
+                obj.transform.Rotate(Vector3.right, mouseY, Space.World);
+            }
         }
         else if (!Input.GetMouseButtonUp(1))
         {
@@ -262,11 +358,14 @@ public class InteractionManager : MonoBehaviour
     {
         float scrollWheel = Input.GetAxis("Mouse ScrollWheel");
 
-        selectedObject.transform.localScale += new Vector3(scrollWheel, scrollWheel, scrollWheel) * scaleSpeed;
+        foreach (GameObject obj in selectedObjects)
+        {
+            obj.transform.localScale += new Vector3(scrollWheel, scrollWheel, scrollWheel) * scaleSpeed;
+        }
     }
     public void SpawnObject(GameObject associatedObject)
     {
-        GameObject spawnedObject = new GameObject();
+        GameObject spawnedObject;
         if (Physics.Raycast(Vector3.zero, Vector3.up, out RaycastHit hit, Mathf.Infinity))
         {
             GameObject hitObject = hit.collider.gameObject;
@@ -277,10 +376,12 @@ public class InteractionManager : MonoBehaviour
         {
             spawnedObject = Instantiate(associatedObject, new Vector3(0f, associatedObject.GetComponent<Renderer>().bounds.extents.y, 0f), transform.rotation);
         }
-        
+        DeselectAllObjects();
         SelectObject(spawnedObject);
-        
-        selectedObject.layer = LayerMask.NameToLayer("Objects");
+        spawnedObject.layer = LayerMask.NameToLayer("Objects");
+        GameObject indicator = Instantiate(objectIndicator, Vector3.zero, Quaternion.identity);
+        indicator.transform.SetParent(spawnedObject.transform);
+        indicator.SetActive(false);
     }
 
     //Called in ObjectController.Start(), as it has to be the concrete game object, and not a reference to the prefab that is added to the list.
@@ -292,25 +393,32 @@ public class InteractionManager : MonoBehaviour
     
     public void Reset()
     {
-        if (!selectedObject) return;
+        //you can only reset if there is one object selected
+        if (selectedObjects.Count != 1) return;
 
-        selectedRb.useGravity = true;
-        selectedRb.velocity = Vector3.zero;
+        Rigidbody rb = selectedObjects[0].GetComponent<Rigidbody>();
+        rb.useGravity = true;
+        rb.velocity = Vector3.zero;
 
         UnlockRotation();
 
-        selectedRb.isKinematic = false;
-        Physics.IgnoreCollision(selectedObject.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
-        selectedObject.transform.position = new Vector3(0f, selectedObject.GetComponent<Renderer>().bounds.extents.y, 0f);
-        selectedObject.transform.rotation = Quaternion.identity;
-        selectedObject.transform.localScale = Vector3.one;
+        rb.isKinematic = false;
+        Physics.IgnoreCollision(selectedObjects[0].GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
+        selectedObjects[0].transform.position = new Vector3(0f, selectedObjects[0].GetComponent<Renderer>().bounds.extents.y, 0f);
+        selectedObjects[0].transform.rotation = Quaternion.identity;
+        selectedObjects[0].transform.localScale = Vector3.one;
     }
     public void Delete()
     {
-        if (selectedObject != null)
+        if (selectedObjects.Count != 0)
         {
-            spawnedObjects.Remove(selectedObject);
-            Destroy(selectedObject);
+            foreach (GameObject obj in selectedObjects)
+            {
+                objs.Remove(obj);
+                Destroy(obj);
+            }
+            selectedObjects.Clear();
+
             GizmoController.Instance.EnableWorkGizmo(false);
         }
     }
@@ -327,45 +435,85 @@ public class InteractionManager : MonoBehaviour
     
     public void Bury()
     {
-        if (selectedObject == null) return;
-        if (selectedObject.GetComponent<ObjectController>().IsOnGround() == false) return;
+        if (selectedObjects.Count == 0) return;
+        foreach (GameObject obj in selectedObjects)
+        {
+            if (obj.GetComponent<ObjectController>().IsOnGround() == false) return;
+            Rigidbody rb = obj.GetComponent<Rigidbody>();
+            rb.velocity = Vector3.zero;
+            rb.freezeRotation = true;
+            rb.constraints = RigidbodyConstraints.FreezePosition;
+            rb.useGravity = false;
+            rb.isKinematic = true;
 
-        selectedRb.velocity = Vector3.zero;
-        selectedRb.freezeRotation = true;
-        selectedRb.constraints = RigidbodyConstraints.FreezePosition;
-        selectedRb.useGravity = false;
-        selectedRb.isKinematic = true;
-
-        Physics.IgnoreCollision(selectedObject.GetComponent<Collider>(), sandbox.GetComponent<Collider>());
-        selectedObject.transform.position = new Vector3(selectedObject.transform.position.x, selectedObject.transform.position.y - buryDepth, selectedObject.transform.position.z);
+            Physics.IgnoreCollision(obj.GetComponent<Collider>(), sandbox.GetComponent<Collider>());
+            obj.transform.position = new Vector3(obj.transform.position.x, obj.transform.position.y - buryDepth, obj.transform.position.z);
+        }
     }
 
     private void UnlockRotation()
     {
-        selectedRb.constraints = RigidbodyConstraints.None;
-
-        if (!selectedObject.GetComponent<ObjectController>().lockRotation) return;
-
-        selectedRb.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+        foreach (GameObject obj in selectedObjects)
+        {
+            Rigidbody rb;
+            obj.TryGetComponent(out rb);
+            rb.constraints = RigidbodyConstraints.None;
+            if (!obj.GetComponent<ObjectController>().lockRotation) return;
+            obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+        }
     }
     public void SetUseGizmo()
     {
         useGizmo = !useGizmo;
-        if (useGizmo && !selectedObject) return;
+        if (useGizmo && selectedObjects.Count == 0) return;
         GizmoController.Instance.EnableWorkGizmo(useGizmo);
     }
     public bool GetUseGizmo()
     {
         return useGizmo;
     }
-    public GameObject GetSelectedObject()
+    public List<GameObject> GetSelectedObjects()
     {
-        return selectedObject;
+        return selectedObjects;
     }
     private void ResetCamera()
     {
         Camera.main.transform.position = cameraPos;
         Camera.main.transform.rotation = Quaternion.Euler(cameraRotation);
         Camera.main.orthographic = false;
+    }
+
+    //Called in ObjectController.Start(), as it has to be the concrete game object, and not a reference to the prefab that is added to the list.
+    //If associated object is used, it throws an exception
+    public void AddObject(GameObject objectToAdd)
+    {
+        objs.Add(objectToAdd);
+    }
+    public void RemoveObject(GameObject objectToRemove)
+    {
+        objs.Remove(objectToRemove);
+        selectedObjects.Remove(objectToRemove);
+    }
+    public List<GameObject> GetObjects()
+    {
+        return objs;
+    }
+    public bool IsDragging()
+    {
+        return isDragging;
+    }
+    public void IgnoreAllRaycasts()
+    {
+        foreach (GameObject obj in objs)
+        {
+            obj.layer = LayerMask.NameToLayer("Ignore Raycast");
+        }
+    }
+    public void RecoverAllRaycasts()
+    {
+        foreach (GameObject obj in objs)
+        {
+            obj.layer = LayerMask.NameToLayer("Objects");
+        }
     }
 }

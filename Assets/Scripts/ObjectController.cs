@@ -5,11 +5,16 @@ public class ObjectController : MonoBehaviour
 {
     public bool lockRotation;
     public bool isOnGround;
+    private void Start()
+    {
+        InteractionManager.Instance.AddObject(gameObject);
+    }
 
     void Update()
     {
         if (transform.position.y < InteractionManager.Instance.destroyYValue)
         {
+            InteractionManager.Instance.RemoveObject(gameObject);
             Destroy(gameObject);
             //Fixed an issue here; Have to check that the object being destroyed is also the one selected
             if (InteractionManager.Instance.GetSelectedObject() == gameObject && InteractionManager.Instance.GetUseGizmo())

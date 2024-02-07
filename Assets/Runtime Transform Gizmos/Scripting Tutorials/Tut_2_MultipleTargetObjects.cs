@@ -106,7 +106,7 @@ namespace RTG
             //       the gizmo handles. If we didn't perform this check, clicking on a
             //       gizmo might actually disable it instead if the click does not hover
             //       a game object (i.e. thin air click).
-            if (RTInput.WasLeftMouseButtonPressedThisFrame() && 
+            if (RTInput.WasLeftMouseButtonPressedThisFrame() &&
                 RTGizmosEngine.Get.HoveredGizmo == null)
             {
                 // Pick a game object
@@ -119,9 +119,10 @@ namespace RTG
                         // The CTRL key is pressed; it means we find ourselves in 2 possible situations:
                         // a) the picked object is already selected, in which case we deselect it;
                         // b) the picked object is not selected, in which case we append it to the selection.
-                        if (_selectedObjects.Contains(pickedObject)) _selectedObjects.Remove(pickedObject);
+                        if (_selectedObjects.Contains(pickedObject))
+                            _selectedObjects.Remove(pickedObject);
                         else _selectedObjects.Add(pickedObject);
-                        
+
                         // The selection has changed
                         OnSelectionChanged();
                     }
@@ -141,7 +142,7 @@ namespace RTG
                     // If we reach this point, it means no object was picked. This means that we clicked
                     // in thin air, so we just clear the selected objects list.
                     _selectedObjects.Clear();
-                    OnSelectionChanged();
+                    // OnSelectionChanged();
 
                     // The selection has changed
                     OnSelectionChanged();
