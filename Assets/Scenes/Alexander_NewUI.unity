@@ -10657,7 +10657,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f1a6665e8a64124a88695fae829f864, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraControllerObject: {fileID: 0}
+  cameraControllerObject: {fileID: 2003347437}
   rotationAmount: 22.5
   maxUp: 67.5
   maxDown: 0
