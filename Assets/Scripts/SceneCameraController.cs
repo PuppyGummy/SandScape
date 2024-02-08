@@ -29,7 +29,7 @@ public class SceneCameraController : MonoBehaviour
         if(currentRotation + rotationXAmount >= maxUp)
             return;
         
-        gameObject.transform.Rotate(new Vector3(1, 0, 0), rotationXAmount, Space.World);
+        gameObject.transform.Rotate(new Vector3(1, 0, 0), rotationXAmount, Space.Self);
         currentRotation += rotationXAmount;
     }
 
@@ -38,7 +38,7 @@ public class SceneCameraController : MonoBehaviour
         if(currentRotation - rotationXAmount < maxDown)
             return;
         
-        gameObject.transform.Rotate(new Vector3(1, 0, 0), rotationXAmount * -1,  Space.World);
+        gameObject.transform.Rotate(new Vector3(1, 0, 0), rotationXAmount * -1,  Space.Self);
         currentRotation -= rotationXAmount;
     }
 }
