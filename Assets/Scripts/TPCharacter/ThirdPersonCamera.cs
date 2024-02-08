@@ -8,7 +8,7 @@ namespace TPCharacter
         private GameObject player;
         private Transform orientation;
         private CinemachineFreeLook cinemachineFreeLook;
-    
+
         public float rotationSpeed;
 
         private void OnEnable()
@@ -17,7 +17,7 @@ namespace TPCharacter
             {
                 cinemachineFreeLook = gameObject.GetComponent<CinemachineFreeLook>();
             }
-        
+
             player = InteractionManager.Instance.playerObject;
             orientation = player.transform.GetChild(1).transform;
 
@@ -35,11 +35,11 @@ namespace TPCharacter
             orientation.forward = viewDirection.normalized;
 
             //If there's any input, turn to new forward direction
-            float horizontalInput = Input.GetAxis("Horizontal");
-            float verticalInput = Input.GetAxis("Vertical");
+            float horizontalInput = Input.GetAxisRaw("Horizontal");
+            float verticalInput = Input.GetAxisRaw("Vertical");
             Vector3 inputDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
-        
-            if(inputDirection != Vector3.zero)
+
+            if (inputDirection != Vector3.zero)
                 player.transform.forward = Vector3.Slerp(player.transform.forward, inputDirection.normalized, Time.deltaTime * rotationSpeed);
         }
     }

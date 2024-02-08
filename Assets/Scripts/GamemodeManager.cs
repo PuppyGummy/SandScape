@@ -78,6 +78,7 @@ public class GamemodeManager : MonoBehaviour
 
         InteractionManager.Instance.selectMode = false;
         InteractionManager.Instance.DeselectAllObjects();
+        // InteractionManager.Instance.playerObject.GetComponent<Rigidbody>().isKinematic = true;
         if (InteractionManager.Instance.GetUseGizmo())
             GizmoController.Instance.EnableGizmo(false);
     }
@@ -90,6 +91,7 @@ public class GamemodeManager : MonoBehaviour
         playModeEnabled = false;
 
         InteractionManager.Instance.selectMode = true;
+        // InteractionManager.Instance.playerObject.GetComponent<Rigidbody>().isKinematic = false;
 
         ResetCameraTransform();
     }

@@ -8,7 +8,7 @@ public class PlayerMovementController : MonoBehaviour
 {
     [Header("Keybinds")]
     public KeyCode jumpKey = KeyCode.Space;
-    
+
     [Header("Movement")]
     public float speed;
     public float jumpForce;
@@ -23,8 +23,8 @@ public class PlayerMovementController : MonoBehaviour
     private bool grounded;
 
     [Header("Properties")]
-    public Rigidbody rigidbody;
-    
+    public Rigidbody rb;
+
     public Transform orientation;
 
     private float horizontalInput;
@@ -35,11 +35,14 @@ public class PlayerMovementController : MonoBehaviour
     /// True = possessed, false = not possessed.
     /// </summary>
     public bool active;
+    // private CharacterController characterController;
 
     private Vector3 moveDirection;
     private void Start()
     {
-        rigidbody.freezeRotation = true;
+        rb = GetComponent<Rigidbody>();
+        rb.freezeRotation = true;
+        // characterController = GetComponent<CharacterController>();
     }
 
     private void Update()
@@ -49,7 +52,7 @@ public class PlayerMovementController : MonoBehaviour
         LimitVelocity();
 
         //Selector for choosing drag / friction
-        rigidbody.drag = grounded ? groundDrag : 0.0f;
+        rb.drag = grounded ? groundDrag : 0.0f;
     }
 
     private void FixedUpdate()
@@ -63,7 +66,7 @@ public class PlayerMovementController : MonoBehaviour
         verticalInput = Input.GetAxisRaw("Vertical");
 
         if (!Input.GetKey(jumpKey) || !readyToJump || !grounded) return;
-        
+
         readyToJump = false;
         Jump();
 
@@ -73,32 +76,35 @@ public class PlayerMovementController : MonoBehaviour
     void AddMovementInput()
     {
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
-        
-        if(grounded)
-            rigidbody.AddForce(moveDirection.normalized * (speed * 10.0f), ForceMode.Force);
+        Vector3 targetVelocity = moveDirection * speed;
+
+        if (grounded)
+            // characterController.Move(moveDirection * speed * Time.deltaTime);
+            rb.velocity = new Vector3(targetVelocity.x, rb.velocity.y, targetVelocity.z);
         else
-            rigidbody.AddForce(moveDirection.normalized * (speed * 10.0f * airMultiplier), ForceMode.Force);
+            // characterController.Move(moveDirection * speed * airMultiplier * Time.deltaTime);
+            rb.velocity = new Vector3(targetVelocity.x * airMultiplier, rb.velocity.y, targetVelocity.z * airMultiplier);
     }
 
     void LimitVelocity()
     {
-        var rigidbodyVelocity = rigidbody.velocity;
+        var rigidbodyVelocity = rb.velocity;
         Vector3 flatVelocity = new Vector3(rigidbodyVelocity.x, 0.0f, rigidbodyVelocity.z);
 
         if (flatVelocity.magnitude > speed)
         {
             Vector3 limitedVelocity = flatVelocity.normalized * speed;
-            rigidbody.velocity = new Vector3(limitedVelocity.x, rigidbodyVelocity.y, limitedVelocity.z);
+            rb.velocity = new Vector3(limitedVelocity.x, rigidbodyVelocity.y, limitedVelocity.z);
         }
     }
 
     void Jump()
     {
-        var velocity = rigidbody.velocity;
+        var velocity = rb.velocity;
         velocity = new Vector3(velocity.x, 0.0f, velocity.z);
-        rigidbody.velocity = velocity;
-        
-        rigidbody.AddForce(transform.up * jumpForce, ForceMode.Impulse);
+        rb.velocity = velocity;
+
+        rb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
     }
 
     void ResetJump()
@@ -109,9 +115,9 @@ public class PlayerMovementController : MonoBehaviour
     //If active player is destroyed, we want to exit play mode
     private void OnDestroy()
     {
-        if(!active)
+        if (!active)
             return;
-        
+
         GamemodeManager.Instance.TogglePlayMode();
     }
 }
