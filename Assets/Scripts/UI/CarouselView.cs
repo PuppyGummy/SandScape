@@ -24,6 +24,8 @@ public class CarouselView : MonoBehaviour {
     public  float imageGap = 30;
 
     public int swipeThrustHold = 30;
+    public Vector3 focusedSize;
+    public Vector3 unfocusedSize;
     
     private int currentIndex;
     
@@ -102,11 +104,11 @@ public class CarouselView : MonoBehaviour {
             elements[i].anchoredPosition = new Vector2(screenPosition + ((imageWidth + imageGap) * i), 0);
             if (i == currentIndex)
             {
-                elements[i].localScale = Vector3.Lerp(elements[i].localScale, new Vector3(1.2f, 1.2f, 1.2f), Time.deltaTime * 5);
+                elements[i].localScale = Vector3.Lerp(elements[i].localScale, focusedSize, Time.deltaTime * 5);
             }
             else
             {
-                elements[i].localScale = Vector3.Lerp(elements[i].localScale, new Vector3(0.7f, 0.7f, 0.7f), Time.deltaTime * 5);
+                elements[i].localScale = Vector3.Lerp(elements[i].localScale, unfocusedSize, Time.deltaTime * 5);
             }
         }
     }

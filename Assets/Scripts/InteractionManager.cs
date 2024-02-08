@@ -139,6 +139,8 @@ public class InteractionManager : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             GameObject hitObject = GetHitObject();
+            /*if(hitObject)
+                Debug.Log(hitObject + hitObject.tag);*/
 
             if (hitObject != null && hitObject.CompareTag("Interactable"))
             {
@@ -160,6 +162,7 @@ public class InteractionManager : MonoBehaviour
                 else
                 {
                     //single select
+
                     if (!selectedObjects.Contains(hitObject))
                     {
                         DeselectAllObjects();
@@ -179,7 +182,7 @@ public class InteractionManager : MonoBehaviour
         {
             foreach (GameObject obj in selectedObjects)
             {
-                if (obj != null)
+                if (obj)
                     obj.layer = LayerMask.NameToLayer("Objects");
             }
         }
