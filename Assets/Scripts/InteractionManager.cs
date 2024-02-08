@@ -286,6 +286,8 @@ public class InteractionManager : MonoBehaviour
                     if (Physics.Raycast(rb.transform.position, Vector3.down, out hit, Mathf.Infinity))
                     {
                         indicator.transform.position = hit.point;
+                        //lock the rotation of the indicator
+                        indicator.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
                     }
                 }
             }
