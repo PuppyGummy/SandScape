@@ -427,9 +427,12 @@ public class InteractionManager : MonoBehaviour
         {
             Rigidbody rb;
             obj.TryGetComponent(out rb);
-            rb.constraints = RigidbodyConstraints.None;
-            if (!obj.GetComponent<ObjectController>().lockRotation) return;
-            obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+            if (rb)
+            {
+                rb.constraints = RigidbodyConstraints.None;
+                if (!obj.GetComponent<ObjectController>().lockRotation) return;
+                obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+            }
         }
     }
     public void SetUseGizmo()
