@@ -28,19 +28,19 @@ namespace TPCharacter
         void Update()
         {
             //Set forward rotation ot view direction
-            var transformPosition = transform.position;
-            var playerPosition = player.transform.position;
-            Vector3 viewDirection = playerPosition - new Vector3(transformPosition.x, playerPosition.y, transformPosition.z);
+            // var transformPosition = transform.position;
+            // var playerPosition = player.transform.position;
+            // Vector3 viewDirection = playerPosition - new Vector3(transformPosition.x, playerPosition.y, transformPosition.z);
 
-            orientation.forward = viewDirection.normalized;
+            // orientation.forward = viewDirection.normalized;
 
-            //If there's any input, turn to new forward direction
-            float horizontalInput = Input.GetAxisRaw("Horizontal");
-            float verticalInput = Input.GetAxisRaw("Vertical");
-            Vector3 inputDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
+            // //If there's any input, turn to new forward direction
+            // float horizontalInput = Input.GetAxisRaw("Horizontal");
+            // float verticalInput = Input.GetAxisRaw("Vertical");
+            // Vector3 inputDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
-            if (inputDirection != Vector3.zero)
-                player.transform.forward = Vector3.Slerp(player.transform.forward, inputDirection.normalized, Time.deltaTime * rotationSpeed);
+            // if (inputDirection != Vector3.zero)
+            // player.transform.forward = Vector3.Slerp(player.transform.forward, inputDirection.normalized, Time.deltaTime * rotationSpeed);
         }
     }
 }

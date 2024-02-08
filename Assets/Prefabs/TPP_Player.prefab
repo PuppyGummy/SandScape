@@ -162,7 +162,7 @@ MonoBehaviour:
   speed: 7
   jumpForce: 8
   jumpCoolDown: 0.25
-  airMultiplier: 0.4
+  airMultiplier: 1
   playerHeight: 2
   ground:
     serializedVersion: 2
@@ -171,6 +171,10 @@ MonoBehaviour:
   rb: {fileID: 0}
   orientation: {fileID: 2793468026237694666}
   active: 0
+  turnSmoothTime: 0.1
+  turnSmoothVelocity: 0
+  direction: {x: 0, y: 0, z: 0}
+  targetVelocity: {x: 0, y: 0, z: 0}
 --- !u!114 &511399631396984559
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -36,6 +36,10 @@ public class PlayerMovementController : MonoBehaviour
     /// </summary>
     public bool active;
     // private CharacterController characterController;
+    public float turnSmoothTime = 0.1f;
+    public float turnSmoothVelocity;
+    public Vector3 direction;
+    public Vector3 targetVelocity;
 
     private Vector3 moveDirection;
     private void Start()
@@ -71,19 +75,37 @@ public class PlayerMovementController : MonoBehaviour
         Jump();
 
         Invoke(nameof(ResetJump), jumpCoolDown);
+        if (horizontalInput == 0 && verticalInput == 0)
+        {
+            targetVelocity = Vector3.zero;
+        }
     }
 
     void AddMovementInput()
     {
-        moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
-        Vector3 targetVelocity = moveDirection * speed;
 
-        if (grounded)
-            // characterController.Move(moveDirection * speed * Time.deltaTime);
-            rb.velocity = new Vector3(targetVelocity.x, rb.velocity.y, targetVelocity.z);
-        else
-            // characterController.Move(moveDirection * speed * airMultiplier * Time.deltaTime);
-            rb.velocity = new Vector3(targetVelocity.x * airMultiplier, rb.velocity.y, targetVelocity.z * airMultiplier);
+        // moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
+        direction = new Vector3(horizontalInput, 0.0f, verticalInput).normalized;
+        if (direction.magnitude >= 0.1f)
+        {
+            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
+            float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, turnSmoothTime);
+            transform.rotation = Quaternion.Euler(0.0f, angle, 0.0f);
+            moveDirection = Quaternion.Euler(0.0f, targetAngle, 0.0f) * Vector3.forward;
+
+            targetVelocity = moveDirection.normalized * speed;
+
+            if (grounded)
+                // characterController.Move(moveDirection * speed * Time.deltaTime);
+                rb.velocity = new Vector3(targetVelocity.x, rb.velocity.y, targetVelocity.z);
+            // rb.MovePosition(rb.position + moveDirection * speed * Time.deltaTime);
+            // rb.AddForce(moveDirection.normalized * (speed * 10.0f) * Time.deltaTime, ForceMode.Force);
+            else
+                // rb.MovePosition(rb.position + moveDirection * speed * airMultiplier * Time.deltaTime);
+                // characterController.Move(moveDirection * speed * airMultiplier * Time.deltaTime);
+                rb.velocity = new Vector3(targetVelocity.x * airMultiplier, rb.velocity.y, targetVelocity.z * airMultiplier);
+            // rb.AddForce(moveDirection.normalized * (speed * airMultiplier * 10.0f) * Time.deltaTime, ForceMode.Force);
+        }
     }
 
     void LimitVelocity()
