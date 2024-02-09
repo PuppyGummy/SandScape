@@ -188,7 +188,7 @@ namespace RTG
 
         public SceneGizmo CreateSceneGizmo(Camera sceneCamera)
         {
-            if (GetSceneGizmoByCamera(sceneCamera) != null) return null;
+            /*if (GetSceneGizmoByCamera(sceneCamera) != null) return null;
 
             var gizmo = new Gizmo();
             RegisterGizmo(gizmo);
@@ -199,7 +199,9 @@ namespace RTG
 
             _sceneGizmos.Add(sceneGizmo);
 
-            return sceneGizmo;
+            return sceneGizmo;*/
+
+            return null;
         }
 
         public MoveGizmo CreateMoveGizmo()
