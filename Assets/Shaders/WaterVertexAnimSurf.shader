@@ -8,6 +8,7 @@ Shader "Custom/WaterVertexAnimSurf"
         _WaveStrength ("Wave Strength", Float) = 0.5
         _WaveFrequency ("Wave Frequency", Float) = 1.0
         _WaveSpeed ("Wave Speed", Float) = 1.0
+        [Toggle] _YAxis("Y Axis?", int) = 0
     }
     SubShader
     {
@@ -34,17 +35,20 @@ Shader "Custom/WaterVertexAnimSurf"
         float _WaveStrength;
         float _WaveFrequency;
         float _WaveSpeed;
+        int _YAxis;
 
         #pragma vertex vert
 
         void vert(inout appdata_full v)
         {
-            float wave = sin(_WaveFrequency * (v.vertex.z + _Time.y * _WaveSpeed)) * _WaveStrength;
-            v.vertex.z += wave;
+            float wave = sin(_WaveFrequency * (v.vertex.y * _YAxis + v.vertex.z * (1-_YAxis) + _Time.y * _WaveSpeed)) * _WaveStrength;
+            v.vertex.y = v.vertex.y + wave * _YAxis;
+            v.vertex.z = v.vertex.z + wave * (1-_YAxis);
 
             float slightHorizontalMovementScale = 0.1;
             v.vertex.x += slightHorizontalMovementScale * wave;
-            v.vertex.y += slightHorizontalMovementScale * wave;
+            v.vertex.y += slightHorizontalMovementScale * wave * (1 - _YAxis);
+            v.vertex.z += slightHorizontalMovementScale * wave * _YAxis;
         }
 
         void surf (Input IN, inout SurfaceOutputStandard o)
