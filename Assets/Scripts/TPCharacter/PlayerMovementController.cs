@@ -75,10 +75,16 @@ public class PlayerMovementController : MonoBehaviour
         Jump();
 
         Invoke(nameof(ResetJump), jumpCoolDown);
-        if (horizontalInput == 0 && verticalInput == 0)
-        {
-            targetVelocity = Vector3.zero;
-        }
+        // if (horizontalInput == 0 && verticalInput == 0)
+        // {
+        //     // lock the character's rotation
+        //     rb.constraints = RigidbodyConstraints.FreezeRotation;
+        // }
+        // else
+        // {
+        //     // unlock the character's rotation
+        //     rb.constraints = RigidbodyConstraints.None;
+        // }
     }
 
     void AddMovementInput()

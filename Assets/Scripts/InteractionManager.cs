@@ -84,7 +84,7 @@ public class InteractionManager : MonoBehaviour
         {
             ResetCamera();
         }
-        if (Input.GetMouseButton(0) && isHoveringObject && selectedObjects.Count != 0)
+        if (Input.GetMouseButton(0) && isHoveringObject && selectedObjects.Count != 0 && !EventSystem.current.IsPointerOverGameObject())
         {
             isDragging = true;
         }
