@@ -21,7 +21,7 @@ public class ObjectController : MonoBehaviour
             if (InteractionManager.Instance.GetSelectedObjects().Contains(gameObject) && InteractionManager.Instance.GetUseGizmo())
                 GizmoController.Instance.EnableGizmo(false);
         }
-        if (InteractionManager.Instance.GetEnablePhysics())
+        if (InteractionManager.Instance.GetEnablePhysics() && !gameObject.GetComponent<Rigidbody>().useGravity)
         {
             if (!InteractionManager.Instance.IsIntersecting(gameObject, InteractionManager.Instance.GetSandbox()))
             {
