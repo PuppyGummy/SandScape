@@ -83,10 +83,6 @@ public class InteractionManager : MonoBehaviour
             HandleRotationInput();
             HandleScaleInput();
         }
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            ResetCamera();
-        }
         if (Input.GetMouseButton(0) && isHoveringObject && selectedObjects.Count != 0 && !EventSystem.current.IsPointerOverGameObject())
         {
             isDragging = true;
@@ -465,7 +461,8 @@ public class InteractionManager : MonoBehaviour
     {
         return selectedObjects;
     }
-    private void ResetCamera()
+    //TODO: Maybe move this to sceneCameraController? Could make sense in the grand scheme
+    public void ResetCamera()
     {
         Camera.main.transform.position = cameraPos;
         Camera.main.transform.rotation = Quaternion.Euler(cameraRotation);

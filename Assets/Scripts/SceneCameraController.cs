@@ -41,4 +41,10 @@ public class SceneCameraController : MonoBehaviour
         gameObject.transform.Rotate(new Vector3(1, 0, 0), rotationXAmount * -1,  Space.Self);
         currentRotation -= rotationXAmount;
     }
+
+    public void ResetCameraPositionAndRotation()
+    {
+        gameObject.transform.rotation = Quaternion.identity;
+        currentRotation = 0.0f;
+    }
 }
