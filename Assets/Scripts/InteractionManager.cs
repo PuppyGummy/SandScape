@@ -48,6 +48,9 @@ public class InteractionManager : MonoBehaviour
     private WaitForFixedUpdate waitForFixedUpdate = new WaitForFixedUpdate();
 
     public static InteractionManager Instance;
+    public float maxScaleSize = 5.0f;
+    public float minScaleSize = 0.1f;
+
     void Awake()
     {
         if (Instance != null)
@@ -339,7 +342,15 @@ public class InteractionManager : MonoBehaviour
 
         foreach (GameObject obj in selectedObjects)
         {
-            obj.transform.localScale += new Vector3(scrollWheel, scrollWheel, scrollWheel) * scaleSpeed;
+            //Vector3 clamp doesn't have a min value...
+            //Im gonna KMS... After the project is finished :^)
+            Vector3 newScale = new Vector3(scrollWheel, scrollWheel, scrollWheel) * scaleSpeed;
+            Vector3 totalScale = obj.transform.localScale + newScale;
+            
+            if(totalScale.magnitude < minScaleSize || totalScale.magnitude > maxScaleSize)
+                return;
+            
+            obj.transform.localScale += newScale;
         }
     }
     public void SpawnObject(GameObject associatedObject)
