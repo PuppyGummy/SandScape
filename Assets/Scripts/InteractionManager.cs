@@ -2,8 +2,6 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
-using RTG;
-
 
 public class InteractionManager : MonoBehaviour
 {
@@ -28,6 +26,7 @@ public class InteractionManager : MonoBehaviour
 
     private bool isDragging = false;
     private bool isHoveringObject = false;
+    private bool enablePhysics = true;
 
     #endregion
 
@@ -67,6 +66,7 @@ public class InteractionManager : MonoBehaviour
         objs = new List<GameObject>();
         selectedObjects = new List<GameObject>();
         selectedRbs = new List<Rigidbody>();
+        sandbox = GameObject.Find("Sandbox");
     }
 
     void Update()
@@ -139,8 +139,6 @@ public class InteractionManager : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             GameObject hitObject = GetHitObject();
-            /*if(hitObject)
-                Debug.Log(hitObject + hitObject.tag);*/
 
             if (hitObject != null && hitObject.CompareTag("Interactable"))
             {
@@ -162,7 +160,6 @@ public class InteractionManager : MonoBehaviour
                 else
                 {
                     //single select
-
                     if (!selectedObjects.Contains(hitObject))
                     {
                         DeselectAllObjects();
@@ -259,10 +256,13 @@ public class InteractionManager : MonoBehaviour
 
             if (selectedRb)
             {
-                selectedRb.freezeRotation = true;
-                selectedRb.useGravity = true;
-                selectedRb.isKinematic = false;
-                Physics.IgnoreCollision(objectToDrag.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
+                if (enablePhysics)
+                {
+                    selectedRb.freezeRotation = true;
+                    selectedRb.useGravity = true;
+                    selectedRb.isKinematic = false;
+                    Physics.IgnoreCollision(objectToDrag.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
+                }
 
                 selectedRbs.Add(selectedRb);
                 Vector3 relativeOffset = selectedRb.transform.position - pos;
@@ -369,13 +369,16 @@ public class InteractionManager : MonoBehaviour
         if (selectedObjects.Count != 1) return;
 
         Rigidbody rb = selectedObjects[0].GetComponent<Rigidbody>();
-        rb.useGravity = true;
+        if (enablePhysics)
+        {
+            rb.useGravity = true;
+            rb.isKinematic = false;
+            Physics.IgnoreCollision(selectedObjects[0].GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
+        }
         rb.velocity = Vector3.zero;
 
         UnlockRotation();
 
-        rb.isKinematic = false;
-        Physics.IgnoreCollision(selectedObjects[0].GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
         selectedObjects[0].transform.position = new Vector3(0f, selectedObjects[0].GetComponent<Renderer>().bounds.extents.y, 0f);
         selectedObjects[0].transform.rotation = Quaternion.identity;
         selectedObjects[0].transform.localScale = Vector3.one;
@@ -490,5 +493,60 @@ public class InteractionManager : MonoBehaviour
         {
             obj.layer = LayerMask.NameToLayer("Objects");
         }
+    }
+    private void DisableAllPhysics()
+    {
+        foreach (GameObject obj in objs)
+        {
+            obj.GetComponent<Rigidbody>().isKinematic = true;
+            obj.GetComponent<Rigidbody>().useGravity = false;
+            obj.GetComponent<Collider>().isTrigger = true;
+        }
+    }
+    private void EnableAllPhysics()
+    {
+        foreach (GameObject obj in objs)
+        {
+            obj.GetComponent<Collider>().isTrigger = false;
+            //if the object is above ground
+            if (!IsIntersecting(obj, sandbox))
+            {
+                obj.GetComponent<Rigidbody>().isKinematic = false;
+                obj.GetComponent<Rigidbody>().useGravity = true;
+                Physics.IgnoreCollision(obj.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
+            }
+            obj.GetComponent<Collider>().isTrigger = false;
+        }
+    }
+    public void SetAllPhysics()
+    {
+        enablePhysics = !enablePhysics;
+        if (objs.Count == 0) return;
+        if (enablePhysics)
+        {
+            EnableAllPhysics();
+        }
+        else
+        {
+            DisableAllPhysics();
+        }
+    }
+    public bool IsIntersecting(GameObject obj1, GameObject obj2)
+    {
+        Bounds obj1Bounds = obj1.GetComponent<Collider>().bounds;
+        Bounds obj2Bounds = obj2.GetComponent<Collider>().bounds;
+        if (obj1Bounds.Intersects(obj2Bounds))
+        {
+            return true;
+        }
+        return false;
+    }
+    public bool GetEnablePhysics()
+    {
+        return enablePhysics;
+    }
+    public GameObject GetSandbox()
+    {
+        return sandbox;
     }
 }
