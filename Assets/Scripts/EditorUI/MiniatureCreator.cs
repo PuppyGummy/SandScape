@@ -125,6 +125,14 @@ namespace EditorUI
             string localPath;
             
             GameObject prefabObject = new GameObject();
+            
+            //Let the new prefab to inherit the original prefab's scale
+            GameObject originalPrefab = meshField.value as GameObject;
+            GameObject prefabInstance = Instantiate(originalPrefab) as GameObject;
+            Vector3 originalScale = prefabInstance.transform.localScale;
+            DestroyImmediate(prefabInstance);
+            prefabObject.transform.localScale = originalScale;
+
             prefabObject = BuildPrefab(prefabObject);
             
             if (!Directory.Exists(rootPath))
