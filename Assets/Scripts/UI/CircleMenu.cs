@@ -6,7 +6,7 @@ public class CircleMenu : MonoBehaviour
 {
     private GameObject selectedObject;
     public Transform actionMenu;
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -21,9 +21,10 @@ public class CircleMenu : MonoBehaviour
             actionMenu.gameObject.SetActive(false);
             return;
         }
-
-        actionMenu.gameObject.SetActive(true);
-        
+        if (Input.GetMouseButtonDown(1))
+        {
+            actionMenu.gameObject.SetActive(!actionMenu.gameObject.activeSelf);
+        }
         selectedObject = InteractionManager.Instance.GetSelectedObjects()[0];
         Vector3 screenPos = Camera.main.WorldToScreenPoint(selectedObject.gameObject.transform.position);
 

@@ -22,7 +22,8 @@ public class ObjectController : MonoBehaviour
 
         if (InteractionManager.Instance.GetEnablePhysics() && !gameObject.GetComponent<Collider>().isTrigger)
         {
-            InteractionManager.Instance.EnablePhysics(gameObject);
+            if (gameObject.CompareTag("Interactable"))
+                InteractionManager.Instance.EnablePhysics(gameObject);
         }
     }
 

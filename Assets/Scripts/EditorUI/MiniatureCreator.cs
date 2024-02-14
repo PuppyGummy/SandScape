@@ -56,22 +56,22 @@ namespace EditorUI
                 }
             };
             root.Add(nameField);
-            
+
             //Miniature model field
             meshField = new ObjectField
             {
                 label = "Model",
                 tooltip = "The prefab model, containing both mesh and materials",
                 objectType = typeof(GameObject),
-                style = { marginLeft =  10, marginRight = 10}
+                style = { marginLeft = 10, marginRight = 10 }
             };
             root.Add(meshField);
-        
+
             //Category field
             categoryField = new DropdownField
             {
                 label = "Category",
-                choices = new List<string>{"Avatar", "Animal", "Nature", "Building", "Monster"}
+                choices = new List<string> { "Avatar", "Animal", "Nature", "Building", "Monster" }
             };
             categoryField.value = categoryField.choices[0];
             categoryField.style.marginLeft = 10;
@@ -89,7 +89,7 @@ namespace EditorUI
                 }
             };
             root.Add(finalizeLabel);
-        
+
             //Create miniature button
             createButton = new Button
             {
@@ -100,7 +100,7 @@ namespace EditorUI
             root.Add(createButton);
         }
 
-        private Action OnClick()
+        private System.Action OnClick()
         {
             return CreationButtonPressed;
         }
@@ -123,9 +123,9 @@ namespace EditorUI
             const string rootPath = "Assets/Prefabs/Miniatures/";
             string categoryPath = categoryField.value + "/";
             string localPath;
-            
+
             GameObject prefabObject = new GameObject();
-            
+
             //Let the new prefab to inherit the original prefab's scale
             GameObject originalPrefab = meshField.value as GameObject;
             if (originalPrefab == null)
@@ -139,7 +139,7 @@ namespace EditorUI
             prefabObject.transform.localScale = originalScale;
 
             prefabObject = BuildPrefab(prefabObject, originalPrefab);
-            
+
             if (!Directory.Exists(rootPath))
                 Debug.LogError("Failed to create asset! Are we missing a folder?");
 

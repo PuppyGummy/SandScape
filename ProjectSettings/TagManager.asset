@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Interactable
   - Sandbox
+  - Locked
   layers:
   - Default
   - TransparentFX

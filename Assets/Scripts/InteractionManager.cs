@@ -113,7 +113,7 @@ public class InteractionManager : MonoBehaviour
         if (Physics.Raycast(ray, out hit, Mathf.Infinity)) //Removed the layer mask so it reacts to other objects
         {
             pos = hit.point;
-            if (hit.collider.CompareTag("Interactable"))
+            if (objs.Contains(hit.collider.gameObject))
             {
                 isHoveringObject = true;
             }
@@ -141,7 +141,7 @@ public class InteractionManager : MonoBehaviour
         {
             GameObject hitObject = GetHitObject();
 
-            if (hitObject != null && hitObject.CompareTag("Interactable"))
+            if (hitObject != null && objs.Contains(hitObject))
             {
                 if (Input.GetKey(KeyCode.LeftShift))
                 {
@@ -249,9 +249,15 @@ public class InteractionManager : MonoBehaviour
     IEnumerator DragMultiObjects(List<GameObject> objectsToDrag)
     {
         List<Vector3> relativeOffsets = new List<Vector3>();
+        Vector3 originalPos = new Vector3();
+        Vector3 newPos = new Vector3();
 
         foreach (GameObject objectToDrag in objectsToDrag)
         {
+            if (objectToDrag.CompareTag("Locked"))
+            {
+                continue;
+            }
             Rigidbody selectedRb;
             objectToDrag.TryGetComponent(out selectedRb);
 
@@ -273,8 +279,13 @@ public class InteractionManager : MonoBehaviour
 
         while (Input.GetMouseButton(0))
         {
+            originalPos = selectedObjects[0].transform.position;
             for (int i = 0; i < objectsToDrag.Count; i++)
             {
+                if (objectsToDrag[0].CompareTag("Locked"))
+                {
+                    continue;
+                }
                 Rigidbody rb = objectsToDrag[i].GetComponent<Rigidbody>();
                 if (rb)
                 {
@@ -285,18 +296,29 @@ public class InteractionManager : MonoBehaviour
                     // Action moveAction = new Action(rb.transform, originalPosition, rb.transform.position);
                     // HistoryManager.Instance.RecordAction(moveAction);
                     GameObject indicator = indicators[i];
-                    indicator.SetActive(true);
-                    //cast a ray down the object and place the object indicator at the hit point
-                    if (Physics.Raycast(rb.transform.position, Vector3.down, out hit, Mathf.Infinity))
+                    if (indicator != null)
                     {
-                        indicator.transform.position = hit.point;
-                        //lock the rotation of the indicator
-                        indicator.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
+                        indicator.SetActive(true);
+                        //cast a ray down the object and place the object indicator at the hit point
+                        if (Physics.Raycast(rb.transform.position, Vector3.down, out hit, Mathf.Infinity))
+                        {
+                            indicator.transform.position = hit.point;
+                            //lock the rotation of the indicator
+                            indicator.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
+                        }
                     }
                 }
             }
             yield return waitForFixedUpdate;
         }
+        // if (Input.GetMouseButtonUp(0))
+        // {
+        //     Debug.Log("Recording move action");
+        //     newPos = selectedObjects[0].transform.position;
+        //     Debug.Log("Original position: " + originalPos + " New position: " + newPos);
+        //     MoveAction moveAction = new MoveAction(selectedObjects, originalPos, newPos);
+        //     HistoryManager.Instance.RecordAction(moveAction);
+        // }
 
         indicators.ForEach(indicator => indicator.SetActive(false));
 
@@ -305,6 +327,8 @@ public class InteractionManager : MonoBehaviour
 
     void HandleRotationInput()
     {
+        Vector3 originalRotation = new Vector3();
+        Vector3 newRotation = new Vector3();
         //Only rotate object if the right mouse button is held
         if (Input.GetMouseButton(1))
         {
@@ -312,9 +336,13 @@ public class InteractionManager : MonoBehaviour
             float mouseX = Input.GetAxis("Mouse X") * rotationSpeed;
             float mouseY = Input.GetAxis("Mouse Y") * rotationSpeed;
 
+            originalRotation = selectedObjects[0].transform.rotation.eulerAngles;
             foreach (GameObject obj in selectedObjects)
             {
-                // Quaternion originalRotation = obj.transform.rotation;
+                if (obj.CompareTag("Locked"))
+                {
+                    break;
+                }
                 Rigidbody selectedRb;
                 obj.TryGetComponent(out selectedRb);
                 if (selectedRb)
@@ -324,31 +352,48 @@ public class InteractionManager : MonoBehaviour
 
                 obj.transform.Rotate(Vector3.up, -mouseX, Space.World);
                 obj.transform.Rotate(Vector3.right, mouseY, Space.World);
-                // Quaternion newRotation = obj.transform.rotation;
-                // Action rotateAction = new Action(obj.transform, originalRotation, newRotation);
-                // HistoryManager.Instance.RecordAction(rotateAction);
             }
+        }
+        if (Input.GetMouseButtonUp(1))
+        {
+            Debug.Log("Recording rotate action");
+            newRotation = selectedObjects[0].transform.rotation.eulerAngles;
+            Debug.Log("Original rotation: " + originalRotation + " New rotation: " + newRotation);
+            RotateAction rotateAction = new RotateAction(selectedObjects, originalRotation, newRotation);
+            HistoryManager.Instance.RecordAction(rotateAction);
         }
     }
 
     void HandleScaleInput()
     {
         float scrollWheel = Input.GetAxis("Mouse ScrollWheel");
-        if (scrollWheel == 0) return;
-        foreach (GameObject obj in selectedObjects)
+        Vector3 originalScale = selectedObjects[0].transform.localScale;
+        if (scrollWheel != 0)
         {
-            //Vector3 clamp doesn't have a min value...
-            //Im gonna KMS... After the project is finished :^)
-            // Vector3 originalScale = obj.transform.localScale;
-            Vector3 newScale = new Vector3(scrollWheel, scrollWheel, scrollWheel) * scaleSpeed;
-            Vector3 totalScale = obj.transform.localScale + newScale;
+            foreach (GameObject obj in selectedObjects)
+            {
+                if (obj.CompareTag("Locked"))
+                {
+                    break;
+                }
+                //Vector3 clamp doesn't have a min value...
+                //Im gonna KMS... After the project is finished :^)
+                // Vector3 originalScale = obj.transform.localScale;
+                Vector3 newScale = new Vector3(scrollWheel, scrollWheel, scrollWheel) * scaleSpeed;
+                Vector3 totalScale = obj.transform.localScale + newScale;
 
-            if (totalScale.magnitude < minScaleSize || totalScale.magnitude > maxScaleSize)
-                return;
+                if (totalScale.magnitude < minScaleSize || totalScale.magnitude > maxScaleSize)
+                    return;
 
-            obj.transform.localScale += newScale;
-            // Action scaleAction = new Action(obj.transform, obj.transform.position, obj.transform.position, originalScale, obj.transform.localScale);
-            // HistoryManager.Instance.RecordAction(scaleAction);
+                obj.transform.localScale += newScale;
+                // Action scaleAction = new Action(obj.transform, obj.transform.position, obj.transform.position, originalScale, obj.transform.localScale);
+                // HistoryManager.Instance.RecordAction(scaleAction);
+            }
+        }
+        if (scrollWheel == 0)
+        {
+            ScaleAction scaleAction = new ScaleAction(selectedObjects, originalScale, selectedObjects[0].transform.localScale);
+            HistoryManager.Instance.RecordAction(scaleAction);
         }
     }
     public void SpawnObject(GameObject associatedObject)
@@ -470,12 +515,12 @@ public class InteractionManager : MonoBehaviour
         if (useGizmo && selectedObjects.Count == 0) return;
         GizmoController.Instance.EnableWorkGizmo(useGizmo);
         if (useGizmo)
-            foreach (GameObject obj in selectedObjects)
+            foreach (GameObject obj in objs)
             {
                 DisablePhysics(obj);
             }
         else
-            foreach (GameObject obj in selectedObjects)
+            foreach (GameObject obj in objs)
             {
                 EnablePhysics(obj);
             }
@@ -531,33 +576,28 @@ public class InteractionManager : MonoBehaviour
     }
     private void DisablePhysics(GameObject obj)
     {
-        obj.GetComponent<Rigidbody>().isKinematic = true;
-        obj.GetComponent<Rigidbody>().useGravity = false;
-        obj.GetComponent<Collider>().isTrigger = true;
-    }
-    private void DisableAllPhysics()
-    {
-        foreach (GameObject obj in objs)
+        if (obj.CompareTag("Interactable"))
         {
             obj.GetComponent<Rigidbody>().isKinematic = true;
             obj.GetComponent<Rigidbody>().useGravity = false;
             obj.GetComponent<Collider>().isTrigger = true;
         }
     }
-    public void EnablePhysics(GameObject obj)
-    {
-        obj.GetComponent<Collider>().isTrigger = false;
-        //if the object is above ground
-        if (!IsIntersecting(obj, sandbox))
-        {
-            obj.GetComponent<Rigidbody>().isKinematic = false;
-            obj.GetComponent<Rigidbody>().useGravity = true;
-            Physics.IgnoreCollision(obj.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
-        }
-    }
-    private void EnableAllPhysics()
+    private void DisableAllPhysics()
     {
         foreach (GameObject obj in objs)
+        {
+            if (obj.CompareTag("Interactable"))
+            {
+                obj.GetComponent<Rigidbody>().isKinematic = true;
+                obj.GetComponent<Rigidbody>().useGravity = false;
+                obj.GetComponent<Collider>().isTrigger = true;
+            }
+        }
+    }
+    public void EnablePhysics(GameObject obj)
+    {
+        if (obj.CompareTag("Interactable"))
         {
             obj.GetComponent<Collider>().isTrigger = false;
             //if the object is above ground
@@ -566,6 +606,23 @@ public class InteractionManager : MonoBehaviour
                 obj.GetComponent<Rigidbody>().isKinematic = false;
                 obj.GetComponent<Rigidbody>().useGravity = true;
                 Physics.IgnoreCollision(obj.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
+            }
+        }
+    }
+    private void EnableAllPhysics()
+    {
+        foreach (GameObject obj in objs)
+        {
+            if (obj.CompareTag("Interactable"))
+            {
+                obj.GetComponent<Collider>().isTrigger = false;
+                //if the object is above ground
+                if (!IsIntersecting(obj, sandbox))
+                {
+                    obj.GetComponent<Rigidbody>().isKinematic = false;
+                    obj.GetComponent<Rigidbody>().useGravity = true;
+                    Physics.IgnoreCollision(obj.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
+                }
             }
         }
     }
@@ -600,12 +657,28 @@ public class InteractionManager : MonoBehaviour
     {
         return sandbox;
     }
-    // public void Undo()
-    // {
-    //     HistoryManager.Instance.Undo();
-    // }
-    // public void Redo()
-    // {
-    //     HistoryManager.Instance.Redo();
-    // }
+    public void Undo()
+    {
+        HistoryManager.Instance.Undo();
+    }
+    public void Redo()
+    {
+        HistoryManager.Instance.Redo();
+    }
+    public void Lock()
+    {
+        if (selectedObjects.Count == 0) return;
+        foreach (GameObject obj in selectedObjects)
+        {
+            // if (!IsIntersecting(obj, sandbox))
+            {
+                obj.GetComponent<Rigidbody>().isKinematic = !obj.GetComponent<Rigidbody>().isKinematic;
+                obj.GetComponent<Rigidbody>().useGravity = !obj.GetComponent<Rigidbody>().useGravity;
+            }
+            if (obj.tag == "Interactable")
+                obj.tag = "Locked";
+            else if (obj.tag == "Locked")
+                obj.tag = "Interactable";
+        }
+    }
 }
