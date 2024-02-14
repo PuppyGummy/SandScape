@@ -160,6 +160,7 @@ namespace EditorUI
             Outline outlineComponent = prefabObject.AddComponent<Outline>();
             prefabObject.AddComponent<ObjectController>();
 
+            //Add movement controller to avatars
             if (categoryField.value == categoryField.choices[0])
             {
                 PlayerMovementController playerMovementController = prefabObject.AddComponent<PlayerMovementController>();
@@ -173,13 +174,12 @@ namespace EditorUI
             //Setup all component values
             meshFilterComponent.sharedMesh = meshField.value.GetComponent<MeshFilter>().sharedMesh;
             meshRendererComponent.materials = meshField.value.GetComponent<MeshRenderer>().sharedMaterials;
-            // meshColliderComponent.convex = true;
-            // meshColliderComponent.sharedMesh = meshFilterComponent.sharedMesh;
-
-            CopyColliders(originalPrefab, prefabObject);
-
             outlineComponent.enabled = false;
 
+            //Copy colliders
+            CopyColliders(originalPrefab, prefabObject);
+
+            //Setup tags and layers
             prefabObject.tag = "Interactable";
             prefabObject.layer = LayerMask.NameToLayer("Objects");
 
