@@ -147,6 +147,16 @@ namespace EditorUI
             Outline outlineComponent = prefabObject.AddComponent<Outline>();
             prefabObject.AddComponent<ObjectController>();
 
+            if (categoryField.value == categoryField.choices[0])
+            {
+                PlayerMovementController playerMovementController = prefabObject.AddComponent<PlayerMovementController>();
+                playerMovementController.enabled = false;
+
+                GameObject orientationObject = new GameObject();
+                orientationObject.name = "Orientation";
+                orientationObject.transform.parent = prefabObject.transform;
+            }
+
             //Setup all component values
             meshFilterComponent.sharedMesh = meshField.value.GetComponent<MeshFilter>().sharedMesh;
             meshRendererComponent.materials = meshField.value.GetComponent<MeshRenderer>().sharedMaterials;

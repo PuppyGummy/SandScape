@@ -19,7 +19,7 @@ namespace TPCharacter
             }
 
             player = InteractionManager.Instance.playerObject;
-            orientation = player.transform.GetChild(1).transform;
+            orientation = player.transform.Find("Orientation");
 
             cinemachineFreeLook.LookAt = player.transform;
             cinemachineFreeLook.Follow = player.transform;
