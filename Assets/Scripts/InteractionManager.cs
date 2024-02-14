@@ -21,6 +21,7 @@ public class InteractionManager : MonoBehaviour
     /// Rigidbody of the selected object
     /// </summary>
     private List<Rigidbody> selectedRbs;
+    private List<GameObject> indicators;
     private Vector3 cameraPos;
     private Vector3 cameraRotation;
 
@@ -69,6 +70,7 @@ public class InteractionManager : MonoBehaviour
         objs = new List<GameObject>();
         selectedObjects = new List<GameObject>();
         selectedRbs = new List<Rigidbody>();
+        indicators = new List<GameObject>();
         sandbox = GameObject.Find("Sandbox");
     }
 
@@ -276,10 +278,13 @@ public class InteractionManager : MonoBehaviour
                 Rigidbody rb = objectsToDrag[i].GetComponent<Rigidbody>();
                 if (rb)
                 {
+                    // Vector3 originalPosition = rb.transform.position;
                     float bottomToCenterDistance = rb.GetComponent<Collider>().bounds.extents.y + pos.y;
 
                     rb.transform.position = new Vector3(pos.x + relativeOffsets[i].x, Mathf.Max(pos.y + bottomToCenterDistance, minYValue), pos.z + relativeOffsets[i].z);
-                    GameObject indicator = rb.transform.Find("Indicator(Clone)").gameObject;
+                    // Action moveAction = new Action(rb.transform, originalPosition, rb.transform.position);
+                    // HistoryManager.Instance.RecordAction(moveAction);
+                    GameObject indicator = indicators[i];
                     indicator.SetActive(true);
                     //cast a ray down the object and place the object indicator at the hit point
                     if (Physics.Raycast(rb.transform.position, Vector3.down, out hit, Mathf.Infinity))
@@ -293,14 +298,7 @@ public class InteractionManager : MonoBehaviour
             yield return waitForFixedUpdate;
         }
 
-        foreach (Rigidbody selectedRb in selectedRbs)
-        {
-            if (selectedRb)
-            {
-                selectedRb.velocity = Vector3.zero;
-                selectedRb.transform.Find("Indicator(Clone)").gameObject.SetActive(false);
-            }
-        }
+        indicators.ForEach(indicator => indicator.SetActive(false));
 
         UnlockRotation();
     }
@@ -310,11 +308,13 @@ public class InteractionManager : MonoBehaviour
         //Only rotate object if the right mouse button is held
         if (Input.GetMouseButton(1))
         {
+            UnlockRotation();
             float mouseX = Input.GetAxis("Mouse X") * rotationSpeed;
             float mouseY = Input.GetAxis("Mouse Y") * rotationSpeed;
 
             foreach (GameObject obj in selectedObjects)
             {
+                // Quaternion originalRotation = obj.transform.rotation;
                 Rigidbody selectedRb;
                 obj.TryGetComponent(out selectedRb);
                 if (selectedRb)
@@ -324,29 +324,31 @@ public class InteractionManager : MonoBehaviour
 
                 obj.transform.Rotate(Vector3.up, -mouseX, Space.World);
                 obj.transform.Rotate(Vector3.right, mouseY, Space.World);
+                // Quaternion newRotation = obj.transform.rotation;
+                // Action rotateAction = new Action(obj.transform, originalRotation, newRotation);
+                // HistoryManager.Instance.RecordAction(rotateAction);
             }
-        }
-        else if (!Input.GetMouseButtonUp(1))
-        {
-            UnlockRotation();
         }
     }
 
     void HandleScaleInput()
     {
         float scrollWheel = Input.GetAxis("Mouse ScrollWheel");
-
+        if (scrollWheel == 0) return;
         foreach (GameObject obj in selectedObjects)
         {
             //Vector3 clamp doesn't have a min value...
             //Im gonna KMS... After the project is finished :^)
+            // Vector3 originalScale = obj.transform.localScale;
             Vector3 newScale = new Vector3(scrollWheel, scrollWheel, scrollWheel) * scaleSpeed;
             Vector3 totalScale = obj.transform.localScale + newScale;
-            
-            if(totalScale.magnitude < minScaleSize || totalScale.magnitude > maxScaleSize)
+
+            if (totalScale.magnitude < minScaleSize || totalScale.magnitude > maxScaleSize)
                 return;
-            
+
             obj.transform.localScale += newScale;
+            // Action scaleAction = new Action(obj.transform, obj.transform.position, obj.transform.position, originalScale, obj.transform.localScale);
+            // HistoryManager.Instance.RecordAction(scaleAction);
         }
     }
     public void SpawnObject(GameObject associatedObject)
@@ -364,8 +366,13 @@ public class InteractionManager : MonoBehaviour
         }
         DeselectAllObjects();
         SelectObject(spawnedObject);
+        if (!enablePhysics || useGizmo)
+        {
+            DisablePhysics(spawnedObject);
+        }
         spawnedObject.layer = LayerMask.NameToLayer("Objects");
         GameObject indicator = Instantiate(objectIndicator, Vector3.zero, Quaternion.identity);
+        indicators.Add(indicator);
         indicator.transform.SetParent(spawnedObject.transform);
         indicator.SetActive(false);
     }
@@ -374,6 +381,9 @@ public class InteractionManager : MonoBehaviour
     {
         //you can only reset if there is one object selected
         if (selectedObjects.Count != 1) return;
+        // Vector3 originalPosition = selectedObjects[0].transform.position;
+        // Quaternion originalRotation = selectedObjects[0].transform.rotation;
+        // Vector3 originalScale = selectedObjects[0].transform.localScale;
 
         Rigidbody rb = selectedObjects[0].GetComponent<Rigidbody>();
         if (enablePhysics)
@@ -389,15 +399,18 @@ public class InteractionManager : MonoBehaviour
         selectedObjects[0].transform.position = new Vector3(0f, selectedObjects[0].GetComponent<Renderer>().bounds.extents.y, 0f);
         selectedObjects[0].transform.rotation = Quaternion.identity;
         selectedObjects[0].transform.localScale = Vector3.one;
+        // Action action = new Action(selectedObjects[0].transform, originalPosition, selectedObjects[0].transform.position, originalRotation, selectedObjects[0].transform.rotation, originalScale, selectedObjects[0].transform.localScale);
+        // HistoryManager.Instance.RecordAction(action);
     }
     public void Delete()
     {
         if (selectedObjects.Count != 0)
         {
-            foreach (GameObject obj in selectedObjects)
+            for (int i = 0; i < selectedObjects.Count; i++)
             {
-                objs.Remove(obj);
-                Destroy(obj);
+                objs.Remove(selectedObjects[i]);
+                Destroy(selectedObjects[i]);
+                indicators.Remove(indicators[i]);
             }
             selectedObjects.Clear();
 
@@ -420,6 +433,7 @@ public class InteractionManager : MonoBehaviour
         if (selectedObjects.Count == 0) return;
         foreach (GameObject obj in selectedObjects)
         {
+            // Vector3 originalPosition = obj.transform.position;
             if (obj.GetComponent<ObjectController>().IsOnGround() == false) return;
             Rigidbody rb = obj.GetComponent<Rigidbody>();
             rb.velocity = Vector3.zero;
@@ -430,6 +444,9 @@ public class InteractionManager : MonoBehaviour
 
             Physics.IgnoreCollision(obj.GetComponent<Collider>(), sandbox.GetComponent<Collider>());
             obj.transform.position = new Vector3(obj.transform.position.x, obj.transform.position.y - buryDepth, obj.transform.position.z);
+            // Vector3 newPosition = obj.transform.position;
+            // Action buryAction = new Action(obj.transform, originalPosition, newPosition);
+            // HistoryManager.Instance.RecordAction(buryAction);
         }
     }
 
@@ -452,6 +469,16 @@ public class InteractionManager : MonoBehaviour
         useGizmo = !useGizmo;
         if (useGizmo && selectedObjects.Count == 0) return;
         GizmoController.Instance.EnableWorkGizmo(useGizmo);
+        if (useGizmo)
+            foreach (GameObject obj in selectedObjects)
+            {
+                DisablePhysics(obj);
+            }
+        else
+            foreach (GameObject obj in selectedObjects)
+            {
+                EnablePhysics(obj);
+            }
     }
     public bool GetUseGizmo()
     {
@@ -502,6 +529,12 @@ public class InteractionManager : MonoBehaviour
             obj.layer = LayerMask.NameToLayer("Objects");
         }
     }
+    private void DisablePhysics(GameObject obj)
+    {
+        obj.GetComponent<Rigidbody>().isKinematic = true;
+        obj.GetComponent<Rigidbody>().useGravity = false;
+        obj.GetComponent<Collider>().isTrigger = true;
+    }
     private void DisableAllPhysics()
     {
         foreach (GameObject obj in objs)
@@ -509,6 +542,17 @@ public class InteractionManager : MonoBehaviour
             obj.GetComponent<Rigidbody>().isKinematic = true;
             obj.GetComponent<Rigidbody>().useGravity = false;
             obj.GetComponent<Collider>().isTrigger = true;
+        }
+    }
+    public void EnablePhysics(GameObject obj)
+    {
+        obj.GetComponent<Collider>().isTrigger = false;
+        //if the object is above ground
+        if (!IsIntersecting(obj, sandbox))
+        {
+            obj.GetComponent<Rigidbody>().isKinematic = false;
+            obj.GetComponent<Rigidbody>().useGravity = true;
+            Physics.IgnoreCollision(obj.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
         }
     }
     private void EnableAllPhysics()
@@ -523,7 +567,6 @@ public class InteractionManager : MonoBehaviour
                 obj.GetComponent<Rigidbody>().useGravity = true;
                 Physics.IgnoreCollision(obj.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
             }
-            obj.GetComponent<Collider>().isTrigger = false;
         }
     }
     public void SetAllPhysics()
@@ -557,4 +600,12 @@ public class InteractionManager : MonoBehaviour
     {
         return sandbox;
     }
+    // public void Undo()
+    // {
+    //     HistoryManager.Instance.Undo();
+    // }
+    // public void Redo()
+    // {
+    //     HistoryManager.Instance.Redo();
+    // }
 }
