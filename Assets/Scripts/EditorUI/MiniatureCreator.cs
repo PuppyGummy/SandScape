@@ -133,7 +133,7 @@ namespace EditorUI
                 Debug.LogError("No original prefab selected!");
                 return;
             }
-            GameObject prefabInstance = Instantiate(originalPrefab) as GameObject;
+            GameObject prefabInstance = Instantiate(originalPrefab);
             Vector3 originalScale = prefabInstance.transform.localScale;
             DestroyImmediate(prefabInstance);
             prefabObject.transform.localScale = originalScale;
