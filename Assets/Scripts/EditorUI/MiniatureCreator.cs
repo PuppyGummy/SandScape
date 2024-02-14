@@ -64,7 +64,8 @@ namespace EditorUI
             meshField = new ObjectField
             {
                 label = "Model",
-                objectType = typeof(Mesh),
+                tooltip = "The prefab model, containing both mesh and materials",
+                objectType = typeof(GameObject),
                 style = { marginLeft =  10, marginRight = 10}
             };
             root.Add(meshField);
@@ -149,7 +150,8 @@ namespace EditorUI
             prefabObject.AddComponent<ObjectController>();
 
             //TODO: Mesh filter and renderer settings should be copied from prefab, not model
-            meshFilterComponent.sharedMesh = (Mesh)meshField.value;
+            meshFilterComponent.sharedMesh = meshField.value.GetComponent<MeshFilter>().sharedMesh;
+            meshRendererComponent.materials = meshField.value.GetComponent<MeshRenderer>().sharedMaterials;
             meshColliderComponent.convex = true;
             meshColliderComponent.sharedMesh = meshFilterComponent.sharedMesh;
             outlineComponent.enabled = false;
