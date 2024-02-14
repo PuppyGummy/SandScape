@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 33303969372556330}
   - component: {fileID: 23852199586524012}
   - component: {fileID: 64957917542521298}
+  - component: {fileID: 5634453216014742046}
   m_Layer: 0
   m_Name: t-rex
   m_TagString: Untagged
@@ -107,6 +108,27 @@ MeshCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 5
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300002, guid: 4c61063d9c6dc4f2fb7fec8e7fb8ed34, type: 3}
+--- !u!65 &5634453216014742046
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1919096439118448}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3.3199182, y: 0.82796216, z: 4.861829}
+  m_Center: {x: 0.0000001192093, y: 0.3480656, z: 0.4443097}
