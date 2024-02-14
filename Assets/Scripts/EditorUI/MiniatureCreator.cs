@@ -125,7 +125,20 @@ namespace EditorUI
             string localPath;
             
             GameObject prefabObject = new GameObject();
-            prefabObject = BuildPrefab(prefabObject);
+            
+            //Let the new prefab to inherit the original prefab's scale
+            GameObject originalPrefab = meshField.value as GameObject;
+            if (originalPrefab == null)
+            {
+                Debug.LogError("No original prefab selected!");
+                return;
+            }
+            GameObject prefabInstance = Instantiate(originalPrefab);
+            Vector3 originalScale = prefabInstance.transform.localScale;
+            DestroyImmediate(prefabInstance);
+            prefabObject.transform.localScale = originalScale;
+
+            prefabObject = BuildPrefab(prefabObject, originalPrefab);
             
             if (!Directory.Exists(rootPath))
                 Debug.LogError("Failed to create asset! Are we missing a folder?");
@@ -137,13 +150,13 @@ namespace EditorUI
             DestroyImmediate(prefabObject);
         }
 
-        private GameObject BuildPrefab(GameObject prefabObject)
+        private GameObject BuildPrefab(GameObject prefabObject, GameObject originalPrefab)
         {
             //Add and save components
             MeshFilter meshFilterComponent = prefabObject.AddComponent<MeshFilter>();
             MeshRenderer meshRendererComponent = prefabObject.AddComponent<MeshRenderer>();
             Rigidbody rigidbodyComponent = prefabObject.AddComponent<Rigidbody>();
-            MeshCollider meshColliderComponent = prefabObject.AddComponent<MeshCollider>();
+            // MeshCollider meshColliderComponent = prefabObject.AddComponent<MeshCollider>();
             Outline outlineComponent = prefabObject.AddComponent<Outline>();
             prefabObject.AddComponent<ObjectController>();
 
@@ -160,14 +173,59 @@ namespace EditorUI
             //Setup all component values
             meshFilterComponent.sharedMesh = meshField.value.GetComponent<MeshFilter>().sharedMesh;
             meshRendererComponent.materials = meshField.value.GetComponent<MeshRenderer>().sharedMaterials;
-            meshColliderComponent.convex = true;
-            meshColliderComponent.sharedMesh = meshFilterComponent.sharedMesh;
+            // meshColliderComponent.convex = true;
+            // meshColliderComponent.sharedMesh = meshFilterComponent.sharedMesh;
+
+            CopyColliders(originalPrefab, prefabObject);
+
             outlineComponent.enabled = false;
 
             prefabObject.tag = "Interactable";
             prefabObject.layer = LayerMask.NameToLayer("Objects");
 
             return prefabObject;
+        }
+
+        private void CopyColliders(GameObject source, GameObject destination)
+        {
+            // Copy BoxCollider
+            foreach (var originalCollider in source.GetComponents<BoxCollider>())
+            {
+                BoxCollider collider = destination.AddComponent<BoxCollider>();
+                collider.center = originalCollider.center;
+                collider.size = originalCollider.size;
+                collider.isTrigger = originalCollider.isTrigger;
+            }
+
+            // Copy SphereCollider
+            foreach (var originalCollider in source.GetComponents<SphereCollider>())
+            {
+                SphereCollider collider = destination.AddComponent<SphereCollider>();
+                collider.center = originalCollider.center;
+                collider.radius = originalCollider.radius;
+                collider.isTrigger = originalCollider.isTrigger;
+            }
+
+            // Copy CapsuleCollider
+            foreach (var originalCollider in source.GetComponents<CapsuleCollider>())
+            {
+                CapsuleCollider collider = destination.AddComponent<CapsuleCollider>();
+                collider.center = originalCollider.center;
+                collider.radius = originalCollider.radius;
+                collider.height = originalCollider.height;
+                collider.direction = originalCollider.direction; // 0 = X, 1 = Y, 2 = Z
+                collider.isTrigger = originalCollider.isTrigger;
+            }
+
+            // Copy MeshCollider
+            foreach (var originalCollider in source.GetComponents<MeshCollider>())
+            {
+                MeshCollider collider = destination.AddComponent<MeshCollider>();
+                collider.sharedMesh = originalCollider.sharedMesh;
+                //don't want to do boring repetitive work :^)
+                collider.convex = true;
+                collider.isTrigger = originalCollider.isTrigger;
+            }
         }
     }
 }
