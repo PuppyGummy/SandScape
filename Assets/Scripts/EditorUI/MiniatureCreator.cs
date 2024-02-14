@@ -6,7 +6,6 @@ using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
-using Object = UnityEngine.Object;
 
 namespace EditorUI
 {
@@ -25,7 +24,6 @@ namespace EditorUI
         private ObjectField meshField;
         private DropdownField categoryField;
         private Button createButton;
-        private readonly Color outlineColor = new(78.0f, 186.0f, 204.0f, 255.0f);
 
         public void CreateGUI()
         {
@@ -58,8 +56,7 @@ namespace EditorUI
                 }
             };
             root.Add(nameField);
-
-            //TODO: Change from mesh to prefab.
+            
             //Miniature model field
             meshField = new ObjectField
             {
@@ -123,7 +120,7 @@ namespace EditorUI
 
         private void CreatePrefab()
         {
-            string rootPath = "Assets/Prefabs/Miniatures/";
+            const string rootPath = "Assets/Prefabs/Miniatures/";
             string categoryPath = categoryField.value + "/";
             string localPath;
             
@@ -142,6 +139,7 @@ namespace EditorUI
 
         private GameObject BuildPrefab(GameObject prefabObject)
         {
+            //Add and save components
             MeshFilter meshFilterComponent = prefabObject.AddComponent<MeshFilter>();
             MeshRenderer meshRendererComponent = prefabObject.AddComponent<MeshRenderer>();
             Rigidbody rigidbodyComponent = prefabObject.AddComponent<Rigidbody>();
@@ -149,7 +147,7 @@ namespace EditorUI
             Outline outlineComponent = prefabObject.AddComponent<Outline>();
             prefabObject.AddComponent<ObjectController>();
 
-            //TODO: Mesh filter and renderer settings should be copied from prefab, not model
+            //Setup all component values
             meshFilterComponent.sharedMesh = meshField.value.GetComponent<MeshFilter>().sharedMesh;
             meshRendererComponent.materials = meshField.value.GetComponent<MeshRenderer>().sharedMaterials;
             meshColliderComponent.convex = true;
