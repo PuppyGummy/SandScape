@@ -366,6 +366,10 @@ public class InteractionManager : MonoBehaviour
         }
         DeselectAllObjects();
         SelectObject(spawnedObject);
+        if (!enablePhysics || useGizmo)
+        {
+            DisablePhysics(spawnedObject);
+        }
         spawnedObject.layer = LayerMask.NameToLayer("Objects");
         GameObject indicator = Instantiate(objectIndicator, Vector3.zero, Quaternion.identity);
         indicators.Add(indicator);
@@ -402,10 +406,11 @@ public class InteractionManager : MonoBehaviour
     {
         if (selectedObjects.Count != 0)
         {
-            foreach (GameObject obj in selectedObjects)
+            for (int i = 0; i < selectedObjects.Count; i++)
             {
-                objs.Remove(obj);
-                Destroy(obj);
+                objs.Remove(selectedObjects[i]);
+                Destroy(selectedObjects[i]);
+                indicators.Remove(indicators[i]);
             }
             selectedObjects.Clear();
 
@@ -464,6 +469,16 @@ public class InteractionManager : MonoBehaviour
         useGizmo = !useGizmo;
         if (useGizmo && selectedObjects.Count == 0) return;
         GizmoController.Instance.EnableWorkGizmo(useGizmo);
+        if (useGizmo)
+            foreach (GameObject obj in selectedObjects)
+            {
+                DisablePhysics(obj);
+            }
+        else
+            foreach (GameObject obj in selectedObjects)
+            {
+                EnablePhysics(obj);
+            }
     }
     public bool GetUseGizmo()
     {
@@ -514,6 +529,12 @@ public class InteractionManager : MonoBehaviour
             obj.layer = LayerMask.NameToLayer("Objects");
         }
     }
+    private void DisablePhysics(GameObject obj)
+    {
+        obj.GetComponent<Rigidbody>().isKinematic = true;
+        obj.GetComponent<Rigidbody>().useGravity = false;
+        obj.GetComponent<Collider>().isTrigger = true;
+    }
     private void DisableAllPhysics()
     {
         foreach (GameObject obj in objs)
@@ -521,6 +542,17 @@ public class InteractionManager : MonoBehaviour
             obj.GetComponent<Rigidbody>().isKinematic = true;
             obj.GetComponent<Rigidbody>().useGravity = false;
             obj.GetComponent<Collider>().isTrigger = true;
+        }
+    }
+    public void EnablePhysics(GameObject obj)
+    {
+        obj.GetComponent<Collider>().isTrigger = false;
+        //if the object is above ground
+        if (!IsIntersecting(obj, sandbox))
+        {
+            obj.GetComponent<Rigidbody>().isKinematic = false;
+            obj.GetComponent<Rigidbody>().useGravity = true;
+            Physics.IgnoreCollision(obj.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
         }
     }
     private void EnableAllPhysics()
@@ -535,7 +567,6 @@ public class InteractionManager : MonoBehaviour
                 obj.GetComponent<Rigidbody>().useGravity = true;
                 Physics.IgnoreCollision(obj.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
             }
-            obj.GetComponent<Collider>().isTrigger = false;
         }
     }
     public void SetAllPhysics()
@@ -569,12 +600,12 @@ public class InteractionManager : MonoBehaviour
     {
         return sandbox;
     }
-    public void Undo()
-    {
-        HistoryManager.Instance.Undo();
-    }
-    public void Redo()
-    {
-        HistoryManager.Instance.Redo();
-    }
+    // public void Undo()
+    // {
+    //     HistoryManager.Instance.Undo();
+    // }
+    // public void Redo()
+    // {
+    //     HistoryManager.Instance.Redo();
+    // }
 }
