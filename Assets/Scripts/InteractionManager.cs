@@ -30,6 +30,7 @@ public class InteractionManager : MonoBehaviour
     private bool isHoveringObject = false;
     private bool enablePhysics = true;
     private bool isScaling = false;
+    private bool isRotating = false;
 
     #endregion
 
@@ -91,6 +92,7 @@ public class InteractionManager : MonoBehaviour
                 HandleScaleInput();
         }
         ScaleObjects();
+        RotateObjects();
         if (Input.GetMouseButton(0) && isHoveringObject && selectedObjects.Count != 0 && !EventSystem.current.IsPointerOverGameObject())
         {
             isDragging = true;
@@ -380,6 +382,41 @@ public class InteractionManager : MonoBehaviour
         //     HistoryManager.Instance.RecordAction(rotateAction);
         // }
     }
+    public void StartRotating()
+    {
+        isRotating = true;
+        initialMousePosition = Input.mousePosition;
+    }
+
+    public void RotateObjects()
+    {
+        if (isRotating)
+        {
+            Vector3 currentMousePosition = Input.mousePosition;
+            Vector3 rotationDelta = currentMousePosition - initialMousePosition;
+
+            foreach (GameObject obj in selectedObjects)
+            {
+                if (obj.CompareTag("Locked"))
+                {
+                    continue;
+                }
+
+                float rotationX = rotationDelta.y * rotationSpeed * 0.01f;
+                float rotationY = -rotationDelta.x * rotationSpeed * 0.01f;
+
+                obj.transform.Rotate(Vector3.up, rotationY, Space.World);
+                obj.transform.Rotate(Vector3.right, rotationX, Space.World);
+            }
+
+            initialMousePosition = currentMousePosition;
+        }
+
+        if (isRotating && Input.GetMouseButtonDown(0))
+        {
+            isRotating = false;
+        }
+    }
 
     void HandleScaleInput()
     {
@@ -421,7 +458,7 @@ public class InteractionManager : MonoBehaviour
         if (isScaling)
         {
             Vector3 currentMousePosition = Input.mousePosition;
-            float scrollDelta = (currentMousePosition - initialMousePosition).magnitude;
+            float scrollDelta = currentMousePosition.x - initialMousePosition.x;
 
             foreach (GameObject obj in selectedObjects)
             {
@@ -429,8 +466,14 @@ public class InteractionManager : MonoBehaviour
                 {
                     continue;
                 }
+                if (currentMousePosition.x == initialMousePosition.x)
+                {
+                    continue;
+                }
 
-                Vector3 newScale = Vector3.one * scrollDelta * scaleSpeed * 0.01f;
+                float scaleFactor = scrollDelta > 0 ? 1.0f : -1.0f;
+
+                Vector3 newScale = Vector3.one * scaleFactor * scaleSpeed * 0.1f;
                 Vector3 totalScale = obj.transform.localScale + newScale;
 
                 if (totalScale.magnitude < minScaleSize || totalScale.magnitude > maxScaleSize)
@@ -441,7 +484,7 @@ public class InteractionManager : MonoBehaviour
                 obj.transform.localScale += newScale;
             }
 
-            // initialMousePosition = currentMousePosition;
+            initialMousePosition = currentMousePosition;
         }
 
         if (isScaling && Input.GetMouseButtonDown(0))
@@ -449,6 +492,7 @@ public class InteractionManager : MonoBehaviour
             isScaling = false;
         }
     }
+
     public void SpawnObject(GameObject associatedObject)
     {
         GameObject spawnedObject;
