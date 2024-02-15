@@ -43,10 +43,10 @@ public class GizmoController : MonoBehaviour
         objectUniversalGizmo = RTGizmosEngine.Get.CreateObjectUniversalGizmo();
 
         EnableGizmo(false);
-        objectMoveGizmo.SetTargetObjects(InteractionManager.Instance.GetSelectedObjects());
-        objectRotationGizmo.SetTargetObjects(InteractionManager.Instance.GetSelectedObjects());
-        objectScaleGizmo.SetTargetObjects(InteractionManager.Instance.GetSelectedObjects());
-        objectUniversalGizmo.SetTargetObjects(InteractionManager.Instance.GetSelectedObjects());
+        objectMoveGizmo.SetTargetObjects(GetTartgetObjects());
+        objectRotationGizmo.SetTargetObjects(GetTartgetObjects());
+        objectScaleGizmo.SetTargetObjects(GetTartgetObjects());
+        objectUniversalGizmo.SetTargetObjects(GetTartgetObjects());
         workGizmo = objectMoveGizmo;
         workGizmoId = GizmoId.Move;
     }
@@ -58,7 +58,7 @@ public class GizmoController : MonoBehaviour
             if (RTInput.WasLeftMouseButtonPressedThisFrame() &&
                 RTGizmosEngine.Get.HoveredGizmo == null)
             {
-                workGizmo.SetTargetObjects(InteractionManager.Instance.GetSelectedObjects());
+                workGizmo.SetTargetObjects(GetTartgetObjects());
                 OnSelectionChanged();
             }
             if (RTInput.WasKeyPressedThisFrame(KeyCode.W)) SetWorkGizmoId(GizmoId.Move);
@@ -83,7 +83,7 @@ public class GizmoController : MonoBehaviour
         if (InteractionManager.Instance.GetSelectedObjects().Count != 0)
         {
             workGizmo.Gizmo.SetEnabled(true);
-            workGizmo.SetTargetObjects(InteractionManager.Instance.GetSelectedObjects());
+            workGizmo.SetTargetObjects(GetTartgetObjects());
             workGizmo.RefreshPositionAndRotation();
         }
     }
@@ -111,9 +111,21 @@ public class GizmoController : MonoBehaviour
     }
     public void EnableWorkGizmo(bool enable)
     {
-        // targetObjects = InteractionManager.Instance.GetSelectedObjects();
-        workGizmo.SetTargetObjects(InteractionManager.Instance.GetSelectedObjects());
+        workGizmo.SetTargetObjects(GetTartgetObjects());
         workGizmo.Gizmo.SetEnabled(enable);
+    }
+    public List<GameObject> GetTartgetObjects()
+    {
+        List<GameObject> selectedObjects = InteractionManager.Instance.GetSelectedObjects();
+        List<GameObject> targetObjects = new List<GameObject>();
+        foreach (GameObject obj in selectedObjects)
+        {
+            if (obj.CompareTag("Interactable"))
+            {
+                targetObjects.Add(obj);
+            }
+        }
+        return targetObjects;
     }
     public void RefreshGizmo()
     {
