@@ -180,9 +180,9 @@ namespace EditorUI
             CopyColliders(originalPrefab, prefabObject);
             
             //If no colliders were copied, add a convex mesh collider
-            if (originalPrefab.GetComponents<Collider>().Length < 1)
+            if (prefabObject.GetComponents<Collider>().Length < 1)
             {
-                MeshCollider collider = originalPrefab.AddComponent<MeshCollider>();
+                MeshCollider collider = prefabObject.AddComponent<MeshCollider>();
                 collider.sharedMesh = meshFilterComponent.sharedMesh;
                 collider.convex = true;
             }
