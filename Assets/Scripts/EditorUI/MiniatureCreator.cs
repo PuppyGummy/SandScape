@@ -178,6 +178,14 @@ namespace EditorUI
 
             //Copy colliders
             CopyColliders(originalPrefab, prefabObject);
+            
+            //If no colliders were copied, add a convex mesh collider
+            if (originalPrefab.GetComponents<Collider>().Length < 1)
+            {
+                MeshCollider collider = originalPrefab.AddComponent<MeshCollider>();
+                collider.sharedMesh = meshFilterComponent.sharedMesh;
+                collider.convex = true;
+            }
 
             //Setup tags and layers
             prefabObject.tag = "Interactable";
