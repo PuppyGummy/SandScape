@@ -58,10 +58,13 @@ namespace UI
         /// <param name="pressedButton">The gameobject for the button that was pressed</param>
         private void ButtonPressed(GameObject pressedButton)
         {
-            Debug.Log("Pressed " + pressedButton.gameObject.name);
             SwitchTabs(pressedButton.gameObject);
         }
 
+        /// <summary>
+        /// Disables current tab and enables the desired one
+        /// </summary>
+        /// <param name="pressedButton">The gameobject of the pressed tab button</param>
         private void SwitchTabs(GameObject pressedButton)
         {
             //Setup vars
