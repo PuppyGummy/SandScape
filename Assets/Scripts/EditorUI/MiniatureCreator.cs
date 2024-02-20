@@ -25,6 +25,7 @@ namespace EditorUI
         private DropdownField categoryField;
         private Button createButton;
         private Button refreshInventoryButton;
+        private Button clearInventoryButton;
 
         public void CreateGUI()
         {
@@ -120,6 +121,14 @@ namespace EditorUI
             };
             refreshInventoryButton.clicked += OnRefreshClicked();
             root.Add(refreshInventoryButton);
+
+            clearInventoryButton = new Button
+            {
+                name = "button",
+                text = "clear all"
+            };
+            clearInventoryButton.clicked += OnClearClicked();
+            root.Add(clearInventoryButton);
         }
 
         private System.Action OnCreateClicked()
@@ -130,6 +139,16 @@ namespace EditorUI
         private System.Action OnRefreshClicked()
         {
             return RefreshAll;
+        }
+
+        private System.Action OnClearClicked()
+        {
+            return ClearAll;
+        }
+
+        private void ClearAll()
+        {
+            MiniatureManager.Instance.ClearAllMiniatures();
         }
 
         private void CreationButtonPressed()

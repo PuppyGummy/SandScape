@@ -79,7 +79,7 @@ public class MiniatureManager : MonoBehaviour
         GameObject uiButton = PrefabUtility.InstantiatePrefab(miniatureUIButton).GameObject();
         
         //Setup its correct parent, so that it appears in the grid menu in its category
-        uiButton.transform.parent = tabController.tabs[categoryID].transform.GetChild(1); //Child 1 is ALWAYS the grid
+        uiButton.transform.parent = GetTabGrid(categoryID); //Child 1 is ALWAYS the grid
         
         //Modify button to work correctly
         uiButton.transform.localScale = Vector3.one;
@@ -87,8 +87,33 @@ public class MiniatureManager : MonoBehaviour
         // uiButton.GetComponent<TextMeshPro>().text = associatedObject.gameObject.name; - Name has annoying to setup... But we may also not need it at all?
     }
 
-    private void ClearAllMiniatures()
+    public void ClearAllMiniatures()
     {
+        List<GameObject> objectsToDestroy = new List<GameObject>();
+        
         //TODO: Clear all
+        for (int i = 0; i < 5; i++)
+        {
+            Transform tabGrid = GetTabGrid(i);
+            int children = tabGrid.childCount;
+
+            for (int childIndex = 0; childIndex < children; childIndex++)
+            {
+                // DestroyImmediate(tabGrid.GetChild(childIndex).gameObject);
+                objectsToDestroy.Add(tabGrid.GetChild(childIndex).gameObject);
+            }
+        }
+
+        foreach (var objectToDestroy in objectsToDestroy)
+        {
+            DestroyImmediate(objectToDestroy.gameObject);
+        }
+        
+        objectsToDestroy.Clear();
+    }
+
+    private Transform GetTabGrid(int categoryID)
+    {
+        return tabController.tabs[categoryID].transform.GetChild(1);
     }
 }

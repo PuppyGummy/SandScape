@@ -1149,7 +1149,7 @@ GameObject:
   - component: {fileID: 171786825}
   - component: {fileID: 171786824}
   m_Layer: 5
-  m_Name: NatureButton
+  m_Name: BuildingButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1238,7 +1238,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 5bc878851918cd640b8ffd941069316e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a808b7c5b726bca4fbc6473e6c0e09d5, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -12283,7 +12283,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 517b50f5ec3fae643875b88d9798ee58, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3750ec5de34f1e94c8e6e050a9a10080, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -13133,7 +13133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1887961055}
   m_Layer: 2
-  m_Name: NatureTab
+  m_Name: BuildingTab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13972,7 +13972,7 @@ GameObject:
   - component: {fileID: 2010975990}
   - component: {fileID: 2010975989}
   m_Layer: 5
-  m_Name: BuildingButton
+  m_Name: NatureButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14061,7 +14061,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a808b7c5b726bca4fbc6473e6c0e09d5, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5bc878851918cd640b8ffd941069316e, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
