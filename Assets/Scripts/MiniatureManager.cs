@@ -36,20 +36,41 @@ public class MiniatureManager : MonoBehaviour
 
        tabController.RefreshLists();
        
-       //Get all avatars from the folder
-       string[] avatars = AssetDatabase.FindAssets("t:prefab", new [] { "Assets/Prefabs/Miniatures/Avatar/"});
-       foreach (var avatarGUID in avatars)
-       {
-           var path = AssetDatabase.GUIDToAssetPath(avatarGUID);
-           GameObject go = AssetDatabase.LoadAssetAtPath<GameObject>(path);
-           
-           CreateMiniatureUIElement(go,0);
-       }
+       UpdateCategory(0);
+       UpdateCategory(1);
+       UpdateCategory(2);
+       UpdateCategory(3);
+       UpdateCategory(4);
     }
     
     public void AddSingleMiniature()
     {
         
+    }
+
+    private void UpdateCategory(int categoryID)
+    {
+        //Set folder name
+        var folderName = categoryID switch
+        {
+            0 => "Avatar",
+            1 => "Animal",
+            2 => "Building",
+            3 => "Monster",
+            4 => "Nature",
+            _ => null
+        };
+
+        //Get all miniatures from specified folder
+        string[] assets = AssetDatabase.FindAssets("t:prefab", new [] { "Assets/Prefabs/Miniatures/" + folderName + "/"});
+        foreach (var assetGUID in assets)
+        {
+            var path = AssetDatabase.GUIDToAssetPath(assetGUID);
+            GameObject go = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+           
+            //Create miniature UI from found miniature prefab
+            CreateMiniatureUIElement(go, categoryID);
+        }
     }
 
     private void CreateMiniatureUIElement(GameObject associatedObject, int categoryID)
