@@ -11,8 +11,7 @@ namespace UI
 
         [SerializeField] private GameObject tabContainer;
         
-        [SerializeField]
-        private List<GameObject> tabs = new List<GameObject>();
+        [SerializeField] public List<GameObject> tabs = new List<GameObject>();
 
         private GameObject currentTab;
         
@@ -50,6 +49,15 @@ namespace UI
                 
                 tabs.Add(tab.gameObject);
             }
+        }
+
+        public void RefreshLists()
+        {
+            tabs.Clear();
+            tabButtons.Clear();
+            
+            AddTabs();
+            AddButtons();
         }
 
         /// <summary>

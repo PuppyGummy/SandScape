@@ -100,6 +100,18 @@ namespace EditorUI
             createButton.clicked += OnCreateClicked();
             root.Add(createButton);
             
+            Label inventoryLabel = new Label("Inventory")
+            {
+                style =
+                {
+                    fontSize = 16,
+                    marginTop = 5,
+                    marginBottom = 5,
+                    marginLeft = 5
+                }
+            };
+            root.Add(inventoryLabel);
+            
             //Refresh miniature inventory
             refreshInventoryButton = new Button
             {

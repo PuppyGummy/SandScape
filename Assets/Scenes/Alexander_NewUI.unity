@@ -2751,9 +2751,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53287bd5ef9e58c4585cabfc784eb3d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tabButtons: []
+  tabButtons:
+  - {fileID: 47614839}
+  - {fileID: 1728587741}
+  - {fileID: 171786824}
+  - {fileID: 2010975989}
+  - {fileID: 1214622662}
   tabContainer: {fileID: 96938544}
-  tabs: []
+  tabs:
+  - {fileID: 1123601455}
+  - {fileID: 1972208082}
+  - {fileID: 1887961054}
+  - {fileID: 53732511}
+  - {fileID: 901804006}
 --- !u!1 &497812590
 GameObject:
   m_ObjectHideFlags: 0
@@ -12571,6 +12581,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0205ca1d65989a940af838528503f02e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  miniatureUIButton: {fileID: 5022406494085778754, guid: 4ab3e3c84878b4f80bc166b2089848aa, type: 3}
+  tabController: {fileID: 493074252}
 --- !u!1 &1751406824
 GameObject:
   m_ObjectHideFlags: 0
