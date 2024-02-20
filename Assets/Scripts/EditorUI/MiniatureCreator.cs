@@ -199,6 +199,8 @@ namespace EditorUI
             PrefabUtility.SaveAsPrefabAsset(prefabObject, localPath);
 
             DestroyImmediate(prefabObject);
+            
+            //TODO: Add new asset to the inventory here??
         }
 
         private GameObject BuildPrefab(GameObject prefabObject, GameObject originalPrefab)

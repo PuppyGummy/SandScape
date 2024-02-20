@@ -55,9 +55,9 @@ public class MiniatureManager : MonoBehaviour
         {
             0 => "Avatar",
             1 => "Animal",
-            2 => "Building",
-            3 => "Monster",
-            4 => "Nature",
+            2 => "Nature",
+            3 => "Building",
+            4 => "Monster",
             _ => null
         };
 
