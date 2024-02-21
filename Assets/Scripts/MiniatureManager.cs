@@ -31,8 +31,6 @@ public class MiniatureManager : MonoBehaviour
     {
        Debug.Log("Refreshed yo");
        ClearAllMiniatures();
-       
-       //TODO: V Re add all assets here V
 
        tabController.RefreshLists();
        
@@ -41,11 +39,6 @@ public class MiniatureManager : MonoBehaviour
        UpdateCategory(2);
        UpdateCategory(3);
        UpdateCategory(4);
-    }
-    
-    public void AddSingleMiniature()
-    {
-        
     }
 
     private void UpdateCategory(int categoryID)
@@ -89,29 +82,39 @@ public class MiniatureManager : MonoBehaviour
 
     public void ClearAllMiniatures()
     {
+        //List to keep track of all assets to delete
         List<GameObject> objectsToDestroy = new List<GameObject>();
         
-        //TODO: Clear all
+        //For each category, get all inventory buttons and put them in the list
         for (int i = 0; i < 5; i++)
         {
+            //The inventory grid
             Transform tabGrid = GetTabGrid(i);
             int children = tabGrid.childCount;
 
+            //Add each inventory button to the list
             for (int childIndex = 0; childIndex < children; childIndex++)
             {
-                // DestroyImmediate(tabGrid.GetChild(childIndex).gameObject);
                 objectsToDestroy.Add(tabGrid.GetChild(childIndex).gameObject);
             }
         }
 
+        //Destroy all buttons
         foreach (var objectToDestroy in objectsToDestroy)
         {
             DestroyImmediate(objectToDestroy.gameObject);
         }
         
+        //Clear list
         objectsToDestroy.Clear();
     }
 
+    /// <summary>
+    /// Simple method to grab the miniature grid, based on the desired tab.
+    /// Mostly for avoiding repetitions
+    /// </summary>
+    /// <param name="categoryID"></param>
+    /// <returns></returns>
     private Transform GetTabGrid(int categoryID)
     {
         return tabController.tabs[categoryID].transform.GetChild(1);
