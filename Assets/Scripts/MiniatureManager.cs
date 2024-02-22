@@ -29,6 +29,7 @@ public class MiniatureManager : MonoBehaviour
 
     [SerializeField] private GameObject miniatureUIButton;
     [SerializeField] private TabController tabController;
+    [SerializeField] private List<Sprite> watermarks;
 
     public void RefreshAllMiniatures()
     {
@@ -83,34 +84,26 @@ public class MiniatureManager : MonoBehaviour
         
         //IMAGES
         
-        // Debug.Log(associatedObject.name);
+        //TODO: Consider - Is it OK to hardcode the category references?? I.e load them from a list using the category ID
+        //Set Watermark
+        uiButton.GetComponent<Image>().sprite = watermarks[categoryID];
 
         Sprite miniatureThumbnail = null;
         string[] images = AssetDatabase.FindAssets("t:Texture2D", new [] { "Assets/UI_Assets/Icons/" + folderName + "/"});
         
-
+        //Set miniature image
         foreach (var imageName in images)
         {
-            Debug.Log("image name: " + imageName);
-            Debug.Log("name: " + associatedObject.name);
-            
             var path = AssetDatabase.GUIDToAssetPath(imageName);
             Debug.Log("path: " + path);
             
-            if (path.Contains(associatedObject.name))
-            {
-                
-                miniatureThumbnail = AssetDatabase.LoadAssetAtPath<Sprite>(path);
-            }
-            else
-            {
-                miniatureThumbnail = null;
-            }
+            miniatureThumbnail = path.Contains(associatedObject.name) ? AssetDatabase.LoadAssetAtPath<Sprite>(path) : null;
         }
         
-        //TODO: Load image for button
+        Image iconImage = uiButton.transform.GetChild(0).GetComponent<Image>();
+        
         if(miniatureThumbnail != null)
-            uiButton.GetComponent<Image>().sprite = miniatureThumbnail;
+            iconImage.sprite = miniatureThumbnail;
     }
 
     public void ClearAllMiniatures()
