@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -6,6 +7,8 @@ using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UIElements;
+using Image = UnityEngine.UI.Image;
 
 public class MiniatureManager : MonoBehaviour
 {
@@ -62,22 +65,52 @@ public class MiniatureManager : MonoBehaviour
             GameObject go = AssetDatabase.LoadAssetAtPath<GameObject>(path);
            
             //Create miniature UI from found miniature prefab
-            CreateMiniatureUIElement(go, categoryID);
+            CreateMiniatureUIElement(go, categoryID, folderName);
         }
     }
 
-    private void CreateMiniatureUIElement(GameObject associatedObject, int categoryID)
+    private void CreateMiniatureUIElement(GameObject associatedObject, int categoryID, string folderName)
     {
         //Spawn UI Item
         GameObject uiButton = PrefabUtility.InstantiatePrefab(miniatureUIButton).GameObject();
         
         //Setup its correct parent, so that it appears in the grid menu in its category
         uiButton.transform.parent = GetTabGrid(categoryID); //Child 1 is ALWAYS the grid
-        
+
         //Modify button to work correctly
         uiButton.transform.localScale = Vector3.one;
         uiButton.GetComponent<ButtonController>().associatedObject = associatedObject;
-        // uiButton.GetComponent<TextMeshPro>().text = associatedObject.gameObject.name; - Name has annoying to setup... But we may also not need it at all?
+        
+        //IMAGES
+        
+        // Debug.Log(associatedObject.name);
+
+        Sprite miniatureThumbnail = null;
+        string[] images = AssetDatabase.FindAssets("t:Texture2D", new [] { "Assets/UI_Assets/Icons/" + folderName + "/"});
+        
+
+        foreach (var imageName in images)
+        {
+            Debug.Log("image name: " + imageName);
+            Debug.Log("name: " + associatedObject.name);
+            
+            var path = AssetDatabase.GUIDToAssetPath(imageName);
+            Debug.Log("path: " + path);
+            
+            if (path.Contains(associatedObject.name))
+            {
+                
+                miniatureThumbnail = AssetDatabase.LoadAssetAtPath<Sprite>(path);
+            }
+            else
+            {
+                miniatureThumbnail = null;
+            }
+        }
+        
+        //TODO: Load image for button
+        if(miniatureThumbnail != null)
+            uiButton.GetComponent<Image>().sprite = miniatureThumbnail;
     }
 
     public void ClearAllMiniatures()
