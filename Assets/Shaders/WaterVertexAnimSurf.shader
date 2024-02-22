@@ -19,13 +19,12 @@ Shader "Custom/WaterVertexAnimSurf"
         AlphaToMask Off
 
         CGPROGRAM
-        #pragma surface surf Standard fullforwardshadows alpha
+        #pragma surface surf Standard fullforwardshadows alpha:fade keepalpha nolightmap nodirlightmap
         #pragma target 3.0
         #pragma shader_feature _ALPHAPREMULTIPLY_ON
 
         struct Input
         {
-            float2 uv_MainTex;
             float3 worldPos;
         };
 
