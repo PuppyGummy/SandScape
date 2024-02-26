@@ -26,7 +26,7 @@ public class CircleMenu : MonoBehaviour
             actionMenu.gameObject.SetActive(!actionMenu.gameObject.activeSelf);
         }
         selectedObject = InteractionManager.Instance.GetSelectedObjects()[0];
-        Vector3 screenPos = Camera.main.WorldToScreenPoint(selectedObject.gameObject.transform.position);
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(selectedObject.gameObject.GetComponent<Collider>().bounds.center);
 
         actionMenu.transform.position = screenPos;
         actionMenu.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);

@@ -84,26 +84,36 @@ public class MiniatureManager : MonoBehaviour
         
         //IMAGES
         
-        //TODO: Consider - Is it OK to hardcode the category references?? I.e load them from a list using the category ID
         //Set Watermark
         uiButton.GetComponent<Image>().sprite = watermarks[categoryID];
-
-        Sprite miniatureThumbnail = null;
+        
         string[] images = AssetDatabase.FindAssets("t:Texture2D", new [] { "Assets/UI_Assets/Icons/" + folderName + "/"});
         
         //Set miniature image
         foreach (var imageName in images)
         {
+            Sprite miniatureThumbnail = null;
+            
             var path = AssetDatabase.GUIDToAssetPath(imageName);
             Debug.Log("path: " + path);
+            Debug.Log("Obje: " + associatedObject.name + ".png");
+
+            miniatureThumbnail = path.Contains(associatedObject.name + ".png") ? AssetDatabase.LoadAssetAtPath<Sprite>(path) : null;
+
+            if (!miniatureThumbnail)
+            {
+                Debug.LogWarning("Icon not set for " + associatedObject.name + "...\n" +
+                                 "Maybe you named an asset wrong, or forgot to set image type to sprite??");
+            }
             
-            miniatureThumbnail = path.Contains(associatedObject.name) ? AssetDatabase.LoadAssetAtPath<Sprite>(path) : null;
+            Image iconImage = uiButton.transform.GetChild(0).GetComponent<Image>();
+        
+            if(miniatureThumbnail)
+            {
+                iconImage.sprite = miniatureThumbnail;
+                Debug.Log("Set Icon for: " + associatedObject.name);
+            }
         }
-        
-        Image iconImage = uiButton.transform.GetChild(0).GetComponent<Image>();
-        
-        if(miniatureThumbnail != null)
-            iconImage.sprite = miniatureThumbnail;
     }
 
     public void ClearAllMiniatures()
