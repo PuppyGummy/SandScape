@@ -21,7 +21,6 @@ public class HistoryManager : MonoBehaviour
 
     public void RecordAction(Action action)
     {
-        // action.PrintAction();
         undoStack.Push(action);
         redoStack.Clear();
     }
@@ -31,7 +30,6 @@ public class HistoryManager : MonoBehaviour
         if (undoStack.Count > 0)
         {
             Action actionToUndo = undoStack.Pop();
-            // actionToUndo.PrintAction();
             actionToUndo.Undo();
             redoStack.Push(actionToUndo);
         }
@@ -42,7 +40,6 @@ public class HistoryManager : MonoBehaviour
         if (redoStack.Count > 0)
         {
             Action actionToRedo = redoStack.Pop();
-            // actionToRedo.PrintAction();
             actionToRedo.Redo();
             undoStack.Push(actionToRedo);
         }
@@ -72,21 +69,24 @@ public class MoveAction : Action
     public override void Undo()
     {
         Vector3 offset = originalPosition - newPosition;
-        // targetTransform.position = originalPosition;
+        Debug.Log("Offset: " + offset);
+        InteractionManager.Instance.DisableAllPhysics();
         foreach (GameObject target in targetObjects)
         {
             target.transform.position += offset;
         }
+        InteractionManager.Instance.EnableAllPhysics();
     }
 
     public override void Redo()
     {
+        InteractionManager.Instance.DisableAllPhysics();
         Vector3 offset = newPosition - originalPosition;
-        // targetTransform.position = newPosition;
         foreach (GameObject target in targetObjects)
         {
             target.transform.position += offset;
         }
+        InteractionManager.Instance.EnableAllPhysics();
     }
 }
 
@@ -106,7 +106,6 @@ public class RotateAction : Action
     {
         Vector3 offset = originalRotaition - newRotation;
         Debug.Log("Offset: " + offset);
-        // targetTransform.rotation = originalRotaition;
         foreach (GameObject target in targetObjects)
         {
             target.transform.Rotate(offset);
@@ -115,7 +114,6 @@ public class RotateAction : Action
     public override void Redo()
     {
         Vector3 offset = newRotation - originalRotaition;
-        // targetTransform.rotation = newRotation;
         foreach (GameObject target in targetObjects)
         {
             target.transform.Rotate(offset);
@@ -137,7 +135,6 @@ public class ScaleAction : Action
     public override void Undo()
     {
         Vector3 offset = originalScale - newScale;
-        // targetTransform.localScale = originalScale;
         foreach (GameObject target in targetObjects)
         {
             target.transform.localScale += offset;
@@ -146,68 +143,70 @@ public class ScaleAction : Action
     public override void Redo()
     {
         Vector3 offset = newScale - originalScale;
-        // targetTransform.localScale = newScale;
         foreach (GameObject target in targetObjects)
         {
             target.transform.localScale += offset;
         }
     }
 }
+public class TransformAction : Action
+{
+    private List<GameObject> targetObjects;
+    private Vector3 originalPosition;
+    private Vector3 newPosition;
+    private Vector3 originalRotaition;
+    private Vector3 newRotation;
+    private Vector3 originalScale;
+    private Vector3 newScale;
 
-// public class Action
-// {
-//     private Transform targetTransform;
-//     private Vector3 originalPosition;
-//     private Vector3 newPosition;
-//     private Quaternion originalRotation;
-//     private Quaternion newRotation;
-//     private Vector3 originalScale;
-//     private Vector3 newScale;
-
-//     public Action(Transform target, Vector3 originalPos, Vector3 newPos, Quaternion originalRot, Quaternion newRot, Vector3 originalScl, Vector3 newScl)
-//     {
-//         targetTransform = target;
-//         originalPosition = originalPos;
-//         newPosition = newPos;
-//         originalRotation = originalRot;
-//         newRotation = newRot;
-//         originalScale = originalScl;
-//         newScale = newScl;
-//     }
-//     public Action(Transform target, Vector3 originalPos, Vector3 newPos)
-//     {
-//         targetTransform = target;
-//         originalPosition = originalPos;
-//         newPosition = newPos;
-//     }
-//     public Action(Transform target, Quaternion originalRot, Quaternion newRot)
-//     {
-//         targetTransform = target;
-//         originalRotation = originalRot;
-//         newRotation = newRot;
-//     }
-//     public Action(Transform target, Vector3 originalPos, Vector3 newPos, Vector3 originalScl, Vector3 newScl)
-//     {
-//         targetTransform = target;
-//         originalScale = originalScl;
-//         newScale = newScl;
-//     }
-
-//     public void Undo()
-//     {
-//         targetTransform.position = originalPosition;
-//         targetTransform.rotation = originalRotation;
-//         targetTransform.localScale = originalScale;
-//     }
-
-//     public void Redo()
-//     {
-//         targetTransform.position = newPosition;
-//         targetTransform.rotation = newRotation;
-//         targetTransform.localScale = newScale;
-//     }
-//     public void PrintAction()
-//     {
-//         Debug.Log(targetTransform.ToString() + originalPosition.ToString() + newPosition.ToString() + originalRotation.ToString() + newRotation.ToString() + originalScale.ToString() + newScale.ToString());
-//     }
-// }
+    public TransformAction(List<GameObject> target, Vector3 originalPos, Vector3 newPos, Vector3 originalRot, Vector3 newRot, Vector3 originalScl, Vector3 newScl)
+    {
+        targetObjects = target;
+        originalPosition = originalPos;
+        newPosition = newPos;
+        originalRotaition = originalRot;
+        newRotation = newRot;
+        originalScale = originalScl;
+        newScale = newScl;
+    }
+    public override void Undo()
+    {
+        InteractionManager.Instance.DisableAllPhysics();
+        Vector3 offset = originalPosition - newPosition;
+        foreach (GameObject target in targetObjects)
+        {
+            target.transform.position += offset;
+        }
+        offset = originalRotaition - newRotation;
+        foreach (GameObject target in targetObjects)
+        {
+            target.transform.Rotate(offset);
+        }
+        offset = originalScale - newScale;
+        foreach (GameObject target in targetObjects)
+        {
+            target.transform.localScale += offset;
+        }
+        InteractionManager.Instance.EnableAllPhysics();
+    }
+    public override void Redo()
+    {
+        InteractionManager.Instance.DisableAllPhysics();
+        Vector3 offset = newPosition - originalPosition;
+        foreach (GameObject target in targetObjects)
+        {
+            target.transform.position += offset;
+        }
+        offset = newRotation - originalRotaition;
+        foreach (GameObject target in targetObjects)
+        {
+            target.transform.Rotate(offset);
+        }
+        offset = newScale - originalScale;
+        foreach (GameObject target in targetObjects)
+        {
+            target.transform.localScale += offset;
+        }
+        InteractionManager.Instance.EnableAllPhysics();
+    }
+}

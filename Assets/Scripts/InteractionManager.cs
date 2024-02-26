@@ -25,12 +25,24 @@ public class InteractionManager : MonoBehaviour
     private List<GameObject> indicators;
     private Vector3 cameraPos;
     private Vector3 cameraRotation;
+    private Vector3 originalPos = new Vector3();
+    private Vector3 newPos = new Vector3();
+    private Vector3 originalRotation = new Vector3();
+    private Vector3 newRotation = new Vector3();
+    private Vector3 originalScale = new Vector3();
+    private Vector3 newScale = new Vector3();
+    private float bottomToCenterDistance;
+    private float liftedHeight;
+    private float sensitivity = 0.1f;
+    private float timeSinceLastScroll = 0f;
+    private float scrollEndDelay = 0.1f;
 
     private bool isDragging = false;
     private bool isHoveringObject = false;
     private bool enablePhysics = true;
     private bool isScaling = false;
     private bool isRotating = false;
+    private bool isScalingWithMouseScroll = false;
 
     #endregion
 
@@ -51,6 +63,7 @@ public class InteractionManager : MonoBehaviour
     #endregion
 
     private WaitForFixedUpdate waitForFixedUpdate = new WaitForFixedUpdate();
+    private WaitForSeconds waitForSeconds = new WaitForSeconds(1f);
 
     public static InteractionManager Instance;
     public float maxScaleSize = 5.0f;
@@ -86,20 +99,33 @@ public class InteractionManager : MonoBehaviour
         HandleSelectionInput();
         if (selectedObjects.Count != 0 && !useGizmo)
         {
-            if (Input.GetMouseButton(1))
-                HandleRotationInput();
-            if (Input.GetAxis("Mouse ScrollWheel") != 0)
-                HandleScaleInput();
+            HandleRotationInput();
+            HandleScaleInput();
         }
+
         ScaleObjects();
         RotateObjects();
-        if (Input.GetMouseButton(0) && isHoveringObject && selectedObjects.Count != 0 && !EventSystem.current.IsPointerOverGameObject())
+        if (Input.GetMouseButtonDown(0) && isHoveringObject && selectedObjects.Count != 0 && !EventSystem.current.IsPointerOverGameObject())
         {
             isDragging = true;
+            Debug.Log("Recording original position");
+            originalPos = selectedObjects[0].transform.position;
+            Debug.Log("Original position: " + originalPos);
         }
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0) && selectedObjects.Count != 0 && isDragging)
         {
             isDragging = false;
+            // if (selectedObjects[0].GetComponent<ObjectController>().IsOnGround() == false) return;
+            // Debug.Log("isOnGround: " + selectedObjects[0].GetComponent<ObjectController>().IsOnGround());
+            // float liftedHeight = Mathf.Max(pos.y + bottomToCenterDistance, minYValue);
+            Debug.Log("Lifted height: " + liftedHeight);
+            // selectedObjects[0].transform.position = new Vector3(selectedObjects[0].transform.position.x, selectedObjects[0].transform.position.y - liftedHeight, selectedObjects[0].transform.position.z);
+            Debug.Log("Recording new position");
+            newPos = new Vector3(selectedObjects[0].transform.position.x, selectedObjects[0].transform.position.y - liftedHeight, selectedObjects[0].transform.position.z);
+            // newPos = selectedObjects[0].transform.position;
+            Debug.Log("Original position: " + originalPos + " New position: " + newPos);
+            MoveAction moveAction = new MoveAction(selectedObjects, originalPos, newPos);
+            HistoryManager.Instance.RecordAction(moveAction);
         }
         if (isDragging && !Input.GetKey(KeyCode.LeftShift) && !useGizmo)
         {
@@ -108,6 +134,14 @@ public class InteractionManager : MonoBehaviour
             {
                 obj.layer = LayerMask.NameToLayer("Ignore Raycast");
             }
+        }
+        if (Input.GetMouseButtonUp(1) && selectedObjects.Count != 0)
+        {
+            Debug.Log("Recording rotate action");
+            newRotation = selectedObjects[0].transform.rotation.eulerAngles;
+            Debug.Log("Original rotation: " + originalRotation + " New rotation: " + newRotation);
+            RotateAction rotateAction = new RotateAction(selectedObjects, originalRotation, newRotation);
+            HistoryManager.Instance.RecordAction(rotateAction);
         }
     }
     void FixedUpdate()
@@ -138,7 +172,7 @@ public class InteractionManager : MonoBehaviour
     /// Handles selection of objects, and starts dragging the object if held
     /// </summary>
     // TODO: Stop lifting the object when selecting it?
-    void HandleSelectionInput()
+    private void HandleSelectionInput()
     {
         //If the mouse is over a UI element, return
         if (EventSystem.current.IsPointerOverGameObject())
@@ -179,8 +213,12 @@ public class InteractionManager : MonoBehaviour
             }
             else
             {
-                DeselectAllObjects();
-                GizmoController.Instance.OnSelectionChanged();
+                //If we click on empty space, deselect all objects
+                if (!isRotating && !isScaling)
+                {
+                    DeselectAllObjects();
+                    GizmoController.Instance.OnSelectionChanged();
+                }
             }
         }
         //If we release mouse button and there is a selected object
@@ -193,7 +231,7 @@ public class InteractionManager : MonoBehaviour
             }
         }
     }
-    public GameObject GetHitObject()
+    private GameObject GetHitObject()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit raycastHit;
@@ -254,11 +292,9 @@ public class InteractionManager : MonoBehaviour
         selectedObjects.Clear();
         selectedRbs.Clear();
     }
-    IEnumerator DragMultiObjects(List<GameObject> objectsToDrag)
+    private IEnumerator DragMultiObjects(List<GameObject> objectsToDrag)
     {
         List<Vector3> relativeOffsets = new List<Vector3>();
-        Vector3 originalPos = new Vector3();
-        Vector3 newPos = new Vector3();
 
         foreach (GameObject objectToDrag in objectsToDrag)
         {
@@ -287,7 +323,7 @@ public class InteractionManager : MonoBehaviour
 
         while (Input.GetMouseButton(0))
         {
-            originalPos = selectedObjects[0].transform.position;
+
             for (int i = 0; i < objectsToDrag.Count; i++)
             {
                 if (objectsToDrag[i].CompareTag("Locked"))
@@ -297,13 +333,9 @@ public class InteractionManager : MonoBehaviour
                 Rigidbody rb = objectsToDrag[i].GetComponent<Rigidbody>();
                 if (rb)
                 {
-                    // Vector3 originalPosition = rb.transform.position;
-                    float bottomToCenterDistance = rb.GetComponent<Collider>().bounds.extents.y + pos.y;
-
+                    bottomToCenterDistance = rb.GetComponent<Collider>().bounds.extents.y + pos.y;
+                    liftedHeight = Mathf.Max(pos.y + bottomToCenterDistance, minYValue);
                     rb.transform.position = new Vector3(pos.x + relativeOffsets[i].x, Mathf.Max(pos.y + bottomToCenterDistance, minYValue), pos.z + relativeOffsets[i].z);
-                    // Action moveAction = new Action(rb.transform, originalPosition, rb.transform.position);
-                    // HistoryManager.Instance.RecordAction(moveAction);
-                    // GameObject indicator = indicators[i];
                     GameObject indicator = objectsToDrag[i].transform.GetChild(0).gameObject;
                     if (indicator != null)
                     {
@@ -320,42 +352,31 @@ public class InteractionManager : MonoBehaviour
             }
             yield return waitForFixedUpdate;
         }
-        // if (Input.GetMouseButtonUp(0))
-        // {
-        //     Debug.Log("Recording move action");
-        //     newPos = selectedObjects[0].transform.position;
-        //     Debug.Log("Original position: " + originalPos + " New position: " + newPos);
-        //     MoveAction moveAction = new MoveAction(selectedObjects, originalPos, newPos);
-        //     HistoryManager.Instance.RecordAction(moveAction);
-        // }
-
-        // foreach (GameObject indicator in indicators)
-        // {
-        //     if (indicator != null)
-        //     {
-        //         indicator.SetActive(false);
-        //     }
-        // }
         foreach (GameObject obj in selectedObjects)
         {
+            obj.GetComponent<Rigidbody>().velocity = Vector3.zero;
             obj.transform.GetChild(0).gameObject.SetActive(false);
         }
 
         UnlockRotation();
     }
 
-    void HandleRotationInput()
+    //rotate with right mouse button
+    private void HandleRotationInput()
     {
-        Vector3 originalRotation = new Vector3();
-        Vector3 newRotation = new Vector3();
         //Only rotate object if the right mouse button is held
-        // if (Input.GetMouseButton(1))
+        if (Input.GetMouseButtonDown(1))
+        {
+            originalRotation = selectedObjects[0].transform.rotation.eulerAngles;
+            Debug.Log("Original rotation: " + originalRotation);
+        }
+        if (Input.GetMouseButton(1))
         {
             UnlockRotation();
+
             float mouseX = Input.GetAxis("Mouse X") * rotationSpeed;
             float mouseY = Input.GetAxis("Mouse Y") * rotationSpeed;
 
-            originalRotation = selectedObjects[0].transform.rotation.eulerAngles;
             foreach (GameObject obj in selectedObjects)
             {
                 if (obj.CompareTag("Locked"))
@@ -373,22 +394,17 @@ public class InteractionManager : MonoBehaviour
                 obj.transform.Rotate(Vector3.right, mouseY, Space.World);
             }
         }
-        // if (Input.GetMouseButtonUp(1))
-        // {
-        //     Debug.Log("Recording rotate action");
-        //     newRotation = selectedObjects[0].transform.rotation.eulerAngles;
-        //     Debug.Log("Original rotation: " + originalRotation + " New rotation: " + newRotation);
-        //     RotateAction rotateAction = new RotateAction(selectedObjects, originalRotation, newRotation);
-        //     HistoryManager.Instance.RecordAction(rotateAction);
-        // }
     }
+
+    //rotate with UI button
     public void StartRotating()
     {
         isRotating = true;
         initialMousePosition = Input.mousePosition;
+        originalRotation = selectedObjects[0].transform.rotation.eulerAngles;
+        Debug.Log("Original rotation: " + originalRotation);
     }
-
-    public void RotateObjects()
+    private void RotateObjects()
     {
         if (isRotating)
         {
@@ -415,15 +431,30 @@ public class InteractionManager : MonoBehaviour
         if (isRotating && Input.GetMouseButtonDown(0))
         {
             isRotating = false;
+            Debug.Log("Recording rotate action");
+            newRotation = selectedObjects[0].transform.rotation.eulerAngles;
+            Debug.Log("Original rotation: " + originalRotation + " New rotation: " + newRotation);
+            RotateAction rotateAction = new RotateAction(selectedObjects, originalRotation, newRotation);
+            HistoryManager.Instance.RecordAction(rotateAction);
         }
     }
 
-    void HandleScaleInput()
+    //scale with mouse scroll
+    private void HandleScaleInput()
     {
         float scrollWheel = Input.GetAxis("Mouse ScrollWheel");
-        Vector3 originalScale = selectedObjects[0].transform.localScale;
-        // if (scrollWheel != 0)
+
+
+        if (Mathf.Abs(scrollWheel) > sensitivity)
         {
+            timeSinceLastScroll = Time.time;
+            // Debug.Log("Time since last scroll: " + timeSinceLastScroll);
+            if (!isScalingWithMouseScroll)
+            {
+                originalScale = selectedObjects[0].transform.localScale;
+                Debug.Log("Original scale: " + originalScale);
+                isScalingWithMouseScroll = true;
+            }
             foreach (GameObject obj in selectedObjects)
             {
                 if (obj.CompareTag("Locked"))
@@ -432,28 +463,38 @@ public class InteractionManager : MonoBehaviour
                 }
                 //Vector3 clamp doesn't have a min value...
                 //Im gonna KMS... After the project is finished :^)
-                Vector3 newScale = new Vector3(scrollWheel, scrollWheel, scrollWheel) * scaleSpeed;
-                Vector3 totalScale = obj.transform.localScale + newScale;
+                Vector3 deltaScale = new Vector3(scrollWheel, scrollWheel, scrollWheel) * scaleSpeed;
+                Vector3 totalScale = obj.transform.localScale + deltaScale;
 
                 if (totalScale.magnitude < minScaleSize || totalScale.magnitude > maxScaleSize)
-                    return;
+                    break;
 
-                obj.transform.localScale += newScale;
+                obj.transform.localScale += deltaScale;
             }
         }
-        // if (scrollWheel == 0)
-        // {
-        //     ScaleAction scaleAction = new ScaleAction(selectedObjects, originalScale, selectedObjects[0].transform.localScale);
-        //     HistoryManager.Instance.RecordAction(scaleAction);
-        // }
+        else if (isScalingWithMouseScroll && timeSinceLastScroll != 0f)
+        {
+            if ((Time.time - timeSinceLastScroll) > scrollEndDelay)
+            {
+                isScalingWithMouseScroll = false;
+                newScale = selectedObjects[0].transform.localScale;
+                Debug.Log("Recording scale action");
+                Debug.Log("Original scale: " + originalScale + " New scale: " + newScale);
+                ScaleAction scaleAction = new ScaleAction(selectedObjects, originalScale, newScale);
+                HistoryManager.Instance.RecordAction(scaleAction);
+            }
+        }
     }
 
+    //scale with UI button
     public void StartScaling()
     {
         isScaling = true;
         initialMousePosition = Input.mousePosition;
+        originalScale = selectedObjects[0].transform.localScale;
+        Debug.Log("Original scale: " + originalScale);
     }
-    public void ScaleObjects()
+    private void ScaleObjects()
     {
         if (isScaling)
         {
@@ -490,6 +531,11 @@ public class InteractionManager : MonoBehaviour
         if (isScaling && Input.GetMouseButtonDown(0))
         {
             isScaling = false;
+            Debug.Log("Recording scale action");
+            newScale = selectedObjects[0].transform.localScale;
+            Debug.Log("Original scale: " + originalScale + " New scale: " + newScale);
+            ScaleAction scaleAction = new ScaleAction(selectedObjects, originalScale, newScale);
+            HistoryManager.Instance.RecordAction(scaleAction);
         }
     }
 
@@ -672,7 +718,7 @@ public class InteractionManager : MonoBehaviour
             obj.layer = LayerMask.NameToLayer("Objects");
         }
     }
-    private void DisablePhysics(GameObject obj)
+    public void DisablePhysics(GameObject obj)
     {
         if (obj.CompareTag("Interactable"))
         {
@@ -681,7 +727,7 @@ public class InteractionManager : MonoBehaviour
             obj.GetComponent<Collider>().isTrigger = true;
         }
     }
-    private void DisableAllPhysics()
+    public void DisableAllPhysics()
     {
         foreach (GameObject obj in objs)
         {
@@ -707,7 +753,7 @@ public class InteractionManager : MonoBehaviour
             }
         }
     }
-    private void EnableAllPhysics()
+    public void EnableAllPhysics()
     {
         foreach (GameObject obj in objs)
         {
@@ -784,7 +830,7 @@ public class InteractionManager : MonoBehaviour
         if (selectedObjects.Count == 0) return;
         foreach (GameObject obj in selectedObjects)
         {
-            GameObject duplicate = Instantiate(obj, obj.transform.position + new Vector3(0, 0.5f, 0), obj.transform.rotation);
+            GameObject duplicate = Instantiate(obj, obj.transform.position + new Vector3(1f, 0f, 0), obj.transform.rotation);
             duplicate.GetComponent<Outline>().enabled = false;
             Renderer renderer = duplicate.GetComponent<Renderer>();
 
@@ -800,5 +846,19 @@ public class InteractionManager : MonoBehaviour
             }
             duplicate.layer = LayerMask.NameToLayer("Objects");
         }
+    }
+    public void RecordOriginalTransform()
+    {
+        originalPos = selectedObjects[0].transform.position;
+        originalRotation = selectedObjects[0].transform.rotation.eulerAngles;
+        originalScale = selectedObjects[0].transform.localScale;
+    }
+    public void RecordNewTransform()
+    {
+        newPos = selectedObjects[0].transform.position;
+        newRotation = selectedObjects[0].transform.rotation.eulerAngles;
+        newScale = selectedObjects[0].transform.localScale;
+        TransformAction transformAction = new TransformAction(selectedObjects, originalPos, newPos, originalRotation, newRotation, originalScale, newScale);
+        HistoryManager.Instance.RecordAction(transformAction);
     }
 }

@@ -17,7 +17,7 @@ public class ObjectController : MonoBehaviour
             InteractionManager.Instance.RemoveObject(gameObject);
             Destroy(gameObject);
             if (InteractionManager.Instance.GetSelectedObjects().Contains(gameObject) && InteractionManager.Instance.GetUseGizmo())
-                GizmoController.Instance.EnableGizmo(false); //FIX??
+                GizmoController.Instance.EnableGizmo(false);
         }
 
         if (InteractionManager.Instance.GetEnablePhysics() && !gameObject.GetComponent<Collider>().isTrigger)

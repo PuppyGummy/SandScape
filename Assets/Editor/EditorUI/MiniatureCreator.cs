@@ -178,7 +178,7 @@ namespace EditorUI
 
             //Copy colliders
             CopyColliders(originalPrefab, prefabObject);
-            
+
             //If no colliders were copied, add a convex mesh collider
             if (prefabObject.GetComponents<Collider>().Length < 1)
             {
