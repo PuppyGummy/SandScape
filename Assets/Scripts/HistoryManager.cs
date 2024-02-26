@@ -29,6 +29,7 @@ public class HistoryManager : MonoBehaviour
             edits.Add(new TransformHistory(target));
         }
         undoStack.Push(edits);
+        PrintStack(undoStack);
         redoStack.Clear(); // Clear redo stack on new operation
     }
 
@@ -36,10 +37,9 @@ public class HistoryManager : MonoBehaviour
     {
         if (undoStack.Count <= 1) return false; // Keep the original state
 
-        List<TransformHistory> prevState = undoStack.Pop();
-        redoStack.Push(new List<TransformHistory>(prevState)); // Move the state to redo stack
+        redoStack.Push(undoStack.Pop());
 
-        prevState = undoStack.Peek();
+        List<TransformHistory> prevState = undoStack.Peek();
         foreach (TransformHistory edit in prevState)
         {
             edit.Apply();
@@ -52,13 +52,23 @@ public class HistoryManager : MonoBehaviour
         if (redoStack.Count == 0) return false;
 
         List<TransformHistory> nextState = redoStack.Pop();
-        SaveState(nextState.Select(edit => edit.target).ToList<GameObject>());
+        undoStack.Push(nextState);
 
         foreach (TransformHistory edit in nextState)
         {
             edit.Apply();
         }
         return true;
+    }
+    public void PrintStack(Stack<List<TransformHistory>> stack)
+    {
+        foreach (List<TransformHistory> edits in stack)
+        {
+            for (int i = 0; i < edits.Count; i++)
+            {
+                Debug.Log("edit" + i + " position: " + edits[i].position + " rotation: " + edits[i].rotation + " scale: " + edits[i].scale);
+            }
+        }
     }
 }
 

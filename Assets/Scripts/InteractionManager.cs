@@ -587,9 +587,9 @@ public class InteractionManager : MonoBehaviour
     public void Bury()
     {
         if (selectedObjects.Count == 0) return;
+        HistoryManager.Instance.SaveState(selectedObjects);
         foreach (GameObject obj in selectedObjects)
         {
-            HistoryManager.Instance.SaveState(selectedObjects);
             if (obj.GetComponent<ObjectController>().IsOnGround() == false) return;
             Rigidbody rb = obj.GetComponent<Rigidbody>();
             rb.velocity = Vector3.zero;
@@ -600,8 +600,8 @@ public class InteractionManager : MonoBehaviour
 
             Physics.IgnoreCollision(obj.GetComponent<Collider>(), sandbox.GetComponent<Collider>());
             obj.transform.position = new Vector3(obj.transform.position.x, obj.transform.position.y - buryDepth, obj.transform.position.z);
-            HistoryManager.Instance.SaveState(selectedObjects);
         }
+        HistoryManager.Instance.SaveState(selectedObjects);
     }
 
     private void UnlockRotation()
