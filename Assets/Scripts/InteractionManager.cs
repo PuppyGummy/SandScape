@@ -86,8 +86,7 @@ public class InteractionManager : MonoBehaviour
     {
         if (!selectMode)
             return;
-
-        HandleSelectionInput();
+        
         if (selectedObjects.Count != 0 && !useGizmo)
         {
             HandleRotationInput();
@@ -96,7 +95,8 @@ public class InteractionManager : MonoBehaviour
 
         ScaleObjects();
         RotateObjects();
-        if (Input.GetMouseButtonDown(0) && isHoveringObject && selectedObjects.Count != 0 && !EventSystem.current.IsPointerOverGameObject())
+        // if (Input.GetMouseButtonDown(0) && isHoveringObject && selectedObjects.Count != 0 && !EventSystem.current.IsPointerOverGameObject())
+        if (Input.GetMouseButtonDown(0) && selectedObjects.Count != 0 && !EventSystem.current.IsPointerOverGameObject())
         {
             isDragging = true;
             HistoryManager.Instance.SaveState(selectedObjects);
@@ -106,6 +106,9 @@ public class InteractionManager : MonoBehaviour
             isDragging = false;
             HistoryManager.Instance.SaveState(selectedObjects);
         }
+        
+        HandleSelectionInput();
+        
         if (isDragging && !Input.GetKey(KeyCode.LeftShift) && !useGizmo)
         {
             StartCoroutine(DragMultiObjects(selectedObjects));
@@ -118,19 +121,18 @@ public class InteractionManager : MonoBehaviour
         {
             HistoryManager.Instance.SaveState(selectedObjects);
         }
-        if (useGizmo && selectedObjects.Count != 0)
+
+        if (!useGizmo || selectedObjects.Count == 0) return;
+        
+        if (!GizmoController.Instance.IsHoveringGizmo()) return;
+            
+        if (Input.GetMouseButtonDown(0))
         {
-            if (GizmoController.Instance.IsHoveringGizmo())
-            {
-                if (Input.GetMouseButtonDown(0))
-                {
-                    HistoryManager.Instance.SaveState(selectedObjects);
-                }
-                if (Input.GetMouseButtonUp(0) && selectedObjects.Count != 0)
-                {
-                    HistoryManager.Instance.SaveState(selectedObjects);
-                }
-            }
+            HistoryManager.Instance.SaveState(selectedObjects);
+        }
+        if (Input.GetMouseButtonUp(0) && selectedObjects.Count != 0)
+        {
+            HistoryManager.Instance.SaveState(selectedObjects);
         }
     }
     void FixedUpdate()
@@ -172,7 +174,7 @@ public class InteractionManager : MonoBehaviour
         {
             GameObject hitObject = GetHitObject();
 
-            if (hitObject != null && objs.Contains(hitObject))
+            if (hitObject && objs.Contains(hitObject))
             {
                 if (Input.GetKey(KeyCode.LeftShift))
                 {
@@ -294,20 +296,19 @@ public class InteractionManager : MonoBehaviour
             Rigidbody selectedRb;
             objectToDrag.TryGetComponent(out selectedRb);
 
-            if (selectedRb)
+            if (!selectedRb) continue;
+            
+            if (enablePhysics)
             {
-                if (enablePhysics)
-                {
-                    selectedRb.freezeRotation = true;
-                    selectedRb.useGravity = true;
-                    selectedRb.isKinematic = false;
-                    Physics.IgnoreCollision(objectToDrag.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
-                }
-
-                selectedRbs.Add(selectedRb);
-                Vector3 relativeOffset = selectedRb.transform.position - pos;
-                relativeOffsets.Add(relativeOffset);
+                selectedRb.freezeRotation = true;
+                selectedRb.useGravity = true;
+                selectedRb.isKinematic = false;
+                Physics.IgnoreCollision(objectToDrag.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
             }
+
+            selectedRbs.Add(selectedRb);
+            Vector3 relativeOffset = selectedRb.transform.position - pos;
+            relativeOffsets.Add(relativeOffset);
         }
 
         while (Input.GetMouseButton(0))
@@ -320,24 +321,23 @@ public class InteractionManager : MonoBehaviour
                     continue;
                 }
                 Rigidbody rb = objectsToDrag[i].GetComponent<Rigidbody>();
-                if (rb)
-                {
-                    bottomToCenterDistance = rb.GetComponent<Collider>().bounds.extents.y + pos.y;
-                    // liftedHeight = Mathf.Max(pos.y + bottomToCenterDistance, minYValue) - pos.y;
-                    rb.transform.position = new Vector3(pos.x + relativeOffsets[i].x, Mathf.Max(pos.y + bottomToCenterDistance, minYValue), pos.z + relativeOffsets[i].z);
-                    GameObject indicator = objectsToDrag[i].transform.GetChild(0).gameObject;
-                    if (indicator != null)
-                    {
-                        indicator.SetActive(true);
-                        //cast a ray down the object and place the object indicator at the hit point
-                        if (Physics.Raycast(rb.transform.position, Vector3.down, out hit, Mathf.Infinity))
-                        {
-                            indicator.transform.position = hit.point;
-                            //lock the rotation of the indicator
-                            indicator.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
-                        }
-                    }
-                }
+                if (!rb) continue;
+                
+                bottomToCenterDistance = rb.GetComponent<Collider>().bounds.extents.y + pos.y;
+                // liftedHeight = Mathf.Max(pos.y + bottomToCenterDistance, minYValue) - pos.y;
+                rb.transform.position = new Vector3(pos.x + relativeOffsets[i].x, 
+                    Mathf.Max(pos.y + bottomToCenterDistance, minYValue), pos.z + relativeOffsets[i].z);
+                
+                GameObject indicator = objectsToDrag[i].transform.GetChild(0).gameObject;
+                if (!indicator) continue;
+                    
+                indicator.SetActive(true);
+                //cast a ray down the object and place the object indicator at the hit point
+                if (!Physics.Raycast(rb.transform.position, Vector3.down, out hit, Mathf.Infinity)) continue;
+                        
+                indicator.transform.position = hit.point;
+                //lock the rotation of the indicator
+                indicator.transform.rotation = Quaternion.FromToRotation(Vector3.up, hit.normal);
             }
             yield return waitForFixedUpdate;
         }
@@ -455,11 +455,10 @@ public class InteractionManager : MonoBehaviour
         }
         else if (isScalingWithMouseScroll && timeSinceLastScroll != 0f)
         {
-            if ((Time.time - timeSinceLastScroll) > scrollEndDelay)
-            {
-                isScalingWithMouseScroll = false;
-                HistoryManager.Instance.SaveState(selectedObjects);
-            }
+            if (!((Time.time - timeSinceLastScroll) > scrollEndDelay)) return;
+            
+            isScalingWithMouseScroll = false;
+            HistoryManager.Instance.SaveState(selectedObjects);
         }
     }
 
@@ -610,12 +609,12 @@ public class InteractionManager : MonoBehaviour
         {
             Rigidbody rb;
             obj.TryGetComponent(out rb);
-            if (rb)
-            {
-                rb.constraints = RigidbodyConstraints.None;
-                if (!obj.GetComponent<ObjectController>().lockRotation) return;
-                obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-            }
+            
+            if (!rb) continue;
+            
+            rb.constraints = RigidbodyConstraints.None;
+            if (!obj.GetComponent<ObjectController>().lockRotation) return;
+            obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
         }
     }
     public void SetUseGizmo()
@@ -696,12 +695,11 @@ public class InteractionManager : MonoBehaviour
     {
         foreach (GameObject obj in objs)
         {
-            if (obj.CompareTag("Interactable"))
-            {
-                obj.GetComponent<Rigidbody>().isKinematic = true;
-                obj.GetComponent<Rigidbody>().useGravity = false;
-                obj.GetComponent<Collider>().isTrigger = true;
-            }
+            if (!obj.CompareTag("Interactable")) continue;
+            
+            obj.GetComponent<Rigidbody>().isKinematic = true;
+            obj.GetComponent<Rigidbody>().useGravity = false;
+            obj.GetComponent<Collider>().isTrigger = true;
         }
     }
     public void EnablePhysics(GameObject obj)
@@ -710,12 +708,11 @@ public class InteractionManager : MonoBehaviour
         {
             obj.GetComponent<Collider>().isTrigger = false;
             //if the object is above ground
-            if (!IsIntersecting(obj, sandbox))
-            {
-                obj.GetComponent<Rigidbody>().isKinematic = false;
-                obj.GetComponent<Rigidbody>().useGravity = true;
-                Physics.IgnoreCollision(obj.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
-            }
+            if (IsIntersecting(obj, sandbox)) return;
+            
+            obj.GetComponent<Rigidbody>().isKinematic = false;
+            obj.GetComponent<Rigidbody>().useGravity = true;
+            Physics.IgnoreCollision(obj.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
         }
     }
     public void EnableAllPhysics()
@@ -792,9 +789,9 @@ public class InteractionManager : MonoBehaviour
                 obj.GetComponent<Rigidbody>().isKinematic = !obj.GetComponent<Rigidbody>().isKinematic;
                 obj.GetComponent<Rigidbody>().useGravity = !obj.GetComponent<Rigidbody>().useGravity;
             }
-            if (obj.tag == "Interactable")
+            if (obj.CompareTag("Interactable"))
                 obj.tag = "Locked";
-            else if (obj.tag == "Locked")
+            else if (obj.CompareTag("Locked"))
                 obj.tag = "Interactable";
         }
     }
@@ -805,9 +802,9 @@ public class InteractionManager : MonoBehaviour
         {
             GameObject duplicate = Instantiate(obj, obj.transform.position + new Vector3(1f, 0f, 0), obj.transform.rotation);
             duplicate.GetComponent<Outline>().enabled = false;
-            Renderer renderer = duplicate.GetComponent<Renderer>();
+            Renderer miniatureRenderer = duplicate.GetComponent<Renderer>();
 
-            Material[] materials = renderer.materials;
+            Material[] materials = miniatureRenderer.materials;
 
             //remove the last two materials, which are the outline materials
             Array.Resize(ref materials, materials.Length - 2);
