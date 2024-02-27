@@ -87,6 +87,8 @@ public class InteractionManager : MonoBehaviour
         if (!selectMode)
             return;
         
+        HandleSelectionInput();
+        
         if (selectedObjects.Count != 0 && !useGizmo)
         {
             HandleRotationInput();
@@ -106,8 +108,6 @@ public class InteractionManager : MonoBehaviour
             isDragging = false;
             HistoryManager.Instance.SaveState(selectedObjects);
         }
-        
-        HandleSelectionInput();
         
         if (isDragging && !Input.GetKey(KeyCode.LeftShift) && !useGizmo)
         {
@@ -194,22 +194,20 @@ public class InteractionManager : MonoBehaviour
                 else
                 {
                     //single select
-                    if (!selectedObjects.Contains(hitObject))
-                    {
-                        DeselectAllObjects();
-                        SelectObject(hitObject);
-                        GizmoController.Instance.OnSelectionChanged();
-                    }
+                    if (selectedObjects.Contains(hitObject)) return;
+                    
+                    DeselectAllObjects();
+                    SelectObject(hitObject);
+                    GizmoController.Instance.OnSelectionChanged();
                 }
             }
             else
             {
                 //If we click on empty space, deselect all objects
-                if (!isRotating && !isScaling)
-                {
-                    DeselectAllObjects();
-                    GizmoController.Instance.OnSelectionChanged();
-                }
+                if (isRotating || isScaling) return;
+                
+                DeselectAllObjects();
+                GizmoController.Instance.OnSelectionChanged();
             }
         }
         //If we release mouse button and there is a selected object
