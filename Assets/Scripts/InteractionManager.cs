@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 
 public class InteractionManager : MonoBehaviour
 {
@@ -60,6 +61,8 @@ public class InteractionManager : MonoBehaviour
     public static InteractionManager Instance;
     public float maxScaleSize = 5.0f;
     public float minScaleSize = 0.1f;
+    [FormerlySerializedAs("LockedColor")] public Color32 lockedColor = new(255, 100, 75, 255);
+    [FormerlySerializedAs("UnlockedColor")] public Color32 unlockedColor = new(78, 186, 204, 255);
 
     void Awake()
     {
@@ -788,9 +791,15 @@ public class InteractionManager : MonoBehaviour
                 obj.GetComponent<Rigidbody>().useGravity = !obj.GetComponent<Rigidbody>().useGravity;
             }
             if (obj.CompareTag("Interactable"))
+            {
                 obj.tag = "Locked";
+                obj.GetComponent<Outline>().OutlineColor = lockedColor;
+            }
             else if (obj.CompareTag("Locked"))
+            {
                 obj.tag = "Interactable";
+                obj.GetComponent<Outline>().OutlineColor = unlockedColor; //Default color
+            }
         }
     }
     public void DuplicateObject()
