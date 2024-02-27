@@ -24,6 +24,8 @@ namespace EditorUI
         private ObjectField meshField;
         private DropdownField categoryField;
         private Button createButton;
+        private Button refreshInventoryButton;
+        private Button clearInventoryButton;
 
         public void CreateGUI()
         {
@@ -96,19 +98,68 @@ namespace EditorUI
                 name = "button",
                 text = "Create!"
             };
-            createButton.clicked += OnClick();
+            createButton.clicked += OnCreateClicked();
             root.Add(createButton);
+            
+            Label inventoryLabel = new Label("Inventory")
+            {
+                style =
+                {
+                    fontSize = 16,
+                    marginTop = 5,
+                    marginBottom = 5,
+                    marginLeft = 5
+                }
+            };
+            root.Add(inventoryLabel);
+            
+            //Refresh miniature inventory
+            refreshInventoryButton = new Button
+            {
+                name = "button",
+                text = "Refresh all"
+            };
+            refreshInventoryButton.clicked += OnRefreshClicked();
+            root.Add(refreshInventoryButton);
+
+            clearInventoryButton = new Button
+            {
+                name = "button",
+                text = "clear all"
+            };
+            clearInventoryButton.clicked += OnClearClicked();
+            root.Add(clearInventoryButton);
         }
 
-        private System.Action OnClick()
+        private System.Action OnCreateClicked()
         {
             return CreationButtonPressed;
+        }
+        
+        private System.Action OnRefreshClicked()
+        {
+            return RefreshAll;
+        }
+
+        private System.Action OnClearClicked()
+        {
+            return ClearAll;
+        }
+
+        private void ClearAll()
+        {
+            MiniatureManager.Instance.ClearAllMiniatures();
         }
 
         private void CreationButtonPressed()
         {
             CreatePrefab();
             ResetUI();
+        }
+
+        private void RefreshAll()
+        {
+            MiniatureManager.Instance.RefreshAllMiniatures();
         }
 
         void ResetUI()
@@ -178,6 +229,14 @@ namespace EditorUI
 
             //Copy colliders
             CopyColliders(originalPrefab, prefabObject);
+
+            //If no colliders were copied, add a convex mesh collider
+            if (prefabObject.GetComponents<Collider>().Length < 1)
+            {
+                MeshCollider collider = prefabObject.AddComponent<MeshCollider>();
+                collider.sharedMesh = meshFilterComponent.sharedMesh;
+                collider.convex = true;
+            }
 
             //Setup tags and layers
             prefabObject.tag = "Interactable";

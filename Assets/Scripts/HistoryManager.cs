@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
+
 
 public class HistoryManager : MonoBehaviour
 {
     public static HistoryManager Instance;
-    public Stack<Action> undoStack = new Stack<Action>();
-    public Stack<Action> redoStack = new Stack<Action>();
+    private Stack<List<TransformHistory>> undoStack = new Stack<List<TransformHistory>>();
+    private Stack<List<TransformHistory>> redoStack = new Stack<List<TransformHistory>>();
     void Awake()
     {
         if (Instance != null)
@@ -19,195 +21,77 @@ public class HistoryManager : MonoBehaviour
         GameObject.DontDestroyOnLoad(this.gameObject);
     }
 
-    public void RecordAction(Action action)
+    public void SaveState(List<GameObject> targets)
     {
-        // action.PrintAction();
-        undoStack.Push(action);
-        redoStack.Clear();
-    }
-
-    public void Undo()
-    {
-        if (undoStack.Count > 0)
+        List<TransformHistory> edits = new List<TransformHistory>();
+        foreach (GameObject target in targets)
         {
-            Action actionToUndo = undoStack.Pop();
-            // actionToUndo.PrintAction();
-            actionToUndo.Undo();
-            redoStack.Push(actionToUndo);
+            edits.Add(new TransformHistory(target));
         }
+        undoStack.Push(edits);
+        PrintStack(undoStack);
+        redoStack.Clear(); // Clear redo stack on new operation
     }
 
-    public void Redo()
+    public bool Undo()
     {
-        if (redoStack.Count > 0)
+        if (undoStack.Count <= 1) return false; // Keep the original state
+
+        redoStack.Push(undoStack.Pop());
+
+        List<TransformHistory> prevState = undoStack.Peek();
+        foreach (TransformHistory edit in prevState)
         {
-            Action actionToRedo = redoStack.Pop();
-            // actionToRedo.PrintAction();
-            actionToRedo.Redo();
-            undoStack.Push(actionToRedo);
+            edit.Apply();
+        }
+        return true;
+    }
+
+    public bool Redo()
+    {
+        if (redoStack.Count == 0) return false;
+
+        List<TransformHistory> nextState = redoStack.Pop();
+        undoStack.Push(nextState);
+
+        foreach (TransformHistory edit in nextState)
+        {
+            edit.Apply();
+        }
+        return true;
+    }
+    public void PrintStack(Stack<List<TransformHistory>> stack)
+    {
+        foreach (List<TransformHistory> edits in stack)
+        {
+            for (int i = 0; i < edits.Count; i++)
+            {
+                Debug.Log("edit" + i + " position: " + edits[i].position + " rotation: " + edits[i].rotation + " scale: " + edits[i].scale);
+            }
         }
     }
 }
 
-public abstract class Action
+[System.Serializable]
+public class TransformHistory
 {
-    public abstract void Undo();
-    public abstract void Redo();
-}
+    public Vector3 position;
+    public Quaternion rotation;
+    public Vector3 scale;
+    public GameObject target; // Reference to the target Transform
 
-
-public class MoveAction : Action
-{
-    private List<GameObject> targetObjects;
-    private Vector3 originalPosition;
-    private Vector3 newPosition;
-
-    public MoveAction(List<GameObject> targets, Vector3 originalPos, Vector3 newPos)
+    public TransformHistory(GameObject targetObj)
     {
-        targetObjects = targets;
-        originalPosition = originalPos;
-        newPosition = newPos;
+        position = targetObj.transform.position;
+        rotation = targetObj.transform.rotation;
+        scale = targetObj.transform.localScale;
+        target = targetObj;
     }
 
-    public override void Undo()
+    public void Apply()
     {
-        Vector3 offset = originalPosition - newPosition;
-        // targetTransform.position = originalPosition;
-        foreach (GameObject target in targetObjects)
-        {
-            target.transform.position += offset;
-        }
-    }
-
-    public override void Redo()
-    {
-        Vector3 offset = newPosition - originalPosition;
-        // targetTransform.position = newPosition;
-        foreach (GameObject target in targetObjects)
-        {
-            target.transform.position += offset;
-        }
+        target.transform.position = position;
+        target.transform.rotation = rotation;
+        target.transform.localScale = scale;
     }
 }
-
-public class RotateAction : Action
-{
-    private List<GameObject> targetObjects;
-    private Vector3 originalRotaition;
-    private Vector3 newRotation;
-
-    public RotateAction(List<GameObject> target, Vector3 originalRot, Vector3 newRot)
-    {
-        targetObjects = target;
-        originalRotaition = originalRot;
-        newRotation = newRot;
-    }
-    public override void Undo()
-    {
-        Vector3 offset = originalRotaition - newRotation;
-        Debug.Log("Offset: " + offset);
-        // targetTransform.rotation = originalRotaition;
-        foreach (GameObject target in targetObjects)
-        {
-            target.transform.Rotate(offset);
-        }
-    }
-    public override void Redo()
-    {
-        Vector3 offset = newRotation - originalRotaition;
-        // targetTransform.rotation = newRotation;
-        foreach (GameObject target in targetObjects)
-        {
-            target.transform.Rotate(offset);
-        }
-    }
-}
-public class ScaleAction : Action
-{
-    private List<GameObject> targetObjects;
-    private Vector3 originalScale;
-    private Vector3 newScale;
-
-    public ScaleAction(List<GameObject> target, Vector3 originalScl, Vector3 newScl)
-    {
-        targetObjects = target;
-        originalScale = originalScl;
-        newScale = newScl;
-    }
-    public override void Undo()
-    {
-        Vector3 offset = originalScale - newScale;
-        // targetTransform.localScale = originalScale;
-        foreach (GameObject target in targetObjects)
-        {
-            target.transform.localScale += offset;
-        }
-    }
-    public override void Redo()
-    {
-        Vector3 offset = newScale - originalScale;
-        // targetTransform.localScale = newScale;
-        foreach (GameObject target in targetObjects)
-        {
-            target.transform.localScale += offset;
-        }
-    }
-}
-
-// public class Action
-// {
-//     private Transform targetTransform;
-//     private Vector3 originalPosition;
-//     private Vector3 newPosition;
-//     private Quaternion originalRotation;
-//     private Quaternion newRotation;
-//     private Vector3 originalScale;
-//     private Vector3 newScale;
-
-//     public Action(Transform target, Vector3 originalPos, Vector3 newPos, Quaternion originalRot, Quaternion newRot, Vector3 originalScl, Vector3 newScl)
-//     {
-//         targetTransform = target;
-//         originalPosition = originalPos;
-//         newPosition = newPos;
-//         originalRotation = originalRot;
-//         newRotation = newRot;
-//         originalScale = originalScl;
-//         newScale = newScl;
-//     }
-//     public Action(Transform target, Vector3 originalPos, Vector3 newPos)
-//     {
-//         targetTransform = target;
-//         originalPosition = originalPos;
-//         newPosition = newPos;
-//     }
-//     public Action(Transform target, Quaternion originalRot, Quaternion newRot)
-//     {
-//         targetTransform = target;
-//         originalRotation = originalRot;
-//         newRotation = newRot;
-//     }
-//     public Action(Transform target, Vector3 originalPos, Vector3 newPos, Vector3 originalScl, Vector3 newScl)
-//     {
-//         targetTransform = target;
-//         originalScale = originalScl;
-//         newScale = newScl;
-//     }
-
-//     public void Undo()
-//     {
-//         targetTransform.position = originalPosition;
-//         targetTransform.rotation = originalRotation;
-//         targetTransform.localScale = originalScale;
-//     }
-
-//     public void Redo()
-//     {
-//         targetTransform.position = newPosition;
-//         targetTransform.rotation = newRotation;
-//         targetTransform.localScale = newScale;
-//     }
-//     public void PrintAction()
-//     {
-//         Debug.Log(targetTransform.ToString() + originalPosition.ToString() + newPosition.ToString() + originalRotation.ToString() + newRotation.ToString() + originalScale.ToString() + newScale.ToString());
-//     }
-// }
