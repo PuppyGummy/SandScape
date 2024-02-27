@@ -358,7 +358,7 @@ public class InteractionManager : MonoBehaviour
         {
             HistoryManager.Instance.SaveState(selectedObjects);
         }
-        if (Input.GetMouseButton(1))
+        /*if (Input.GetMouseButton(1))
         {
             UnlockRotation();
 
@@ -381,7 +381,7 @@ public class InteractionManager : MonoBehaviour
                 obj.transform.Rotate(Vector3.up, -mouseX, Space.World);
                 obj.transform.Rotate(Vector3.right, mouseY, Space.World);
             }
-        }
+        }*/
     }
 
     //rotate with UI button
