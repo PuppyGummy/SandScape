@@ -67,6 +67,8 @@ Material:
     - _Cutoff: 0.506
     - _DetailNormalMapScale: 1
     - _DstBlend: 10
+    - _EdgeWidth: 0.22
+    - _FoamSize: 1.38
     - _GlossMapScale: 1
     - _Glossiness: 1
     - _GlossyReflections: 1
@@ -82,8 +84,11 @@ Material:
     - _WaveFrequency: 20
     - _WaveSpeed: 0.2
     - _WaveStrength: 0.08
+    - _YAxis: 0
     - _ZWrite: 0
     m_Colors:
     - _Color: {r: 0.22027415, g: 0.57435936, b: 0.7075472, a: 0.73333335}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _FoamColor: {r: 1, g: 1, b: 1, a: 0}
+    - _WaterColor: {r: 0.21960784, g: 0.57254905, b: 0.7058824, a: 0.8745098}
   m_BuildTextureStacks: []
