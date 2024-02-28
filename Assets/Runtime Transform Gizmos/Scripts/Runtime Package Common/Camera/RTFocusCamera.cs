@@ -351,7 +351,7 @@ namespace RTG
                     }
                     // Rotate Camera
                     else
-                    if (_lookAroundSettings.IsLookAroundEnabled && Hotkeys.LookAround.IsActive() && InteractionManager.Instance.GetSelectedObjects().Count == 0)
+                    if (_lookAroundSettings.IsLookAroundEnabled && Hotkeys.LookAround.IsActive() && !InteractionManager.Instance.IsHoveringObject())
                     {
                         if (_lookAroundSettings.LookAroundMode == CameraLookAroundMode.Standard)
                         {

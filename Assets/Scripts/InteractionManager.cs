@@ -239,6 +239,7 @@ public class InteractionManager : MonoBehaviour
     }
     public void SelectObject(GameObject objectToSelect)
     {
+        // Debug.Log("Selecting object: " + objectToSelect.name);
         if (selectedObjects.Contains(objectToSelect)) return;
         selectedObjects.Add(objectToSelect);
 
@@ -583,7 +584,7 @@ public class InteractionManager : MonoBehaviour
     public void ClearAll()
     {
         selectedObjects.Clear();
-        
+
         foreach (var miniature in objs)
         {
             Destroy(miniature);
@@ -681,7 +682,7 @@ public class InteractionManager : MonoBehaviour
     {
         foreach (GameObject obj in objs)
         {
-            if(!obj) continue;
+            if (!obj) continue;
             obj.layer = LayerMask.NameToLayer("Ignore Raycast");
         }
     }
@@ -707,7 +708,7 @@ public class InteractionManager : MonoBehaviour
         foreach (GameObject obj in objs)
         {
             if (!obj.CompareTag("Interactable")) continue;
-            
+
             obj.GetComponent<Rigidbody>().isKinematic = true;
             obj.GetComponent<Rigidbody>().useGravity = false;
             obj.GetComponent<Collider>().isTrigger = true;
@@ -837,5 +838,9 @@ public class InteractionManager : MonoBehaviour
     public void SetDragging(bool value)
     {
         isDragging = value;
+    }
+    public bool IsHoveringObject()
+    {
+        return isHoveringObject;
     }
 }
