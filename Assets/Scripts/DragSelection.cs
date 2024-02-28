@@ -16,17 +16,21 @@ public class DragSelection : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
+        if (!EventSystem.current.IsPointerOverGameObject() && !InteractionManager.Instance.IsDragging() && !GizmoController.Instance.IsHoveringGizmo() && !InteractionManager.Instance.isDraggingSpawnedObject)
         {
-            startPos = Input.mousePosition;
-            selectionBox.gameObject.SetActive(true);
+            if (Input.GetMouseButtonDown(0))
+            {
+                startPos = Input.mousePosition;
+                selectionBox.gameObject.SetActive(true);
+            }
+            if (Input.GetMouseButton(0))
+            {
+                endPos = Input.mousePosition;
+                InteractionManager.Instance.IgnoreAllRaycasts();
+                BoxSelect();
+            }
         }
-        if (Input.GetMouseButton(0) && !InteractionManager.Instance.IsDragging() && !GizmoController.Instance.IsHoveringGizmo() && !InteractionManager.Instance.isDraggingSpawnedObject)
-        {
-            endPos = Input.mousePosition;
-            InteractionManager.Instance.IgnoreAllRaycasts();
-            BoxSelect();
-        }
+
         if (Input.GetMouseButtonUp(0))
         {
             InteractionManager.Instance.RecoverAllRaycasts();
@@ -53,7 +57,7 @@ public class DragSelection : MonoBehaviour
         foreach (GameObject obj in InteractionManager.Instance.GetObjects())
         {
             if (!obj) { InteractionManager.Instance.RemoveObject(obj); continue; }
-            
+
             Vector3 screenPos = Camera.main.WorldToScreenPoint(obj.transform.position);
             if (screenPos.x > min.x && screenPos.x < max.x && screenPos.y > min.y && screenPos.y < max.y)
             {
