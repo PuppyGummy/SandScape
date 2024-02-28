@@ -706,6 +706,8 @@ public class InteractionManager : MonoBehaviour
         {
             if (!obj.CompareTag("Interactable")) continue;
 
+            //TODO: Some miniatures have more than one collider - we should account for this
+            
             obj.GetComponent<Rigidbody>().isKinematic = true;
             obj.GetComponent<Rigidbody>().useGravity = false;
             obj.GetComponent<Collider>().isTrigger = true;
