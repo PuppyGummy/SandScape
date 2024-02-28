@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class DragSelection : MonoBehaviour
 {
@@ -15,12 +16,12 @@ public class DragSelection : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
             startPos = Input.mousePosition;
             selectionBox.gameObject.SetActive(true);
         }
-        if (Input.GetMouseButton(0) && !InteractionManager.Instance.IsDragging() && !GizmoController.Instance.IsHoveringGizmo())
+        if (Input.GetMouseButton(0) && !InteractionManager.Instance.IsDragging() && !GizmoController.Instance.IsHoveringGizmo() && !InteractionManager.Instance.isDraggingSpawnedObject)
         {
             endPos = Input.mousePosition;
             InteractionManager.Instance.IgnoreAllRaycasts();

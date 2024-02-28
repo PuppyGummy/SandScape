@@ -29,7 +29,6 @@ public class HistoryManager : MonoBehaviour
             edits.Add(new TransformHistory(target));
         }
         undoStack.Push(edits);
-        PrintStack(undoStack);
         redoStack.Clear(); // Clear redo stack on new operation
     }
 
