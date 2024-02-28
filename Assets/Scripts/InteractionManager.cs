@@ -582,6 +582,8 @@ public class InteractionManager : MonoBehaviour
 
     public void ClearAll()
     {
+        selectedObjects.Clear();
+        
         foreach (var miniature in objs)
         {
             Destroy(miniature);
