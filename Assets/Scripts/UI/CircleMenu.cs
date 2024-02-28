@@ -32,9 +32,36 @@ public class CircleMenu : MonoBehaviour
             InteractionManager.Instance.RemoveObject(selectedObject);
             return;
         }
-        Vector3 screenPos = Camera.main.WorldToScreenPoint(selectedObject.gameObject.GetComponent<Collider>().bounds.center);
+        
+        Vector3 screenPos;
+        
+        if (InteractionManager.Instance.GetSelectedObjects().Count > 1)
+        {
+            screenPos = Camera.main.WorldToScreenPoint(GetMeanVector(InteractionManager.Instance.GetSelectedObjects()));
+        }
+        else
+        {
+            screenPos = Camera.main.WorldToScreenPoint(selectedObject.gameObject.GetComponent<Collider>().bounds.center);   
+        }
 
         actionMenu.transform.position = screenPos;
         actionMenu.transform.localScale = new Vector3(0.75f, 0.75f, 0.75f);
+    }
+    
+    private Vector3 GetMeanVector(List<GameObject> objects)
+    {
+        if(objects.Count == 0)
+        {
+            return Vector3.zero;
+        }
+ 
+        Vector3 meanVector = Vector3.zero;
+ 
+        foreach(GameObject obj in objects)
+        {
+            meanVector += obj.transform.position;
+        }
+ 
+        return (meanVector / objects.Count);
     }
 }
