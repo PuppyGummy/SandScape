@@ -25,7 +25,13 @@ public class CircleMenu : MonoBehaviour
         {
             actionMenu.gameObject.SetActive(!actionMenu.gameObject.activeSelf);
         }
+        //TODO: This creates a lot of errors...
         selectedObject = InteractionManager.Instance.GetSelectedObjects()[0];
+        if(!selectedObject)
+        {
+            InteractionManager.Instance.RemoveObject(selectedObject);
+            return;
+        }
         Vector3 screenPos = Camera.main.WorldToScreenPoint(selectedObject.gameObject.GetComponent<Collider>().bounds.center);
 
         actionMenu.transform.position = screenPos;

@@ -113,4 +113,9 @@ public class GamemodeManager : MonoBehaviour
         Cursor.lockState = Cursor.lockState == CursorLockMode.Locked ? CursorLockMode.Confined : CursorLockMode.Locked;
         Cursor.visible = !Cursor.visible;
     }
+
+    public void ExitApp()
+    {
+        Application.Quit();
+    }
 }

@@ -52,6 +52,8 @@ public class DragSelection : MonoBehaviour
 
         foreach (GameObject obj in InteractionManager.Instance.GetObjects())
         {
+            if (!obj) { InteractionManager.Instance.RemoveObject(obj); continue; }
+            
             Vector3 screenPos = Camera.main.WorldToScreenPoint(obj.transform.position);
             if (screenPos.x > min.x && screenPos.x < max.x && screenPos.y > min.y && screenPos.y < max.y)
             {

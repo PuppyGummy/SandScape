@@ -681,6 +681,7 @@ public class InteractionManager : MonoBehaviour
     {
         foreach (GameObject obj in objs)
         {
+            if(!obj) continue;
             obj.layer = LayerMask.NameToLayer("Ignore Raycast");
         }
     }
@@ -688,6 +689,7 @@ public class InteractionManager : MonoBehaviour
     {
         foreach (GameObject obj in objs)
         {
+            if (!obj) { RemoveObject(obj); continue; }
             obj.layer = LayerMask.NameToLayer("Objects");
         }
     }
@@ -705,8 +707,6 @@ public class InteractionManager : MonoBehaviour
         foreach (GameObject obj in objs)
         {
             if (!obj.CompareTag("Interactable")) continue;
-
-            //TODO: Some miniatures have more than one collider - we should account for this
             
             obj.GetComponent<Rigidbody>().isKinematic = true;
             obj.GetComponent<Rigidbody>().useGravity = false;
