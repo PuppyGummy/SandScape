@@ -839,4 +839,8 @@ public class InteractionManager : MonoBehaviour
     {
         isDragging = value;
     }
+    public bool IsHoveringObject()
+    {
+        return isHoveringObject;
+    }
 }

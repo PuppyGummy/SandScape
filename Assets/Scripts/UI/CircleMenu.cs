@@ -21,13 +21,13 @@ public class CircleMenu : MonoBehaviour
             actionMenu.gameObject.SetActive(false);
             return;
         }
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(1) && InteractionManager.Instance.IsHoveringObject())
         {
             actionMenu.gameObject.SetActive(!actionMenu.gameObject.activeSelf);
         }
         //TODO: This creates a lot of errors...
         selectedObject = InteractionManager.Instance.GetSelectedObjects()[0];
-        if(!selectedObject)
+        if (!selectedObject)
         {
             InteractionManager.Instance.RemoveObject(selectedObject);
             return;
