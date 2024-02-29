@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: 48 TRANSPARENT BLUE-LPUP-ANIM-YUp
+  m_Name: 48 TRANSPARENT BLUE-LPUP-ANIM-Beach
   m_Shader: {fileID: 4800000, guid: c64bf77e5ec45ed4b965f6999d15d924, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -68,8 +68,8 @@ Material:
     - _Cutoff: 0.506
     - _DetailNormalMapScale: 1
     - _DstBlend: 10
-    - _EdgeWidth: 0.32
-    - _FoamSize: 1
+    - _EdgeWidth: 0.4
+    - _FoamSize: 0.7
     - _GlossMapScale: 1
     - _Glossiness: 1
     - _GlossyReflections: 1
@@ -82,9 +82,9 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
-    - _WaveFrequency: 1
-    - _WaveSpeed: 1
-    - _WaveStrength: 0.0008
+    - _WaveFrequency: 10
+    - _WaveSpeed: 3
+    - _WaveStrength: 1
     - _YAxis: 1
     - _ZWrite: 0
     m_Colors:

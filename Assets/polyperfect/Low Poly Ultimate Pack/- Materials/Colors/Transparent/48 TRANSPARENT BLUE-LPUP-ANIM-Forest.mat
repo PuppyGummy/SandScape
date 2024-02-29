@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: 48 TRANSPARENT BLUE-LPUP-ANIM
+  m_Name: 48 TRANSPARENT BLUE-LPUP-ANIM-Forest
   m_Shader: {fileID: 4800000, guid: c64bf77e5ec45ed4b965f6999d15d924, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -69,9 +69,12 @@ Material:
     - _DstBlend: 10
     - _EdgeWidth: 0.22
     - _FoamSize: 1.38
+    - _Frequency: 0.1
     - _GlossMapScale: 1
     - _Glossiness: 1
     - _GlossyReflections: 1
+    - _InvWaveLength: 0.1
+    - _Magnitude: 0.1
     - _Metallic: 0
     - _Mode: 3
     - _OcclusionStrength: 1
@@ -81,10 +84,12 @@ Material:
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
-    - _WaveFrequency: 20
-    - _WaveSpeed: 0.2
-    - _WaveStrength: 0.08
+    - _WaveFrequency: 10
+    - _WaveSpeed: 5
+    - _WaveStrength: 0.5
+    - _XAxis: 0
     - _YAxis: 0
+    - _ZAxis: 0
     - _ZWrite: 0
     m_Colors:
     - _Color: {r: 0.22027415, g: 0.57435936, b: 0.7075472, a: 0.73333335}
