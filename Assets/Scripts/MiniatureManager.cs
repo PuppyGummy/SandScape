@@ -10,6 +10,8 @@ using UnityEngine.Serialization;
 using UnityEngine.UIElements;
 using Image = UnityEngine.UI.Image;
 
+#if UNITY_EDITOR
+
 public class MiniatureManager : MonoBehaviour
 {
     //Singleton
@@ -156,3 +158,6 @@ public class MiniatureManager : MonoBehaviour
         return tabController.tabs[categoryID].transform.GetChild(0);
     }
 }
+
+
+#endif
