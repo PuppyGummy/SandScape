@@ -153,6 +153,6 @@ public class MiniatureManager : MonoBehaviour
     /// <returns></returns>
     private Transform GetTabGrid(int categoryID)
     {
-        return tabController.tabs[categoryID].transform.GetChild(1);
+        return tabController.tabs[categoryID].transform.GetChild(0);
     }
 }
