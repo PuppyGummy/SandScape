@@ -19,12 +19,12 @@ public class ObjectController : MonoBehaviour
             if (InteractionManager.Instance.GetSelectedObjects().Contains(gameObject) && InteractionManager.Instance.GetUseGizmo())
                 GizmoController.Instance.EnableGizmo(false);
         }
-
-        if (InteractionManager.Instance.GetEnablePhysics() && !gameObject.GetComponent<Collider>().isTrigger)
-        {
-            if (gameObject.CompareTag("Interactable"))
-                InteractionManager.Instance.EnablePhysics(gameObject);
-        }
+        // Maybe not put it here inside the Update()
+        // if (InteractionManager.Instance.GetEnablePhysics() && !gameObject.GetComponent<Collider>().isTrigger)
+        // {
+        //     if (gameObject.CompareTag("Interactable"))
+        //         InteractionManager.Instance.EnablePhysics(gameObject);
+        // }
     }
 
     private void OnCollisionEnter(Collision other)

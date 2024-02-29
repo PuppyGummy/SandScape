@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.629421, g: 0.87635493, b: 0.9422613, a: 1}
+  m_IndirectSpecularColor: {r: 0.62950116, g: 0.87631863, b: 0.94228286, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -15768,6 +15768,7 @@ MonoBehaviour:
   objs: []
   selectedObjects: []
   isDraggingSpawnedObject: 0
+  epsilon: 1.2
   dragSpeed: 10
   rotationSpeed: 10
   minYValue: 1

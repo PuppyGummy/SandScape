@@ -38,6 +38,7 @@ public class InteractionManager : MonoBehaviour
     private bool isRotating = false;
     private bool isScalingWithMouseScroll = false;
     public bool isDraggingSpawnedObject = false;
+    public float epsilon = 0.01f;
 
     #endregion
 
@@ -599,6 +600,7 @@ public class InteractionManager : MonoBehaviour
         HistoryManager.Instance.SaveState(selectedObjects);
         foreach (GameObject obj in selectedObjects)
         {
+            if (obj.CompareTag("Locked")) continue;
             if (obj.GetComponent<ObjectController>().IsOnGround() == false) return;
             Rigidbody rb = obj.GetComponent<Rigidbody>();
             rb.velocity = Vector3.zero;
@@ -633,15 +635,19 @@ public class InteractionManager : MonoBehaviour
         if (useGizmo && selectedObjects.Count == 0) return;
         GizmoController.Instance.EnableWorkGizmo(useGizmo);
         if (useGizmo)
+        {
             foreach (GameObject obj in objs)
             {
                 DisablePhysics(obj);
             }
+        }
         else
+        {
             foreach (GameObject obj in objs)
             {
                 EnablePhysics(obj);
             }
+        }
     }
     public bool GetUseGizmo()
     {
@@ -720,7 +726,7 @@ public class InteractionManager : MonoBehaviour
         {
             obj.GetComponent<Collider>().isTrigger = false;
             //if the object is above ground
-            if (IsIntersecting(obj, sandbox)) return;
+            if (IsIntersecting(obj, sandbox, epsilon)) return;
 
             obj.GetComponent<Rigidbody>().isKinematic = false;
             obj.GetComponent<Rigidbody>().useGravity = true;
@@ -735,7 +741,7 @@ public class InteractionManager : MonoBehaviour
             {
                 obj.GetComponent<Collider>().isTrigger = false;
                 //if the object is above ground
-                if (!IsIntersecting(obj, sandbox))
+                if (!IsIntersecting(obj, sandbox, epsilon))
                 {
                     obj.GetComponent<Rigidbody>().isKinematic = false;
                     obj.GetComponent<Rigidbody>().useGravity = true;
@@ -757,15 +763,18 @@ public class InteractionManager : MonoBehaviour
             DisableAllPhysics();
         }
     }
-    public bool IsIntersecting(GameObject obj1, GameObject obj2)
+    public bool IsIntersecting(GameObject obj1, GameObject obj2, float epsilon)
     {
         Bounds obj1Bounds = obj1.GetComponent<Collider>().bounds;
         Bounds obj2Bounds = obj2.GetComponent<Collider>().bounds;
-        if (obj1Bounds.Intersects(obj2Bounds))
-        {
-            return true;
-        }
-        return false;
+
+        bool overlapX = obj1Bounds.min.x < obj2Bounds.max.x - epsilon && obj1Bounds.max.x > obj2Bounds.min.x + epsilon;
+        bool overlapY = obj1Bounds.min.y < obj2Bounds.max.y - epsilon && obj1Bounds.max.y > obj2Bounds.min.y + epsilon;
+        bool overlapZ = obj1Bounds.min.z < obj2Bounds.max.z - epsilon && obj1Bounds.max.z > obj2Bounds.min.z + epsilon;
+
+        Debug.Log("IsIntersecting: " + (overlapX && overlapY && overlapZ));
+
+        return overlapX && overlapY && overlapZ;
     }
     public bool GetEnablePhysics()
     {
@@ -796,11 +805,12 @@ public class InteractionManager : MonoBehaviour
         if (selectedObjects.Count == 0) return;
         foreach (GameObject obj in selectedObjects)
         {
-            // if (!IsIntersecting(obj, sandbox))
-            {
-                obj.GetComponent<Rigidbody>().isKinematic = !obj.GetComponent<Rigidbody>().isKinematic;
-                obj.GetComponent<Rigidbody>().useGravity = !obj.GetComponent<Rigidbody>().useGravity;
-            }
+            if (!IsIntersecting(obj, sandbox, epsilon))
+                if (!useGizmo)
+                {
+                    obj.GetComponent<Rigidbody>().isKinematic = !obj.GetComponent<Rigidbody>().isKinematic;
+                    obj.GetComponent<Rigidbody>().useGravity = !obj.GetComponent<Rigidbody>().useGravity;
+                }
             if (obj.CompareTag("Interactable"))
             {
                 obj.tag = "Locked";
