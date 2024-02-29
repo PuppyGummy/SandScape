@@ -14,6 +14,8 @@ namespace UI
         [SerializeField] public List<GameObject> tabs = new List<GameObject>();
 
         private GameObject currentTab;
+        private UI_TabImage selectedTab;
+        private UI_TabImage newTab;
         
         // Start is called before the first frame update
         void Start()
@@ -22,6 +24,7 @@ namespace UI
             AddTabs();
 
             currentTab = tabs[0];
+            selectedTab = tabButtons[0].GetComponent<UI_TabImage>();
         }
 
         /// <summary>
@@ -86,12 +89,17 @@ namespace UI
             if(desiredTab == currentTab)
                 return;
             
+            selectedTab.SetInactive();
+            newTab = pressedButton.GetComponent<UI_TabImage>();
+            newTab.SetActive();
+            
             //Disable current tab
             currentTab.gameObject.SetActive(false);
             
             //Enable new tab and save current tab
             desiredTab.SetActive(true);
             currentTab = desiredTab;
+            selectedTab = newTab;
         }
     }
 }
