@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using RapidIcon_1_6_2;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -26,6 +27,9 @@ namespace EditorUI
         private Button createButton;
         private Button refreshInventoryButton;
         private Button clearInventoryButton;
+        private TextField miniPath;
+        private TextField neededIconPath;
+        private Button openIconToolButton;
 
         public void CreateGUI()
         {
@@ -80,7 +84,7 @@ namespace EditorUI
             categoryField.style.marginRight = 10;
             root.Add(categoryField);
 
-            Label finalizeLabel = new Label("Finalize")
+            Label finalizeLabel = new Label("Create Miniature")
             {
                 style =
                 {
@@ -100,6 +104,55 @@ namespace EditorUI
             };
             createButton.clicked += OnCreateClicked();
             root.Add(createButton);
+
+            //Miniature path
+            miniPath = new TextField
+            {
+                label = "Miniature path",
+                value = "none...",
+                style = 
+                {
+                    marginTop = 5,
+                    marginBottom = 5,
+                    marginLeft = 5
+                }
+                
+            };
+            root.Add(miniPath);
+            
+            //Icon path
+            neededIconPath = new TextField
+            {
+                label = "Icon path",
+                value = "none...",
+                style = 
+                {
+                    // marginTop = 5,
+                    marginBottom = 5,
+                    marginLeft = 5
+                }
+            };
+            root.Add(neededIconPath);
+            
+            /*Label iconLabel = new Label("Icon")
+            {
+                style =
+                {
+                    fontSize = 16,
+                    marginTop = 5,
+                    marginBottom = 5,
+                    marginLeft = 5
+                }
+            };
+            root.Add(iconLabel);
+
+            openIconToolButton = new Button
+            {
+                name = "button",
+                text = "Open Icon Tool"
+            };
+            openIconToolButton.clicked += OnIconToolClicked();
+            root.Add(openIconToolButton);*/
             
             Label inventoryLabel = new Label("Inventory")
             {
@@ -131,6 +184,8 @@ namespace EditorUI
             root.Add(clearInventoryButton);
         }
 
+        #region Methods
+        
         private System.Action OnCreateClicked()
         {
             return CreationButtonPressed;
@@ -195,6 +250,9 @@ namespace EditorUI
                 Debug.LogError("Failed to create asset! Are we missing a folder?");
 
             localPath = rootPath + categoryPath + nameField.value + ".prefab";
+            
+            miniPath.value = localPath;
+            neededIconPath.value = "Assets/UI_Assets/Icons/" + categoryPath;
 
             PrefabUtility.SaveAsPrefabAsset(prefabObject, localPath);
 
@@ -286,5 +344,6 @@ namespace EditorUI
                 collider.isTrigger = originalCollider.isTrigger;
             }
         }
+        #endregion
     }
 }
