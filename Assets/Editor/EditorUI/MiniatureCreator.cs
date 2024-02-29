@@ -217,6 +217,7 @@ namespace EditorUI
             if (!MiniatureManager.Instance)
             {
                 Debug.LogError("No miniature manager! Are you in the main scene?");
+                return;
             }
             
             MiniatureManager.Instance.RefreshAllMiniatures();
