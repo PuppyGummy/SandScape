@@ -8,10 +8,9 @@ Shader "Custom/WaterVertexAnimSurf"
         _EdgeWidth("Edge Width", Range(0,1)) = 0.5
         _Metallic ("Metallic", Range(0,1)) = 0.0
         _Smoothness ("Smoothness", Range(0,1)) = 1
-        _WaveStrength ("Wave Strength", Float) = 0.5
+        _WaveStrength ("Wave Strength", Float) = 2
         _WaveFrequency ("Wave Frequency", Float) = 1.0
         _WaveSpeed ("Wave Speed", Float) = 1.0
-        [Toggle] _YAxis("Y Axis?", int) = 0
     }
     SubShader
     {
@@ -22,7 +21,7 @@ Shader "Custom/WaterVertexAnimSurf"
         AlphaToMask Off
 
         CGPROGRAM
-        #pragma surface surf Standard fullforwardshadows alpha:fade keepalpha nolightmap nodirlightmap
+        #pragma surface surf Standard fullforwardshadows alpha:fade keepalpha nolightmap nodirlightmap vertex:vert
         #pragma target 3.0
         #pragma shader_feature _ALPHAPREMULTIPLY_ON
 
@@ -44,7 +43,6 @@ Shader "Custom/WaterVertexAnimSurf"
         float _WaveStrength;
         float _WaveFrequency;
         float _WaveSpeed;
-        int _YAxis;
 
         //noise
 
@@ -79,18 +77,30 @@ Shader "Custom/WaterVertexAnimSurf"
 			return 130.0 * dot( m, g );
 		}
 
-
-        #pragma vertex vert
         void vert(inout appdata_full v)
         {
-            float wave = sin(_WaveFrequency * (v.vertex.y * _YAxis + v.vertex.z * (1-_YAxis) + _Time.y * _WaveSpeed)) * _WaveStrength;
-            v.vertex.y = v.vertex.y + wave * _YAxis;
-            v.vertex.z = v.vertex.z + wave * (1-_YAxis);
+            float3 worldPosition = mul(unity_ObjectToWorld, v.vertex).xyz;
+            
+            // f(t) = Asin(ω*t+φ)
+            // waveOffset = sin( _WaveSpeed * t + φ) * _WaveStrength, φ is based on world position
+            
+            // float wavePhase = _Time.y * _WaveSpeed + worldPosition.x * _WaveFrequency + worldPosition.z * _WaveFrequency;
+            
+            float wavePhase1 = _Time.y * _WaveSpeed + (worldPosition.x + worldPosition.z) * _WaveFrequency;
+            float wavePhase2 = _Time.y * (_WaveSpeed * 0.75) + (worldPosition.x - worldPosition.z) * (_WaveFrequency * 1.5);
 
-            float slightHorizontalMovementScale = 0.1;
-            v.vertex.x += slightHorizontalMovementScale * wave;
-            v.vertex.y += slightHorizontalMovementScale * wave * (1 - _YAxis);
-            v.vertex.z += slightHorizontalMovementScale * wave * _YAxis;
+            // float waveOffset = sin(wavePhase) * _WaveStrength;
+            float waveOffset1 = sin(wavePhase1) * _WaveStrength * 0.1;
+            float waveOffset2 = sin(wavePhase2) * _WaveStrength * 0.05;
+
+            float waveOffset = waveOffset1 + waveOffset2;
+            
+            worldPosition.y += waveOffset;
+            worldPosition.x += 0.1 * waveOffset;
+            worldPosition.z += 0.1 * waveOffset;
+            
+            // Transform the modified world position back to local space
+            v.vertex = mul(unity_WorldToObject, float4(worldPosition, 1.0));
         }
 
         void surf (Input i, inout SurfaceOutputStandard o)

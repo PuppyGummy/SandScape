@@ -1398,6 +1398,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3650243657958296289, guid: 862029cfead91a54fa76fc861ac64f82, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3650243657958296289, guid: 862029cfead91a54fa76fc861ac64f82, type: 3}
       propertyPath: m_TagString
       value: Sandbox
       objectReference: {fileID: 0}
