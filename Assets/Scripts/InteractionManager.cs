@@ -521,6 +521,7 @@ public class InteractionManager : MonoBehaviour
     public GameObject SpawnObject(GameObject associatedObject)
     {
         GameObject spawnedObject;
+        Quaternion defaultRotation = Quaternion.Euler(0f, 180f, 0f);
         // if (Physics.Raycast(Vector3.zero, Vector3.up, out RaycastHit hit, Mathf.Infinity))
         // {
         //     GameObject hitObject = hit.collider.gameObject;
@@ -529,7 +530,7 @@ public class InteractionManager : MonoBehaviour
         // }
         // else
         {
-            spawnedObject = Instantiate(associatedObject, new Vector3(0f, associatedObject.GetComponent<Renderer>().bounds.extents.y, 0f), transform.rotation);
+            spawnedObject = Instantiate(associatedObject, new Vector3(0f, associatedObject.GetComponent<Renderer>().bounds.extents.y, 0f), defaultRotation);
         }
         DeselectAllObjects();
         SelectObject(spawnedObject);
