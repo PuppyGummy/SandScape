@@ -77,7 +77,7 @@ namespace EditorUI
             categoryField = new DropdownField
             {
                 label = "Category",
-                choices = new List<string> { "Avatar", "Animal", "Nature", "Building", "Monster" }
+                choices = new List<string> { "Avatar", "Animal", "Nature", "Building", "Monster", "Furniture", "Spiritual" }
             };
             categoryField.value = categoryField.choices[0];
             categoryField.style.marginLeft = 10;
