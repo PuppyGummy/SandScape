@@ -1,0 +1,127 @@
+using System;
+using System.Text;
+using EditorUI;
+using UnityEditor;
+using UnityEditor.UIElements;
+using UnityEngine;
+using UnityEngine.UIElements;
+
+namespace EditorUI
+{
+    public class ClothesCreator : EditorWindow
+    {
+        [MenuItem("SandScape Tools/Clothes Creator")]
+        public static void ShowExample()
+        {
+            ClothesCreator wnd = GetWindow<ClothesCreator>();
+            wnd.titleContent = new GUIContent("Clothes Creator");
+            wnd.maxSize = new Vector2(380.0f, 160.0f);
+            wnd.minSize = wnd.maxSize;
+        }
+
+        #region Fields
+
+        private ObjectField thinMeshField;
+        private ObjectField fitMeshField;
+        private ObjectField fatMeshField;
+        private Button createButton;
+
+        #endregion
+
+        #region UI
+
+        public void CreateGUI()
+        {
+            // Each editor window contains a root VisualElement object
+            VisualElement root = rootVisualElement;
+
+            // VisualElements objects can contain other VisualElement following a tree hierarchy
+            Label mainLabel = new Label("Clothes Creator")
+            {
+                style =
+                {
+                    fontSize = 24,
+                    marginTop = 5,
+                    marginBottom = 5,
+                    marginLeft = 5,
+                    marginRight = 5
+                }
+            };
+            root.Add(mainLabel);
+            
+            //Model fields
+            thinMeshField = new ObjectField
+            {
+                label = "Thin Model",
+                tooltip = "The prefab model, containing both mesh and materials",
+                objectType = typeof(GameObject),
+                style = { marginLeft = 10, marginRight = 10 },
+                allowSceneObjects = false
+            };
+            root.Add(thinMeshField);
+            
+            fitMeshField = new ObjectField
+            {
+                label = "Fit Model",
+                tooltip = "The prefab model, containing both mesh and materials",
+                objectType = typeof(GameObject),
+                style = { marginLeft = 10, marginRight = 10 }
+            };
+            root.Add(fitMeshField);
+            
+            fatMeshField = new ObjectField
+            {
+                label = "Fat Model",
+                tooltip = "The prefab model, containing both mesh and materials",
+                objectType = typeof(GameObject),
+                style = { marginLeft = 10, marginRight = 10 }
+            };
+            root.Add(fatMeshField);
+            
+            //Only allow meshes to be uploaded
+            thinMeshField.objectType = typeof(Mesh);
+            fitMeshField.objectType = typeof(Mesh);
+            fatMeshField.objectType = typeof(Mesh);
+            
+            //TODO: Add dropdowns for asset categories
+            
+            //Finalize section
+            Label finalizeLabel = new Label("Create Item")
+            {
+                style =
+                {
+                    fontSize = 16,
+                    marginTop = 5,
+                    marginBottom = 5,
+                    marginLeft = 5
+                }
+            };
+            root.Add(finalizeLabel);
+            
+            //Create miniature button
+            createButton = new Button
+            {
+                name = "button",
+                text = "Create!"
+            };
+            createButton.clicked += OnCreateClicked();
+            root.Add(createButton);
+        }
+
+        #endregion
+
+        #region Methods
+
+        private Action OnCreateClicked()
+        {
+            return CreateClothPrefab;
+        }
+
+        private void CreateClothPrefab()
+        {
+            
+        }
+
+        #endregion
+    }
+}
