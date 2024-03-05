@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Text;
 using EditorUI;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.Windows;
 
 namespace EditorUI
 {
@@ -25,6 +27,8 @@ namespace EditorUI
         private ObjectField fitMeshField;
         private ObjectField fatMeshField;
         private Button createButton;
+        private DropdownField categoryField;
+        private TextField nameField;
 
         #endregion
 
@@ -34,7 +38,7 @@ namespace EditorUI
         {
             // Each editor window contains a root VisualElement object
             VisualElement root = rootVisualElement;
-
+            
             // VisualElements objects can contain other VisualElement following a tree hierarchy
             Label mainLabel = new Label("Clothes Creator")
             {
@@ -48,6 +52,19 @@ namespace EditorUI
                 }
             };
             root.Add(mainLabel);
+            
+            //Item name field
+            nameField = new TextField
+            {
+                label = "Item name",
+                value = "Enter name here...",
+                style =
+                {
+                    marginLeft = 10,
+                    marginRight = 10
+                }
+            };
+            root.Add(nameField);
             
             //Model fields
             thinMeshField = new ObjectField
@@ -83,7 +100,16 @@ namespace EditorUI
             fitMeshField.objectType = typeof(Mesh);
             fatMeshField.objectType = typeof(Mesh);
             
-            //TODO: Add dropdowns for asset categories
+            //Category field
+            categoryField = new DropdownField
+            {
+                label = "Category",
+                choices = new List<string> { "Hair", "Top", "Bottom", "Shoe"}
+            };
+            categoryField.value = categoryField.choices[0];
+            categoryField.style.marginLeft = 10;
+            categoryField.style.marginRight = 10;
+            root.Add(categoryField);
             
             //Finalize section
             Label finalizeLabel = new Label("Create Item")
@@ -119,7 +145,30 @@ namespace EditorUI
 
         private void CreateClothPrefab()
         {
+            CreatePrefab();
+            ResetUI();
+        }
+
+        private void CreatePrefab()
+        {
+            const string rootPath = "Assets/Prefabs/Clothes/";
+            string categoryPath = categoryField.value + "/";
+            string localPath;
             
+            GameObject prefabObject = new GameObject();
+            
+            if (!Directory.Exists(rootPath))
+                Debug.LogError("Failed to create asset! Are we missing a folder?");
+
+            localPath = rootPath + categoryPath + nameField.value + ".prefab";
+        }
+
+        void ResetUI()
+        {
+            nameField.value = "None...";
+            thinMeshField.value = null;
+            fitMeshField.value = null;
+            fatMeshField.value = null;
         }
 
         #endregion

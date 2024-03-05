@@ -71,6 +71,9 @@ namespace EditorUI
             };
             root.Add(meshField);
 
+            meshField.allowSceneObjects = false;
+            meshField.objectType = typeof(GameObject);
+
             //Category field
             categoryField = new DropdownField
             {
