@@ -1,13 +1,8 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UI;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.UIElements;
 using Image = UnityEngine.UI.Image;
 
 #if UNITY_EDITOR
