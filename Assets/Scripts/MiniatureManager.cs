@@ -39,12 +39,11 @@ public class MiniatureManager : MonoBehaviour
        ClearAllMiniatures();
 
        tabController.RefreshLists();
-       
-       UpdateCategory(0);
-       UpdateCategory(1);
-       UpdateCategory(2);
-       UpdateCategory(3);
-       UpdateCategory(4);
+
+       for (int i = 0; i < tabController.tabs.Count; i++)
+       {
+           UpdateCategory(i);
+       }
     }
 
     private void UpdateCategory(int categoryID)
@@ -57,6 +56,8 @@ public class MiniatureManager : MonoBehaviour
             2 => "Nature",
             3 => "Building",
             4 => "Monster",
+            5 => "Furniture",
+            6 => "Spiritual",
             _ => null
         };
 
@@ -124,7 +125,7 @@ public class MiniatureManager : MonoBehaviour
         List<GameObject> objectsToDestroy = new List<GameObject>();
         
         //For each category, get all inventory buttons and put them in the list
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < tabController.tabs.Count; i++)
         {
             //The inventory grid
             Transform tabGrid = GetTabGrid(i);
