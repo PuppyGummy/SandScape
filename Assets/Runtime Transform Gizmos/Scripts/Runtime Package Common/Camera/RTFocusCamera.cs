@@ -455,7 +455,17 @@ namespace RTG
             float zoomAmount = deviceScroll * _zoomSettings.GetZoomSensitivity(TargetCamera);
             if (_zoomSettings.InvertZoomAxis) zoomAmount *= -1.0f;
 
+            // Calculate the distance to the origin
+            float distanceToOrigin = Vector3.Distance(_targetTransform.position, Vector3.zero);
+
+            // Calculate a zoom speed factor based on the distance to the origin
+            float zoomSpeedFactor = Mathf.Clamp(distanceToOrigin / 100.0f, 0.5f, 2f);
+
+            zoomAmount *= zoomSpeedFactor;
+
             zoomAmount *= _targetCamera.EstimateZoomFactorSpherical(_lastFocusPoint);
+
+            // zoomAmount = Mathf.Clamp(zoomAmount, _zoomAmountMin, _zoomAmountMax);
 
             return zoomAmount;
         }

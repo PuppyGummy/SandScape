@@ -14264,7 +14264,7 @@ MonoBehaviour:
     _accelerationRate: 15
   _panSettings:
     _canBeDisplayed: 1
-    _isExpanded: 1
+    _isExpanded: 0
     _panMode: 0
     _standardPanSensitivity: 5
     _smoothPanSensitivity: 0.7
@@ -16576,7 +16576,6 @@ MonoBehaviour:
   objectIndicator: {fileID: 1521069232243536, guid: 3d70d3a3371de497a840b5641fd46a4e, type: 3}
   playerObject: {fileID: 0}
   inventoryUI: {fileID: 1332010231}
-  focusCamera: {fileID: 1510722673}
   maxScaleSize: 5
   minScaleSize: 0.1
   lockedColor:

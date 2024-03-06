@@ -109,11 +109,13 @@ public class InteractionManager : MonoBehaviour
 
         ScaleObjects();
         RotateObjects();
-        // if (Input.GetMouseButtonDown(0) && isHoveringObject && selectedObjects.Count != 0 && !EventSystem.current.IsPointerOverGameObject())
-        if (Input.GetMouseButtonDown(0) && selectedObjects.Count != 0 && !EventSystem.current.IsPointerOverGameObject())
+        if (Input.GetMouseButton(0) && selectedObjects.Count != 0 && !EventSystem.current.IsPointerOverGameObject())
         {
-            isDragging = true;
-            HistoryManager.Instance.SaveState(selectedObjects);
+            if (RTInput.WasMouseMoved())
+            {
+                isDragging = true;
+                HistoryManager.Instance.SaveState(selectedObjects);
+            }
         }
         if (Input.GetMouseButtonUp(0) && selectedObjects.Count != 0 && isDragging)
         {
