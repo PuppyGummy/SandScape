@@ -2,9 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
-using UnityEditor.VersionControl;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class CustomizationItemManager : MonoBehaviour
 {
@@ -22,14 +20,21 @@ public class CustomizationItemManager : MonoBehaviour
             return instance;
         }
     }
-
-    public List<GameObject> clothingItems;
+    
+    //Public lists for customization
+    public List<GameObject> hair;
+    public List<GameObject> tops;
+    public List<GameObject> bottoms;
+    public List<GameObject> shoes;
 
 #if UNITY_EDITOR
 
     public void ClearList()
     {
-        clothingItems?.Clear();
+        hair?.Clear();
+        tops?.Clear();
+        bottoms?.Clear();
+        shoes?.Clear();
     }
 
     public void RefreshList()
@@ -59,8 +64,22 @@ public class CustomizationItemManager : MonoBehaviour
                 var path = AssetDatabase.GUIDToAssetPath(assetGUID);
                 GameObject go = AssetDatabase.LoadAssetAtPath<GameObject>(path);
            
-                //Add item from folder
-                clothingItems.Add(go);
+                //Add item from folder to corresponding list
+                switch (folderName)
+                {
+                    case "Hair":
+                        hair.Add(go);
+                        break;
+                    case "Top":
+                        tops.Add(go);
+                        break;
+                    case "Bottom":
+                        bottoms.Add(go);
+                        break;
+                    case "Shoes":
+                        shoes.Add(go);
+                        break;
+                }
             }   
         }
     }
