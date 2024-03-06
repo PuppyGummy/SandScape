@@ -248,6 +248,30 @@ namespace RTG
                 else if (FocusSettings.FocusMode == CameraFocusMode.Smooth) StartCoroutine(_focusCrtn = DoSmoothFocus(focusData));
             }
         }
+        private Vector3 GetCurrentFocusPoint()
+        {
+            List<GameObject> selectedObjects = InteractionManager.Instance.GetSelectedObjects();
+            if (selectedObjects != null && selectedObjects.Count > 0)
+            {
+                var bounds = new Bounds(selectedObjects[0].transform.position, Vector3.zero);
+                for (int i = 1; i < selectedObjects.Count; i++)
+                {
+                    bounds.Encapsulate(selectedObjects[i].transform.position);
+                }
+
+                return bounds.center;
+            }
+            else
+            {
+                Vector3 sandboxPos = InteractionManager.Instance.sandbox.transform.position;
+                return new Vector3(sandboxPos.x, sandboxPos.y - 2, sandboxPos.z);
+            }
+        }
+        public void UpdateFocusPoint()
+        {
+            _lastFocusPoint = GetCurrentFocusPoint();
+            SetFocusPoint(_lastFocusPoint);
+        }
 
         public void Update_SystemCall()
         {
@@ -449,7 +473,8 @@ namespace RTG
 
         private void Orbit(float degreesLocalX, float degreesWorldY)
         {
-            Vector3 orbitPoint = _targetTransform.position + _targetTransform.forward * _focusPointOffset;
+            Vector3 orbitPoint = GetCurrentFocusPoint();
+            // Vector3 orbitPoint = _targetTransform.position + _targetTransform.forward * _focusPointOffset;
 
             _targetTransform.RotateAround(orbitPoint, Vector3.up, degreesWorldY);
             _targetTransform.RotateAround(orbitPoint, _targetTransform.right, degreesLocalX);

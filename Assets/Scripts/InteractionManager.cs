@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.EventSystems;
 using UnityEngine.Serialization;
+using RTG;
 
 public class InteractionManager : MonoBehaviour
 {
@@ -92,6 +93,11 @@ public class InteractionManager : MonoBehaviour
     {
         if (!selectMode)
             return;
+
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            RTFocusCamera.Get.Focus(selectedObjects);
+        }
 
         HandleSelectionInput();
 
@@ -184,6 +190,8 @@ public class InteractionManager : MonoBehaviour
             {
                 if (Input.GetKey(KeyCode.LeftShift))
                 {
+                    RTFocusCamera.Get.UpdateFocusPoint();
+
                     //multi select
                     if (selectedObjects.Contains(hitObject))
                     {
@@ -202,6 +210,8 @@ public class InteractionManager : MonoBehaviour
                     //single select
                     if (selectedObjects.Contains(hitObject)) return;
 
+                    RTFocusCamera.Get.UpdateFocusPoint();
+
                     DeselectAllObjects();
                     SelectObject(hitObject);
                     GizmoController.Instance.OnSelectionChanged();
@@ -211,6 +221,8 @@ public class InteractionManager : MonoBehaviour
             {
                 //If we click on empty space, deselect all objects
                 if (isRotating || isScaling) return;
+
+                RTFocusCamera.Get.UpdateFocusPoint();
 
                 DeselectAllObjects();
                 GizmoController.Instance.OnSelectionChanged();

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.629421, g: 0.87635493, b: 0.9422613, a: 1}
+  m_IndirectSpecularColor: {r: 0.62950116, g: 0.87631863, b: 0.94228286, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -14266,7 +14266,7 @@ MonoBehaviour:
     _canBeDisplayed: 1
     _isExpanded: 1
     _panMode: 0
-    _standardPanSensitivity: 1
+    _standardPanSensitivity: 5
     _smoothPanSensitivity: 0.7
     _smoothValue: 4
     _invertX: 0
@@ -14295,9 +14295,9 @@ MonoBehaviour:
   _zoomSettings:
     _canBeDisplayed: 1
     _isExpanded: 1
-    _zoomMode: 0
+    _zoomMode: 1
     _orthoStandardZoomSensitivity: 10
-    _perspStandardZoomSensitivity: 10
+    _perspStandardZoomSensitivity: 20
     _orthoSmoothZoomSensitivity: 5
     _perspSmoothZoomSensitivity: 5
     _orthoZoomSmoothValue: 5
@@ -14436,7 +14436,7 @@ MonoBehaviour:
       _key: 0
       _lCtrl: 0
       _lCmd: 0
-      _lAlt: 0
+      _lAlt: 1
       _lShift: 0
       _useStrictModifierCheck: 0
       _lMouseBtn: 0
@@ -14451,7 +14451,7 @@ MonoBehaviour:
       _key: 0
       _lCtrl: 0
       _lCmd: 0
-      _lAlt: 1
+      _lAlt: 0
       _lShift: 0
       _useStrictModifierCheck: 0
       _lMouseBtn: 0
@@ -16576,6 +16576,7 @@ MonoBehaviour:
   objectIndicator: {fileID: 1521069232243536, guid: 3d70d3a3371de497a840b5641fd46a4e, type: 3}
   playerObject: {fileID: 0}
   inventoryUI: {fileID: 1332010231}
+  focusCamera: {fileID: 1510722673}
   maxScaleSize: 5
   minScaleSize: 0.1
   lockedColor:
