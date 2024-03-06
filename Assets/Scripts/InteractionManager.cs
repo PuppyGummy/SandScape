@@ -224,10 +224,12 @@ public class InteractionManager : MonoBehaviour
                 //If we click on empty space, deselect all objects
                 if (isRotating || isScaling) return;
 
-                RTFocusCamera.Get.UpdateFocusPoint();
+                if(RTFocusCamera.Get)
+                    RTFocusCamera.Get.UpdateFocusPoint();
 
                 DeselectAllObjects();
-                GizmoController.Instance.OnSelectionChanged();
+                if(GizmoController.Instance)
+                    GizmoController.Instance.OnSelectionChanged();
             }
         }
         //If we release mouse button and there is a selected object
