@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
-using RapidIcon_1_6_2;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -72,6 +70,9 @@ namespace EditorUI
                 style = { marginLeft = 10, marginRight = 10 }
             };
             root.Add(meshField);
+
+            meshField.allowSceneObjects = false;
+            meshField.objectType = typeof(GameObject);
 
             //Category field
             categoryField = new DropdownField

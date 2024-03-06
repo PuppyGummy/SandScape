@@ -30,7 +30,6 @@ public class MiniatureManager : MonoBehaviour
 
     public void RefreshAllMiniatures()
     {
-       Debug.Log("Refreshed yo");
        ClearAllMiniatures();
 
        tabController.RefreshLists();
@@ -39,6 +38,7 @@ public class MiniatureManager : MonoBehaviour
        {
            UpdateCategory(i);
        }
+       Debug.Log("Refreshed Inventory");
     }
 
     private void UpdateCategory(int categoryID)
