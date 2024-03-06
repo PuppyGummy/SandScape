@@ -247,6 +247,7 @@ namespace EditorUI
             };
 
             return prefabObject;
+            //TODO: Destroy object
         }
 
         void ResetUI()
