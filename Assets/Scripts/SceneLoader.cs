@@ -1,3 +1,4 @@
+using RTG;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -8,6 +9,8 @@ public class SceneLoader : MonoBehaviour
     public GameObject scenePanel;
     public GameObject gameUIPanel;
     public GameObject boxSelectUI;
+    public GameObject rtInput;
+    public GizmoController gizmoController;
     private static SceneLoader instance;
 
     public static SceneLoader Instance
@@ -40,6 +43,8 @@ public class SceneLoader : MonoBehaviour
         scenePanel.SetActive(false);
         gameUIPanel.SetActive(true);
         boxSelectUI.SetActive(true);
+        rtInput.SetActive(true);
+        gizmoController.enabled = true;
     }
 
     /// <summary>
@@ -56,6 +61,8 @@ public class SceneLoader : MonoBehaviour
         scenePanel.SetActive(true);
         gameUIPanel.SetActive(false);
         boxSelectUI.SetActive(false);
+        rtInput.SetActive(false);
+        gizmoController.enabled = false;
 
         loadedScenario = 0;
     }

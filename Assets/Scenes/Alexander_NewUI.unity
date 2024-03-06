@@ -11184,7 +11184,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1000605922
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17216,7 +17216,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1746339294}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 35f8836579ef04f0bad1b968b05f6ea2, type: 3}
   m_Name: 
@@ -17236,6 +17236,8 @@ MonoBehaviour:
   scenePanel: {fileID: 105392263}
   gameUIPanel: {fileID: 392751268}
   boxSelectUI: {fileID: 1000605921}
+  rtInput: {fileID: 2094359825}
+  gizmoController: {fileID: 1746339300}
 --- !u!114 &1746339302
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20700,7 +20702,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2094359826
 MonoBehaviour:
   m_ObjectHideFlags: 0

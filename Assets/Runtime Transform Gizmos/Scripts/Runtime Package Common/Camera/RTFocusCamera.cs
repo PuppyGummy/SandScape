@@ -263,6 +263,7 @@ namespace RTG
             }
             else
             {
+                if (!InteractionManager.Instance.sandbox) return default;
                 Vector3 sandboxPos = InteractionManager.Instance.sandbox.transform.position;
                 return new Vector3(sandboxPos.x, sandboxPos.y - 2, sandboxPos.z);
             }

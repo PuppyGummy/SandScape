@@ -16,6 +16,8 @@ public class DragSelection : MonoBehaviour
 
     void Update()
     {
+        if(!GizmoController.Instance.enabled)
+            return;
         if (!EventSystem.current.IsPointerOverGameObject() && !InteractionManager.Instance.IsDragging() && !GizmoController.Instance.IsHoveringGizmo() && !InteractionManager.Instance.isDraggingSpawnedObject)
         {
             if (Input.GetMouseButtonDown(0))
