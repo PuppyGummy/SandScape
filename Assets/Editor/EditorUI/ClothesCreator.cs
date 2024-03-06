@@ -29,6 +29,8 @@ namespace EditorUI
         private Button createButton;
         private DropdownField categoryField;
         private TextField nameField;
+        private Button refreshInventoryButton;
+        private Button clearInventoryButton;
 
         #endregion
 
@@ -132,6 +134,35 @@ namespace EditorUI
             };
             createButton.clicked += OnCreateClicked();
             root.Add(createButton);
+            
+            Label inventoryLabel = new Label("Inventory")
+            {
+                style =
+                {
+                    fontSize = 16,
+                    marginTop = 5,
+                    marginBottom = 5,
+                    marginLeft = 5
+                }
+            };
+            root.Add(inventoryLabel);
+            
+            //Refresh miniature inventory
+            refreshInventoryButton = new Button
+            {
+                name = "button",
+                text = "Refresh all"
+            };
+            refreshInventoryButton.clicked += OnRefreshClicked();
+            root.Add(refreshInventoryButton);
+
+            clearInventoryButton = new Button
+            {
+                name = "button",
+                text = "clear all"
+            };
+            clearInventoryButton.clicked += OnClearClicked();
+            root.Add(clearInventoryButton);
         }
 
         #endregion
@@ -142,11 +173,42 @@ namespace EditorUI
         {
             return CreateClothPrefab;
         }
+        
+        private Action OnRefreshClicked()
+        {
+            return RefreshItems;
+        }
+        
+        private Action OnClearClicked()
+        {
+            return ClearItems;
+        }
 
         private void CreateClothPrefab()
         {
             CreatePrefab();
             ResetUI();
+        }
+
+        private void ClearItems()
+        {
+            GetItemManager().ClearList();
+        }
+
+        private void RefreshItems()
+        {
+            GetItemManager().RefreshList();
+        }
+
+        private static CustomizationItemManager GetItemManager()
+        {
+            if(CustomizationItemManager.Instance != null)
+            {
+                return CustomizationItemManager.Instance;
+            }
+
+            Debug.LogError("No Customization manager! Are you in the right scene?");
+            return null;
         }
 
         private void CreatePrefab()
@@ -161,6 +223,30 @@ namespace EditorUI
                 Debug.LogError("Failed to create asset! Are we missing a folder?");
 
             localPath = rootPath + categoryPath + nameField.value + ".prefab";
+            
+            prefabObject = BuildPrefab(prefabObject);
+            
+            if (!Directory.Exists(rootPath))
+                Debug.LogError("Failed to create asset! Are we missing a folder?");
+
+            localPath = rootPath + categoryPath + nameField.value + ".prefab";
+            
+            PrefabUtility.SaveAsPrefabAsset(prefabObject, localPath);
+
+            DestroyImmediate(prefabObject);
+        }
+
+        private GameObject BuildPrefab(GameObject prefabObject)
+        {
+            ClothingItem clothingItem = prefabObject.AddComponent<ClothingItem>();
+            clothingItem.itemVariants = new List<Mesh>
+            {
+                (Mesh)thinMeshField.value,
+                (Mesh)fitMeshField.value,
+                (Mesh)fatMeshField.value
+            };
+
+            return prefabObject;
         }
 
         void ResetUI()
