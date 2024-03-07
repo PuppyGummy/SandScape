@@ -97,7 +97,7 @@ public class InteractionManager : MonoBehaviour
         {
             RTFocusCamera.Get.Focus(selectedObjects);
         }
-        if (Input.GetKeyDown(KeyCode.Delete))
+        if (Input.GetKeyDown(KeyCode.Delete) || Input.GetKeyDown(KeyCode.Backspace))
         {
             Delete();
         }
@@ -183,6 +183,13 @@ public class InteractionManager : MonoBehaviour
         if (EventSystem.current.IsPointerOverGameObject())
         {
             return;
+        }
+        if (useGizmo)
+        {
+            if (GizmoController.Instance.IsHoveringGizmo())
+            {
+                return;
+            }
         }
         if (Input.GetMouseButtonDown(0))
         {
@@ -272,7 +279,8 @@ public class InteractionManager : MonoBehaviour
         //Set player if selected object is a player
         if (objectToSelect.gameObject.GetComponent<PlayerMovementController>())
         {
-            playerObject = objectToSelect;
+            if (!objectToSelect.CompareTag("Locked"))
+                playerObject = objectToSelect;
         }
         if (useGizmo)
         {
@@ -337,7 +345,6 @@ public class InteractionManager : MonoBehaviour
 
         while (Input.GetMouseButton(0))
         {
-
             for (int i = 0; i < objectsToDrag.Count; i++)
             {
                 if (objectsToDrag[i].CompareTag("Locked"))
@@ -427,6 +434,7 @@ public class InteractionManager : MonoBehaviour
                 {
                     continue;
                 }
+                DisablePhysics(obj);
 
                 float rotationX = rotationDelta.y * rotationSpeed * 0.01f;
                 float rotationY = -rotationDelta.x * rotationSpeed * 0.01f;
@@ -440,6 +448,10 @@ public class InteractionManager : MonoBehaviour
 
         if (isRotating && Input.GetMouseButtonDown(0))
         {
+            foreach (GameObject obj in selectedObjects)
+            {
+                EnablePhysics(obj);
+            }
             isRotating = false;
             HistoryManager.Instance.SaveState(selectedObjects);
         }
@@ -567,6 +579,7 @@ public class InteractionManager : MonoBehaviour
 
         foreach (GameObject obj in selectedObjects)
         {
+            if (obj.CompareTag("Locked")) continue;
             Rigidbody rb = obj.GetComponent<Rigidbody>();
             if (enablePhysics)
             {
@@ -831,11 +844,19 @@ public class InteractionManager : MonoBehaviour
             {
                 obj.tag = "Locked";
                 obj.GetComponent<Outline>().OutlineColor = lockedColor;
+                if (playerObject == obj)
+                {
+                    playerObject = null;
+                }
             }
             else if (obj.CompareTag("Locked"))
             {
                 obj.tag = "Interactable";
                 obj.GetComponent<Outline>().OutlineColor = unlockedColor; //Default color
+                if (obj.GetComponent<PlayerMovementController>())
+                {
+                    playerObject = obj;
+                }
             }
         }
     }
