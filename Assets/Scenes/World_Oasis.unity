@@ -678,6 +678,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: world-oasis-organic-land-obj
       objectReference: {fileID: 0}
+    - target: {fileID: 1389187175464296500, guid: 910b759edada37e4aab5fcaab2ccdffd, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 4a1b6360a26d20343b8cf69680e04e8b, type: 2}
     - target: {fileID: 5590142546226449800, guid: 910b759edada37e4aab5fcaab2ccdffd, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.7
