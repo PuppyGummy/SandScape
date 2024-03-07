@@ -276,8 +276,10 @@ namespace EditorUI
             Outline outlineComponent = prefabObject.AddComponent<Outline>();
             prefabObject.AddComponent<ObjectController>();
 
-            //Add movement controller to avatars
-            if (categoryField.value == categoryField.choices[0])
+            //Add movement controller to avatars, monsters, and animals
+            if (categoryField.value == categoryField.choices[0] ||
+                categoryField.value == categoryField.choices[1] ||
+                categoryField.value == categoryField.choices[4])
             {
                 PlayerMovementController playerMovementController = prefabObject.AddComponent<PlayerMovementController>();
                 playerMovementController.enabled = false;
