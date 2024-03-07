@@ -224,11 +224,11 @@ public class InteractionManager : MonoBehaviour
                 //If we click on empty space, deselect all objects
                 if (isRotating || isScaling) return;
 
-                if(RTFocusCamera.Get)
+                if (RTFocusCamera.Get)
                     RTFocusCamera.Get.UpdateFocusPoint();
 
                 DeselectAllObjects();
-                if(GizmoController.Instance)
+                if (GizmoController.Instance)
                     GizmoController.Instance.OnSelectionChanged();
             }
         }
@@ -578,8 +578,8 @@ public class InteractionManager : MonoBehaviour
 
             UnlockRotation();
 
-            obj.transform.rotation = Quaternion.identity;
-            obj.transform.localScale = Vector3.one;
+            obj.transform.rotation = obj.GetComponent<ObjectController>().defaultRotation;
+            obj.transform.localScale = obj.GetComponent<ObjectController>().defaultScale;
         }
         HistoryManager.Instance.SaveState(selectedObjects);
     }
