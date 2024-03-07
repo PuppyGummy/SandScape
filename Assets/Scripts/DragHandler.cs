@@ -29,6 +29,8 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         draggedInstance = InteractionManager.Instance.SpawnObject(objectToSpawn);
         draggedInstance.transform.position = GetWorldPositionOnPlane(pos);
         draggedInstance.layer = LayerMask.NameToLayer("Ignore Raycast");
+        InteractionManager.Instance.DisablePhysics(draggedInstance);
+
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -55,6 +57,7 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             Destroy(draggedInstance); // If it doesn't hit anything, destroy it
         }
         draggedInstance.layer = LayerMask.NameToLayer("Objects");
+        InteractionManager.Instance.EnablePhysics(draggedInstance);
     }
 
     private Vector3 GetWorldPositionOnPlane(Vector3 hitpos)

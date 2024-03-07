@@ -5,9 +5,13 @@ public class ObjectController : MonoBehaviour
 {
     public bool lockRotation;
     public bool isOnGround;
+    public Vector3 defaultScale;
+    public Quaternion defaultRotation;
     private void Start()
     {
         InteractionManager.Instance.AddObject(gameObject);
+        defaultScale = transform.localScale;
+        defaultRotation = transform.rotation;
     }
 
     void Update()
