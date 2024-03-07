@@ -46,8 +46,8 @@ GameObject:
   - component: {fileID: 651680464162231229}
   - component: {fileID: 4571312831923373698}
   - component: {fileID: 3458446494550544122}
-  - component: {fileID: 7290275610403784571}
-  - component: {fileID: 7007075925813092383}
+  - component: {fileID: 2651697231027484747}
+  - component: {fileID: 920305602146416844}
   m_Layer: 6
   m_Name: Human
   m_TagString: Interactable
@@ -212,8 +212,8 @@ MonoBehaviour:
   turnSmoothVelocity: 0
   direction: {x: 0, y: 0, z: 0}
   targetVelocity: {x: 0, y: 0, z: 0}
---- !u!136 &7290275610403784571
-CapsuleCollider:
+--- !u!64 &2651697231027484747
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -230,12 +230,11 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.2674141
-  m_Height: 1.8296546
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.91551894, z: 0.024380408}
---- !u!65 &7007075925813092383
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 8bef3e889adbc445fadb173e694fd4c6, type: 3}
+--- !u!65 &920305602146416844
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -254,5 +253,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.5348282, y: 0.18990481, z: 0.42667377}
-  m_Center: {x: 0, y: 0.1, z: 0}
+  m_Size: {x: 0.5348282, y: 0.039776564, z: 0.27408218}
+  m_Center: {x: 0, y: 0.020579934, z: 0.024380416}
