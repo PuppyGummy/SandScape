@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.6294283, g: 0.8763651, b: 0.9422624, a: 1}
+  m_IndirectSpecularColor: {r: 0.62942106, g: 0.876335, b: 0.9422858, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4969,6 +4969,7 @@ GameObject:
   - component: {fileID: 588789107}
   - component: {fileID: 588789106}
   - component: {fileID: 588789105}
+  - component: {fileID: 588789108}
   m_Layer: 5
   m_Name: Lock
   m_TagString: Untagged
@@ -5051,6 +5052,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 588789108}
+        m_TargetAssemblyTypeName: UI_ImageFlipFlop, Assembly-CSharp
+        m_MethodName: Flip
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!114 &588789106
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5071,7 +5084,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 58e6af5b76be8fa45b644fee08fd6d8d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f6dcb2bfece7247f8b4bcbf32f35e3d5, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5089,6 +5102,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 588789103}
   m_CullTransparentMesh: 1
+--- !u!114 &588789108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 588789103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9061248ddbc4112479a7fea768fd907e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  imageElement: {fileID: 588789106}
+  normalImage: {fileID: 21300000, guid: f6dcb2bfece7247f8b4bcbf32f35e3d5, type: 3}
+  flippedImage: {fileID: 21300000, guid: 58e6af5b76be8fa45b644fee08fd6d8d, type: 3}
 --- !u!224 &626878509 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8111671533015038867, guid: 4ab3e3c84878b4f80bc166b2089848aa, type: 3}
@@ -16633,7 +16661,7 @@ GameObject:
   - component: {fileID: 1701875185}
   - component: {fileID: 1701875184}
   m_Layer: 5
-  m_Name: Gizmo
+  m_Name: Reset
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16687,10 +16715,10 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 21300000, guid: 6d992c4c060de1943844c550fde4f253, type: 3}
+    m_HighlightedSprite: {fileID: 21300000, guid: 7f5a5ecd7842f487e8e52ec012ac3f00, type: 3}
     m_PressedSprite: {fileID: 0}
     m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 21300000, guid: 2ef7f1803ec1a1c469e8541ea16628f2, type: 3}
+    m_DisabledSprite: {fileID: 21300000, guid: 2c50ef23132e5a842a35fb3e5d93eb22, type: 3}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
     m_HighlightedTrigger: Highlighted
@@ -16704,7 +16732,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1746339297}
         m_TargetAssemblyTypeName: InteractionManager, Assembly-CSharp
-        m_MethodName: SetUseGizmo
+        m_MethodName: Reset
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -16734,7 +16762,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 5a420277b46fc2a44b1f6a472a874977, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d88529177f8614cdeaee75a3438d95f1, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -20391,7 +20419,7 @@ GameObject:
   - component: {fileID: 2083399715}
   - component: {fileID: 2083399719}
   m_Layer: 5
-  m_Name: GhostMode
+  m_Name: PositionMode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20457,8 +20485,8 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 21300000, guid: c893e4e8eeae87a4b9b3cd4655fe0c70, type: 3}
-    m_PressedSprite: {fileID: 21300000, guid: c893e4e8eeae87a4b9b3cd4655fe0c70, type: 3}
+    m_HighlightedSprite: {fileID: 21300000, guid: 384c0b7d1e3324f30897fa1407d090d8, type: 3}
+    m_PressedSprite: {fileID: 21300000, guid: 384c0b7d1e3324f30897fa1407d090d8, type: 3}
     m_SelectedSprite: {fileID: 0}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
@@ -20474,7 +20502,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1746339297}
         m_TargetAssemblyTypeName: InteractionManager, Assembly-CSharp
-        m_MethodName: SetAllPhysics
+        m_MethodName: SetUseGizmo
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -20516,7 +20544,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 923cd6db0b2593d41afa6477725e4ae2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f5f23a8ca6d2b4ad792a33e248828ba5, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -20547,8 +20575,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   imageElement: {fileID: 2083399717}
-  normalImage: {fileID: 21300000, guid: 923cd6db0b2593d41afa6477725e4ae2, type: 3}
-  flippedImage: {fileID: 21300000, guid: c893e4e8eeae87a4b9b3cd4655fe0c70, type: 3}
+  normalImage: {fileID: 21300000, guid: f5f23a8ca6d2b4ad792a33e248828ba5, type: 3}
+  flippedImage: {fileID: 21300000, guid: 384c0b7d1e3324f30897fa1407d090d8, type: 3}
 --- !u!224 &2089741869 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8111671533015038867, guid: 4ab3e3c84878b4f80bc166b2089848aa, type: 3}
@@ -21003,19 +21031,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6149446624874766337}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1746339297}
-        m_TargetAssemblyTypeName: InteractionManager, Assembly-CSharp
-        m_MethodName: Reset
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &8206255706483903939
 GameObject:
   m_ObjectHideFlags: 0
@@ -21048,7 +21064,7 @@ GameObject:
   - component: {fileID: 6149446624874766337}
   - component: {fileID: 8081269785770112781}
   m_Layer: 5
-  m_Name: Reset
+  m_Name: Customization
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

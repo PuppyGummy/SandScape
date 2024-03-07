@@ -27,7 +27,6 @@ public class InteractionManager : MonoBehaviour
     private Vector3 cameraPos;
     private Vector3 cameraRotation;
     private float bottomToCenterDistance;
-    // private float liftedHeight;
     private float sensitivity = 0.1f;
     private float timeSinceLastScroll = 0f;
     private float scrollEndDelay = 0.1f;
@@ -98,6 +97,10 @@ public class InteractionManager : MonoBehaviour
         {
             RTFocusCamera.Get.Focus(selectedObjects);
         }
+        if (Input.GetKeyDown(KeyCode.Delete))
+        {
+            Delete();
+        }
 
         HandleSelectionInput();
 
@@ -109,13 +112,10 @@ public class InteractionManager : MonoBehaviour
 
         ScaleObjects();
         RotateObjects();
-        if (Input.GetMouseButton(0) && selectedObjects.Count != 0 && !EventSystem.current.IsPointerOverGameObject())
+        if (Input.GetMouseButton(0) && selectedObjects.Count != 0 && !EventSystem.current.IsPointerOverGameObject() && isHoveringObject && RTInput.WasMouseMoved())
         {
-            if (RTInput.WasMouseMoved())
-            {
-                isDragging = true;
-                HistoryManager.Instance.SaveState(selectedObjects);
-            }
+            isDragging = true;
+            HistoryManager.Instance.SaveState(selectedObjects);
         }
         if (Input.GetMouseButtonUp(0) && selectedObjects.Count != 0 && isDragging)
         {
@@ -256,7 +256,6 @@ public class InteractionManager : MonoBehaviour
     }
     public void SelectObject(GameObject objectToSelect)
     {
-        // Debug.Log("Selecting object: " + objectToSelect.name);
         if (selectedObjects.Contains(objectToSelect)) return;
         selectedObjects.Add(objectToSelect);
 
@@ -378,10 +377,10 @@ public class InteractionManager : MonoBehaviour
     private void HandleRotationInput()
     {
         //Only rotate object if the right mouse button is held
-        if (Input.GetMouseButtonDown(1))
-        {
-            HistoryManager.Instance.SaveState(selectedObjects);
-        }
+        // if (Input.GetMouseButtonDown(1))
+        // {
+        //     HistoryManager.Instance.SaveState(selectedObjects);
+        // }
         /*if (Input.GetMouseButton(1))
         {
             UnlockRotation();
@@ -564,24 +563,24 @@ public class InteractionManager : MonoBehaviour
 
     public void Reset()
     {
-        //you can only reset if there is one object selected
-        if (selectedObjects.Count != 1) return;
         HistoryManager.Instance.SaveState(selectedObjects);
 
-        Rigidbody rb = selectedObjects[0].GetComponent<Rigidbody>();
-        if (enablePhysics)
+        foreach (GameObject obj in selectedObjects)
         {
-            rb.useGravity = true;
-            rb.isKinematic = false;
-            Physics.IgnoreCollision(selectedObjects[0].GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
+            Rigidbody rb = obj.GetComponent<Rigidbody>();
+            if (enablePhysics)
+            {
+                rb.useGravity = true;
+                rb.isKinematic = false;
+                Physics.IgnoreCollision(obj.GetComponent<Collider>(), sandbox.GetComponent<Collider>(), false);
+            }
+            rb.velocity = Vector3.zero;
+
+            UnlockRotation();
+
+            obj.transform.rotation = Quaternion.identity;
+            obj.transform.localScale = Vector3.one;
         }
-        rb.velocity = Vector3.zero;
-
-        UnlockRotation();
-
-        selectedObjects[0].transform.position = new Vector3(0f, selectedObjects[0].GetComponent<Renderer>().bounds.extents.y, 0f);
-        selectedObjects[0].transform.rotation = Quaternion.identity;
-        selectedObjects[0].transform.localScale = Vector3.one;
         HistoryManager.Instance.SaveState(selectedObjects);
     }
     public void Delete()
