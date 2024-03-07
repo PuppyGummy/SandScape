@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6535243340870996898}
   - component: {fileID: 4524631992257524738}
   m_Layer: 0
-  m_Name: world-oasis-organic-land-obj
+  m_Name: world-oasis-organic-land-obj-icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

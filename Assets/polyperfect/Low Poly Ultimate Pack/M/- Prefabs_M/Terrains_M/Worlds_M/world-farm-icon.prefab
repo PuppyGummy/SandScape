@@ -4071,7 +4071,7 @@ GameObject:
   - component: {fileID: 9144997009344708610}
   - component: {fileID: 1514832872668299484}
   m_Layer: 0
-  m_Name: world-farm
+  m_Name: world-farm-icon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

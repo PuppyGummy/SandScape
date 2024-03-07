@@ -225,7 +225,7 @@ GameObject:
   - component: {fileID: 1538250075686552910}
   - component: {fileID: 8847940724058362441}
   m_Layer: 3
-  m_Name: world-desert-organic-obj
+  m_Name: world-desert-organic-obj-icon
   m_TagString: Sandbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -1199,7 +1199,7 @@ GameObject:
   - component: {fileID: 1754621566491416172}
   - component: {fileID: 3966812636671685224}
   m_Layer: 3
-  m_Name: world-urban
+  m_Name: world-urban-icon
   m_TagString: Sandbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
