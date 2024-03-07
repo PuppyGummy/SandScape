@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.6293635, g: 0.87631196, b: 0.942252, a: 1}
+  m_IndirectSpecularColor: {r: 0.6294019, g: 0.8762977, b: 0.9422604, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3449,7 +3449,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: b47fb53c92d5c694291302cbc6627931, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 17c5a6ba4f12abb48bcf5795831fcb87, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -3582,7 +3582,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 424e39e797453b94db5da8a065bf7651, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1a2eefa651de26e43b44f7fef5bcc6ae, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -4697,7 +4697,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: e1c08b94df365504b8c791103304ad8a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 61a1ef1fce372954d94638119f342cb4, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -8883,7 +8883,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 6120cbc3ec9dcbd4eb4e28929262c92f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4ea0bebdd1e73774ba63805ae2ba55a2, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -10897,8 +10897,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: 0, y: 16.4, z: -21.1}
+  m_LocalRotation: {x: 0.32763103, y: 0.000000091340524, z: -0.000000032397097, w: 0.9448058}
+  m_LocalPosition: {x: 0, y: 19.453201, z: -32.789894}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -18639,7 +18639,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 0216c7761522c86478cb74c7277539f1, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3685fefb9c353c847891abd66ecc4a6d, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1

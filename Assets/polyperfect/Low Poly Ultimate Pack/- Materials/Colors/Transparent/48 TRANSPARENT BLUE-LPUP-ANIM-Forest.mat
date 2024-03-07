@@ -67,8 +67,8 @@ Material:
     - _Cutoff: 0.506
     - _DetailNormalMapScale: 1
     - _DstBlend: 10
-    - _EdgeWidth: 0.22
-    - _FoamSize: 1.38
+    - _EdgeWidth: 0.109
+    - _FoamSize: 0.42
     - _Frequency: 0.1
     - _GlossMapScale: 1
     - _Glossiness: 1
