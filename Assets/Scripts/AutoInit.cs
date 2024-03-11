@@ -15,8 +15,6 @@ public class AutoInit : MonoBehaviour
         InteractionManager.Instance.sandbox = scenarioSandbox;
 
         //Setup default camera position
-        // if (!Camera.main) return;
-        
         Camera.main.transform.position = defaultCameraPos;
         Camera.main.transform.rotation = Quaternion.Euler(defaultCameraRot);
     }
