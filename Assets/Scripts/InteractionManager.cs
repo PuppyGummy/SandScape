@@ -659,7 +659,7 @@ public class InteractionManager : MonoBehaviour
             if (!rb) continue;
 
             rb.constraints = RigidbodyConstraints.None;
-            if (!obj.GetComponent<ObjectController>().lockRotation) return;
+            if (!obj.GetComponent<ObjectController>().locked) return;
             obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
         }
     }
@@ -871,6 +871,20 @@ public class InteractionManager : MonoBehaviour
             }
         }
     }
+
+    public void LockSingleObject(GameObject objectToLock)
+    {
+        objectToLock.tag = "Locked";
+        objectToLock.GetComponent<Outline>().OutlineColor = lockedColor;
+        Rigidbody rigidbody = objectToLock.GetComponent<Rigidbody>();
+        rigidbody.isKinematic = true;
+        rigidbody.useGravity = false;
+        /*if (playerObject == objectToLock)
+        {
+            playerObject = null;
+        }*/
+    }
+    
     public void DuplicateObject()
     {
         if (selectedObjects.Count == 0) return;
