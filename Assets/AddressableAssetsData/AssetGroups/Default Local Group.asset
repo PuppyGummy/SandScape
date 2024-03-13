@@ -1,0 +1,240 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Default Local Group
+  m_EditorClassIdentifier: 
+  m_GroupName: Default Local Group
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 6b4c01cd71b4447578d8d3c801dc9c83
+  m_SerializeEntries:
+  - m_GUID: eeb1d6b23ac35434da69b3197fc08cdf
+    m_Address: Assets/Prefabs/Miniatures/Avatar/Human.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8c1a731fea4577746aaa1e9d3d94f03b
+    m_Address: Assets/Prefabs/Miniatures/Avatar/Baby.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0e6af5b4a09493f47bdce86d8a5ef49b
+    m_Address: Assets/Prefabs/Miniatures/Animal/Bear_Polar.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2fff4bcbdceac934badeb98904e18283
+    m_Address: Assets/Prefabs/Miniatures/Animal/Butterfly.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f30f27a85daab93418d84a6cec703a59
+    m_Address: Assets/Prefabs/Miniatures/Animal/Deer.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0fa15028a3680df48bbc259fee455af1
+    m_Address: Assets/Prefabs/Miniatures/Animal/Dog.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 282edfc208df79142990a39aa657dfc2
+    m_Address: Assets/Prefabs/Miniatures/Animal/Elephant.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 310dace0dbb8e2f40a4ffe4363e4138e
+    m_Address: Assets/Prefabs/Miniatures/Animal/Fish.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1fe8c57827483694f9e888daab743cd6
+    m_Address: Assets/Prefabs/Miniatures/Animal/Penguin.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 012da94c0cbc6c84d9eabee82e01366f
+    m_Address: Assets/Prefabs/Miniatures/Animal/Pigeon.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6b0c0dc7996d60c4e94e18a8d31ff84e
+    m_Address: Assets/Prefabs/Miniatures/Animal/Snake.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2817cfe1075d2b145ac711ca0d9fecd1
+    m_Address: Assets/Prefabs/Miniatures/Animal/Starfish.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 560d83c8a6d269a43a16c346ae98d350
+    m_Address: Assets/Prefabs/Miniatures/Animal/T-Rex.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ab25632ce8a6a83429e7a896b5a2ef50
+    m_Address: Assets/Prefabs/Miniatures/Building/Car.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 36dcab8e4a4d50647a1ff6b69e37c12d
+    m_Address: Assets/Prefabs/Miniatures/Building/Church.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e344cf967e4534442859538c53875da0
+    m_Address: Assets/Prefabs/Miniatures/Building/Helicopter.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6d625c2001a35044e92fd740a3f4bd62
+    m_Address: Assets/Prefabs/Miniatures/Building/House.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 64b4c46240d2a28489d6fd5df24e03db
+    m_Address: Assets/Prefabs/Miniatures/Building/Lighthouse.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fc9951ee598ed0b42af499b072ec9ee1
+    m_Address: Assets/Prefabs/Miniatures/Building/Motorcycle.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 29564f9ad55afb648874269f2f15f58b
+    m_Address: Assets/Prefabs/Miniatures/Building/Plane.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e80a7dceb26119e459bd1418f5d4f05b
+    m_Address: Assets/Prefabs/Miniatures/Building/School.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2f90ee910ab991b41aed4f516f551744
+    m_Address: Assets/Prefabs/Miniatures/Building/Truck.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d6197adbe345a9e4fb762d66eb7ef422
+    m_Address: Assets/Prefabs/Miniatures/Building/Wall.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fbde5cb13592acb4998810abb5710d96
+    m_Address: Assets/Prefabs/Miniatures/Building/Wall_Window.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9c788ae35d49f264989c876ce2291eb7
+    m_Address: Assets/Prefabs/Miniatures/Monster/Alien.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2d91393ccbbfb7646a0f36690d92a089
+    m_Address: Assets/Prefabs/Miniatures/Monster/Giant.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 977edaf6079954245b05f28101d768d9
+    m_Address: Assets/Prefabs/Miniatures/Monster/Scarecrow.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0f624328e54fcb44aa708b7d3f590b4b
+    m_Address: Assets/Prefabs/Miniatures/Monster/Skeleton.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4852d32f2eeff7e47a0ff88ac0c3a947
+    m_Address: Assets/Prefabs/Miniatures/Monster/Skeleton_Soldier.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 26a8d3f563741e34e97b6e671f4a5693
+    m_Address: Assets/Prefabs/Miniatures/Monster/Zombie_Man.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1f824414416b05445b172ff35d0f76d6
+    m_Address: Assets/Prefabs/Miniatures/Monster/Zombie_Woman.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5f8b7962dae9eb740a6c7b27ac52a1df
+    m_Address: Assets/Prefabs/Miniatures/Nature/Bush.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 06d4dadd0f7bce046ad87bc81119d79b
+    m_Address: Assets/Prefabs/Miniatures/Nature/Cactus_Basic.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 21f4b12062053dd409e1e457eab27af9
+    m_Address: Assets/Prefabs/Miniatures/Nature/Cactus_Big.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7ac717872c92bb746b9b13d463f1fb36
+    m_Address: Assets/Prefabs/Miniatures/Nature/Cactus_Medium.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ee3ac7dfc8ae8c045a7844d9e32fc9b7
+    m_Address: Assets/Prefabs/Miniatures/Nature/Carnations.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 29a95d86fd7be034db87fbf521dd3581
+    m_Address: Assets/Prefabs/Miniatures/Nature/Coral.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d13ff77f9c847c9489f08bf9a8ec5c88
+    m_Address: Assets/Prefabs/Miniatures/Nature/Lime_Tree.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ac9171ae01a564e4cb43b8a034c6c836
+    m_Address: Assets/Prefabs/Miniatures/Nature/Moon.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 80de01eea770c6647a0b78acec77b623
+    m_Address: Assets/Prefabs/Miniatures/Nature/Roses.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7a4763644a49cfb468331770dbf00dcf
+    m_Address: Assets/Prefabs/Miniatures/Nature/Stone.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8459ca7ce47b3234c9053d1b5344d540
+    m_Address: Assets/Prefabs/Miniatures/Nature/Sun.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 41d922f9f15781d4e859878f34663d7d
+    m_Address: Assets/Prefabs/Miniatures/Nature/Tree_Without_Leaves.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 08adc9328b3644eb69e9f5babd8bfce3, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 3982e0296d68b487ca32bf19b56589b6, type: 2}
+    - {fileID: 11400000, guid: fce2a06b7379649acb154de1e8cdd998, type: 2}

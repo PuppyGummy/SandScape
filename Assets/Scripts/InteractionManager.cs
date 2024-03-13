@@ -115,12 +115,12 @@ public class InteractionManager : MonoBehaviour
         if (Input.GetMouseButton(0) && selectedObjects.Count != 0 && !EventSystem.current.IsPointerOverGameObject() && isHoveringObject && RTInput.WasMouseMoved())
         {
             isDragging = true;
-            HistoryManager.Instance.SaveState(selectedObjects);
+            HistoryManager.Instance.SaveState(selectedObjects, Operation.Modify);
         }
         if (Input.GetMouseButtonUp(0) && selectedObjects.Count != 0 && isDragging)
         {
             isDragging = false;
-            HistoryManager.Instance.SaveState(selectedObjects);
+            HistoryManager.Instance.SaveState(selectedObjects, Operation.Modify);
         }
 
         if (isDragging && !Input.GetKey(KeyCode.LeftShift) && !useGizmo)
@@ -133,7 +133,7 @@ public class InteractionManager : MonoBehaviour
         }
         if (Input.GetMouseButtonUp(1) && selectedObjects.Count != 0)
         {
-            HistoryManager.Instance.SaveState(selectedObjects);
+            HistoryManager.Instance.SaveState(selectedObjects, Operation.Modify);
         }
 
         if (!useGizmo || selectedObjects.Count == 0) return;
@@ -142,11 +142,11 @@ public class InteractionManager : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            HistoryManager.Instance.SaveState(selectedObjects);
+            HistoryManager.Instance.SaveState(selectedObjects, Operation.Modify);
         }
         if (Input.GetMouseButtonUp(0) && selectedObjects.Count != 0)
         {
-            HistoryManager.Instance.SaveState(selectedObjects);
+            HistoryManager.Instance.SaveState(selectedObjects, Operation.Modify);
         }
     }
     void FixedUpdate()
@@ -419,7 +419,7 @@ public class InteractionManager : MonoBehaviour
     {
         isRotating = true;
         initialMousePosition = Input.mousePosition;
-        HistoryManager.Instance.SaveState(selectedObjects);
+        HistoryManager.Instance.SaveState(selectedObjects, Operation.Modify);
     }
     private void RotateObjects()
     {
@@ -453,7 +453,7 @@ public class InteractionManager : MonoBehaviour
                 EnablePhysics(obj);
             }
             isRotating = false;
-            HistoryManager.Instance.SaveState(selectedObjects);
+            HistoryManager.Instance.SaveState(selectedObjects, Operation.Modify);
         }
     }
 
@@ -468,7 +468,7 @@ public class InteractionManager : MonoBehaviour
             timeSinceLastScroll = Time.time;
             if (!isScalingWithMouseScroll)
             {
-                HistoryManager.Instance.SaveState(selectedObjects);
+                HistoryManager.Instance.SaveState(selectedObjects, Operation.Modify);
                 isScalingWithMouseScroll = true;
             }
             foreach (GameObject obj in selectedObjects)
@@ -493,7 +493,7 @@ public class InteractionManager : MonoBehaviour
             if (!((Time.time - timeSinceLastScroll) > scrollEndDelay)) return;
 
             isScalingWithMouseScroll = false;
-            HistoryManager.Instance.SaveState(selectedObjects);
+            HistoryManager.Instance.SaveState(selectedObjects, Operation.Modify);
         }
     }
 
@@ -502,7 +502,7 @@ public class InteractionManager : MonoBehaviour
     {
         isScaling = true;
         initialMousePosition = Input.mousePosition;
-        HistoryManager.Instance.SaveState(selectedObjects);
+        HistoryManager.Instance.SaveState(selectedObjects, Operation.Modify);
     }
     private void ScaleObjects()
     {
@@ -541,7 +541,7 @@ public class InteractionManager : MonoBehaviour
         if (isScaling && Input.GetMouseButtonDown(0))
         {
             isScaling = false;
-            HistoryManager.Instance.SaveState(selectedObjects);
+            HistoryManager.Instance.SaveState(selectedObjects, Operation.Modify);
         }
     }
 
@@ -575,7 +575,7 @@ public class InteractionManager : MonoBehaviour
 
     public void Reset()
     {
-        HistoryManager.Instance.SaveState(selectedObjects);
+        HistoryManager.Instance.SaveState(selectedObjects, Operation.Modify);
 
         foreach (GameObject obj in selectedObjects)
         {
@@ -594,12 +594,14 @@ public class InteractionManager : MonoBehaviour
             obj.transform.rotation = obj.GetComponent<ObjectController>().defaultRotation;
             obj.transform.localScale = obj.GetComponent<ObjectController>().defaultScale;
         }
-        HistoryManager.Instance.SaveState(selectedObjects);
+        HistoryManager.Instance.SaveState(selectedObjects, Operation.Modify);
     }
     public void Delete()
     {
         if (selectedObjects.Count != 0)
         {
+            HistoryManager.Instance.SaveState(selectedObjects, Operation.Delete);
+
             for (int i = 0; i < selectedObjects.Count; i++)
             {
                 objs.Remove(selectedObjects[i]);
@@ -626,7 +628,7 @@ public class InteractionManager : MonoBehaviour
     public void Bury()
     {
         if (selectedObjects.Count == 0) return;
-        HistoryManager.Instance.SaveState(selectedObjects);
+        HistoryManager.Instance.SaveState(selectedObjects, Operation.Modify);
         foreach (GameObject obj in selectedObjects)
         {
             if (obj.CompareTag("Locked")) continue;
@@ -641,7 +643,7 @@ public class InteractionManager : MonoBehaviour
             Physics.IgnoreCollision(obj.GetComponent<Collider>(), sandbox.GetComponent<Collider>());
             obj.transform.position = new Vector3(obj.transform.position.x, obj.transform.position.y - buryDepth, obj.transform.position.z);
         }
-        HistoryManager.Instance.SaveState(selectedObjects);
+        HistoryManager.Instance.SaveState(selectedObjects, Operation.Modify);
     }
 
     private void UnlockRotation()
@@ -723,10 +725,19 @@ public class InteractionManager : MonoBehaviour
     }
     public void RecoverAllRaycasts()
     {
-        foreach (GameObject obj in objs)
+        // foreach (GameObject obj in objs)
+        // {
+        //     if (!obj) { RemoveObject(obj); continue; }
+        //     obj.layer = LayerMask.NameToLayer("Objects");
+        // }
+        for (int i = 0; i < objs.Count; i++)
         {
-            if (!obj) { RemoveObject(obj); continue; }
-            obj.layer = LayerMask.NameToLayer("Objects");
+            if (!objs[i])
+            {
+                objs.RemoveAt(i);
+                i--;
+            }
+            objs[i].layer = LayerMask.NameToLayer("Objects");
         }
     }
     public void DisablePhysics(GameObject obj)
@@ -863,10 +874,12 @@ public class InteractionManager : MonoBehaviour
     public void DuplicateObject()
     {
         if (selectedObjects.Count == 0) return;
+        List<GameObject> duplicates = new List<GameObject>();
         foreach (GameObject obj in selectedObjects)
         {
             GameObject duplicate = Instantiate(obj, obj.transform.position + new Vector3(1f, 0f, 0), obj.transform.rotation);
             duplicate.GetComponent<Outline>().enabled = false;
+            duplicates.Add(duplicate);
             Renderer miniatureRenderer = duplicate.GetComponent<Renderer>();
 
             Material[] materials = miniatureRenderer.materials;
@@ -881,6 +894,7 @@ public class InteractionManager : MonoBehaviour
             }
             duplicate.layer = LayerMask.NameToLayer("Objects");
         }
+        HistoryManager.Instance.SaveState(duplicates, Operation.Create);
     }
     public void SetDragging(bool value)
     {

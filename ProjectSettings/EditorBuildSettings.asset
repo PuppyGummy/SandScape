@@ -41,4 +41,5 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/World_Oasis.unity
     guid: f39442430507f224a91ad235bd827f41
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 38ec9cc72cc414410b10f65c488e4f2a, type: 2}
