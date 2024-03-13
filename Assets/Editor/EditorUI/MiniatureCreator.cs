@@ -28,6 +28,9 @@ namespace EditorUI
         private TextField miniPath;
         private TextField neededIconPath;
         private Button openIconToolButton;
+        private Toggle colorTick;
+        private Toggle styleTick;
+        private Toggle shapeTick;
 
         public void CreateGUI()
         {
@@ -84,6 +87,45 @@ namespace EditorUI
             categoryField.style.marginLeft = 10;
             categoryField.style.marginRight = 10;
             root.Add(categoryField);
+            
+            Label customizationLabel = new Label("Customization Options")
+            {
+                style =
+                {
+                    fontSize = 16,
+                    marginTop = 5,
+                    marginBottom = 5,
+                    marginLeft = 5
+                }
+            };
+            root.Add(customizationLabel);
+            
+            colorTick = new Toggle
+            {
+                label = "Customize color?",
+                value = true,
+                style = { marginLeft = 10, marginRight = 10, marginTop = 3, marginBottom = 3},
+                tooltip = "Allow the user to change the color of the selected miniature"
+            };
+            root.Add(colorTick);
+            
+            styleTick = new Toggle
+            {
+                label = "Customize style?",
+                value = false,
+                style = { marginLeft = 10, marginRight = 10, marginTop = 3, marginBottom = 3},
+                tooltip = "Allow the user to change the clothing style of the selected miniature"
+            };
+            root.Add(styleTick);
+            
+            shapeTick = new Toggle
+            {
+                label = "Customize shape?",
+                value = false,
+                style = { marginLeft = 10, marginRight = 10, marginTop = 3, marginBottom = 3},
+                tooltip = "Allow the user to change the body shape / size of the selected miniature"
+            };
+            root.Add(shapeTick);
 
             Label finalizeLabel = new Label("Create Miniature")
             {
@@ -115,7 +157,8 @@ namespace EditorUI
                 {
                     marginTop = 5,
                     marginBottom = 5,
-                    marginLeft = 5
+                    marginLeft = 10,
+                    marginRight = 10
                 }
                 
             };
@@ -130,30 +173,11 @@ namespace EditorUI
                 {
                     // marginTop = 5,
                     marginBottom = 5,
-                    marginLeft = 5
+                    marginLeft = 10,
+                    marginRight = 10
                 }
             };
             root.Add(neededIconPath);
-            
-            /*Label iconLabel = new Label("Icon")
-            {
-                style =
-                {
-                    fontSize = 16,
-                    marginTop = 5,
-                    marginBottom = 5,
-                    marginLeft = 5
-                }
-            };
-            root.Add(iconLabel);
-
-            openIconToolButton = new Button
-            {
-                name = "button",
-                text = "Open Icon Tool"
-            };
-            openIconToolButton.clicked += OnIconToolClicked();
-            root.Add(openIconToolButton);*/
             
             Label inventoryLabel = new Label("Inventory")
             {
@@ -272,8 +296,8 @@ namespace EditorUI
             MeshFilter meshFilterComponent = prefabObject.AddComponent<MeshFilter>();
             MeshRenderer meshRendererComponent = prefabObject.AddComponent<MeshRenderer>();
             Rigidbody rigidbodyComponent = prefabObject.AddComponent<Rigidbody>();
-            // MeshCollider meshColliderComponent = prefabObject.AddComponent<MeshCollider>();
             Outline outlineComponent = prefabObject.AddComponent<Outline>();
+            Customization customizationComponent = prefabObject.AddComponent<Customization>();
             prefabObject.AddComponent<ObjectController>();
 
             //Add movement controller to avatars, monsters, and animals
@@ -288,6 +312,8 @@ namespace EditorUI
                 orientationObject.name = "Orientation";
                 orientationObject.transform.parent = prefabObject.transform;
             }
+            
+            SetupCustomization(prefabObject, customizationComponent);
 
             //Setup all component values
             meshFilterComponent.sharedMesh = meshField.value.GetComponent<MeshFilter>().sharedMesh;
@@ -310,6 +336,48 @@ namespace EditorUI
             prefabObject.layer = LayerMask.NameToLayer("Objects");
 
             return prefabObject;
+        }
+
+        private void SetupCustomization(GameObject prefabObject, Customization customizationComponent)
+        {
+            //Setup customization component
+            if (colorTick.value)
+                customizationComponent.allowColorChange = true;
+            
+            if (shapeTick.value)
+                customizationComponent.allowShapeChange = true;
+            
+            if (styleTick.value)
+            {
+                //This code makes me wanna cry :.^(
+                customizationComponent.allowStyleChange = true;
+
+                GameObject hairObject = new GameObject();
+                hairObject.name = "Hair";
+                GameObject topObject = new GameObject();
+                topObject.name = "Top";
+                GameObject bottomObject = new GameObject();
+                bottomObject.name = "Bottom";
+                GameObject shoeObject = new GameObject();
+                shoeObject.name = "Shoe";
+                
+                //Add renderers
+                MeshRenderer hairRenderer = hairObject.AddComponent<MeshRenderer>();
+                MeshRenderer topRenderer = topObject.AddComponent<MeshRenderer>();
+                MeshRenderer bottomRenderer = bottomObject.AddComponent<MeshRenderer>();
+                MeshRenderer shoeRenderer = shoeObject.AddComponent<MeshRenderer>();
+                
+                //Add filters
+                MeshFilter hairFilter = hairObject.AddComponent<MeshFilter>();
+                MeshFilter topFilter = topObject.AddComponent<MeshFilter>();
+                MeshFilter bottomFilter = bottomObject.AddComponent<MeshFilter>();
+                MeshFilter shoeFilter = shoeObject.AddComponent<MeshFilter>();
+                
+                hairObject.transform.parent = prefabObject.transform;
+                topObject.transform.parent = prefabObject.transform;
+                bottomObject.transform.parent = prefabObject.transform;
+                shoeObject.transform.parent = prefabObject.transform;
+            }
         }
 
         private void CopyColliders(GameObject source, GameObject destination)
@@ -353,6 +421,7 @@ namespace EditorUI
                 collider.isTrigger = originalCollider.isTrigger;
             }
         }
+        
         #endregion
     }
 }
