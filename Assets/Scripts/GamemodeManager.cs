@@ -17,6 +17,7 @@ public class GamemodeManager : MonoBehaviour
     private Quaternion cameraStartRotation;
     private Camera mainCamera;
     private static GamemodeManager instance;
+    public GameObject confirmExitPanel;
 
     public static GamemodeManager Instance
     {
@@ -49,7 +50,7 @@ public class GamemodeManager : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.Escape) && !playModeEnabled)
         {
-            Application.Quit();
+            confirmExitPanel.SetActive(true);
         }
     }
 
@@ -117,5 +118,13 @@ public class GamemodeManager : MonoBehaviour
     public void ExitApp()
     {
         Application.Quit();
+    }
+    public void CancelExit()
+    {
+        confirmExitPanel.SetActive(false);
+    }
+    public void ConfirmExit()
+    {
+        confirmExitPanel.SetActive(true);
     }
 }

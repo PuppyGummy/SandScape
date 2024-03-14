@@ -111,22 +111,22 @@ namespace EditorUI
             {
                 label = "Miniature path",
                 value = "none...",
-                style = 
+                style =
                 {
                     marginTop = 5,
                     marginBottom = 5,
                     marginLeft = 5
                 }
-                
+
             };
             root.Add(miniPath);
-            
+
             //Icon path
             neededIconPath = new TextField
             {
                 label = "Icon path",
                 value = "none...",
-                style = 
+                style =
                 {
                     // marginTop = 5,
                     marginBottom = 5,
@@ -134,7 +134,7 @@ namespace EditorUI
                 }
             };
             root.Add(neededIconPath);
-            
+
             /*Label iconLabel = new Label("Icon")
             {
                 style =
@@ -154,7 +154,7 @@ namespace EditorUI
             };
             openIconToolButton.clicked += OnIconToolClicked();
             root.Add(openIconToolButton);*/
-            
+
             Label inventoryLabel = new Label("Inventory")
             {
                 style =
@@ -166,7 +166,7 @@ namespace EditorUI
                 }
             };
             root.Add(inventoryLabel);
-            
+
             //Refresh miniature inventory
             refreshInventoryButton = new Button
             {
@@ -186,12 +186,12 @@ namespace EditorUI
         }
 
         #region Methods
-        
+
         private System.Action OnCreateClicked()
         {
             return CreationButtonPressed;
         }
-        
+
         private System.Action OnRefreshClicked()
         {
             return RefreshAll;
@@ -220,7 +220,7 @@ namespace EditorUI
                 Debug.LogError("No miniature manager! Are you in the main scene?");
                 return;
             }
-            
+
             MiniatureManager.Instance.RefreshAllMiniatures();
         }
 
@@ -233,7 +233,7 @@ namespace EditorUI
 
         private void CreatePrefab()
         {
-            const string rootPath = "Assets/Prefabs/Miniatures/";
+            const string rootPath = "Assets/Resources/Prefabs/Miniatures/";
             string categoryPath = categoryField.value + "/";
             string localPath;
 
@@ -257,7 +257,7 @@ namespace EditorUI
                 Debug.LogError("Failed to create asset! Are we missing a folder?");
 
             localPath = rootPath + categoryPath + nameField.value + ".prefab";
-            
+
             miniPath.value = localPath;
             neededIconPath.value = "Assets/UI_Assets/Icons/" + categoryPath;
 

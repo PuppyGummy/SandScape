@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
+// using UnityEngine.AddressableAssets;
+// using UnityEngine.ResourceManagement.AsyncOperations;
 
 
 public class HistoryManager : MonoBehaviour
@@ -154,7 +154,9 @@ public class ObjectHistory
 
     private void UndoDelete()
     {
-        PrefabLoader.LoadPrefabByName(prefabName, OnPrefabLoaded);
+        // PrefabLoader.LoadPrefabByName(prefabName, OnPrefabLoaded);
+        GameObject prefab = PrefabLoader.LoadPrefabByName(prefabName);
+        OnPrefabLoaded(prefab);
     }
 
     private void UndoModify()
@@ -170,7 +172,9 @@ public class ObjectHistory
     // Define what each Redo helper function does
     private void RedoCreate()
     {
-        PrefabLoader.LoadPrefabByName(prefabName, OnPrefabLoaded);
+        // PrefabLoader.LoadPrefabByName(prefabName, OnPrefabLoaded);
+        GameObject prefab = PrefabLoader.LoadPrefabByName(prefabName);
+        OnPrefabLoaded(prefab);
     }
 
     private void RedoDelete()
@@ -206,34 +210,65 @@ public class ObjectHistory
     }
 }
 
+// public class PrefabLoader : MonoBehaviour
+// {
+//     public static void LoadPrefabByName(string prefabName, System.Action<GameObject> onComplete)
+//     {
+//         string[] prefabFolders = { "Animal", "Avatar", "Building", "Furniture", "Monster", "Nature", "Spiritual" };
+
+//         foreach (string folderName in prefabFolders)
+//         {
+//             LoadPrefabInFolder(prefabName, folderName, onComplete);
+//         }
+//     }
+
+//     private static void LoadPrefabInFolder(string prefabName, string folderName, System.Action<GameObject> onComplete)
+//     {
+//         string prefabPath = "Assets/Prefabs/Miniatures/" + folderName + "/" + prefabName + ".prefab";
+
+//         Addressables.LoadResourceLocationsAsync(prefabPath).Completed += locationsHandle =>
+//         {
+//             if (locationsHandle.Result.Count > 0)
+//             {
+//                 Addressables.LoadAssetAsync<GameObject>(prefabPath).Completed += assetHandle =>
+//                 {
+//                     if (assetHandle.Status == AsyncOperationStatus.Succeeded)
+//                     {
+//                         onComplete?.Invoke(assetHandle.Result);
+//                     }
+//                 };
+//             }
+//         };
+//     }
+// }
+
 public class PrefabLoader : MonoBehaviour
 {
-    public static void LoadPrefabByName(string prefabName, System.Action<GameObject> onComplete)
+    public static GameObject LoadPrefabByName(string prefabName)
     {
         string[] prefabFolders = { "Animal", "Avatar", "Building", "Furniture", "Monster", "Nature", "Spiritual" };
 
         foreach (string folderName in prefabFolders)
         {
-            LoadPrefabInFolder(prefabName, folderName, onComplete);
+            GameObject prefab = LoadPrefabInFolder(prefabName, folderName);
+            if (prefab != null)
+            {
+                return prefab;
+            }
         }
+
+        Debug.LogError("Prefab not found: " + prefabName);
+        return null;
     }
 
-    private static void LoadPrefabInFolder(string prefabName, string folderName, System.Action<GameObject> onComplete)
+    private static GameObject LoadPrefabInFolder(string prefabName, string folderName)
     {
-        string prefabPath = "Assets/Prefabs/Miniatures/" + folderName + "/" + prefabName + ".prefab";
-
-        Addressables.LoadResourceLocationsAsync(prefabPath).Completed += locationsHandle =>
+        string prefabPath = "Prefabs/Miniatures/" + folderName + "/" + prefabName;
+        GameObject prefab = Resources.Load<GameObject>(prefabPath);
+        if (prefab != null)
         {
-            if (locationsHandle.Result.Count > 0)
-            {
-                Addressables.LoadAssetAsync<GameObject>(prefabPath).Completed += assetHandle =>
-                {
-                    if (assetHandle.Status == AsyncOperationStatus.Succeeded)
-                    {
-                        onComplete?.Invoke(assetHandle.Result);
-                    }
-                };
-            }
-        };
+            return prefab;
+        }
+        return null;
     }
 }
