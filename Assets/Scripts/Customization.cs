@@ -8,7 +8,7 @@ public class Customization : MonoBehaviour
 {
     public enum BodyShape {Small, Medium, Large}
 
-    public BodyShape shape;
+    public BodyShape shape = BodyShape.Medium;
     public bool allowColorChange;
     public bool allowShapeChange;
     public bool allowStyleChange;
@@ -30,6 +30,7 @@ public class Customization : MonoBehaviour
     public void Start()
     {
         SetComponents();
+        shape = (BodyShape)1;
     }
 
     public void SetFacialExpression(int id)

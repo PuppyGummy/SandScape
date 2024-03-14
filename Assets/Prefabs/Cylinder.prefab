@@ -169,3 +169,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lockRotation: 0
   isOnGround: 0
+  defaultScale: {x: 0, y: 0, z: 0}
+  defaultRotation: {x: 0, y: 0, z: 0, w: 0}

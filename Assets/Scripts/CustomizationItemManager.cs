@@ -30,6 +30,12 @@ public class CustomizationItemManager : MonoBehaviour
     public List<MeshFilter> bodyShapes;
 
     public Customization selectedObject;
+    
+    public void SetSelectedObject()
+    {
+        var list = InteractionManager.Instance.GetSelectedObjects();
+        if (list.Count > 0) selectedObject = list[0].GetComponent<Customization>();
+    }
 
 #if UNITY_EDITOR
 
@@ -45,12 +51,6 @@ public class CustomizationItemManager : MonoBehaviour
     {
         ClearList();
         AddAll();
-    }
-
-    public void SetSelectedObject()
-    {
-        var list = InteractionManager.Instance.GetSelectedObjects();
-        if (list.Count > 0) selectedObject = list[0].GetComponent<Customization>();
     }
 
     private void AddAll()
