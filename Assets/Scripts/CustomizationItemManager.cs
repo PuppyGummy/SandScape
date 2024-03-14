@@ -26,6 +26,10 @@ public class CustomizationItemManager : MonoBehaviour
     public List<GameObject> tops;
     public List<GameObject> bottoms;
     public List<GameObject> shoes;
+    public List<MeshFilter> expressions;
+    public List<MeshFilter> bodyShapes;
+
+    public Customization selectedObject;
 
 #if UNITY_EDITOR
 
@@ -41,6 +45,12 @@ public class CustomizationItemManager : MonoBehaviour
     {
         ClearList();
         AddAll();
+    }
+
+    public void SetSelectedObject()
+    {
+        var list = InteractionManager.Instance.GetSelectedObjects();
+        if (list.Count > 0) selectedObject = list[0].GetComponent<Customization>();
     }
 
     private void AddAll()
@@ -76,7 +86,7 @@ public class CustomizationItemManager : MonoBehaviour
                     case "Bottom":
                         bottoms.Add(go);
                         break;
-                    case "Shoes":
+                    case "Shoe":
                         shoes.Add(go);
                         break;
                 }
