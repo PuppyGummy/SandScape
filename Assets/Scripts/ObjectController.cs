@@ -1,5 +1,5 @@
-using System;
 using UnityEngine;
+using System.Collections.Generic;
 using UnityEngine.Serialization;
 
 public class ObjectController : MonoBehaviour
@@ -24,6 +24,7 @@ public class ObjectController : MonoBehaviour
         {
             InteractionManager.Instance.RemoveObject(gameObject);
             Destroy(gameObject);
+            HistoryManager.Instance.SaveState(new List<GameObject> { gameObject }, Operation.Delete);
             if (InteractionManager.Instance.GetSelectedObjects().Contains(gameObject) && InteractionManager.Instance.GetUseGizmo())
                 GizmoController.Instance.EnableGizmo(false);
         }

@@ -6,6 +6,7 @@ public class DragSelection : MonoBehaviour
     [SerializeField] private RectTransform selectionBox;
     private Vector2 startPos;
     private Vector2 endPos;
+    private bool isDragSelecting = false;
 
     void Start()
     {
@@ -16,12 +17,13 @@ public class DragSelection : MonoBehaviour
 
     void Update()
     {
-        if(!GizmoController.Instance.enabled)
+        if (!GizmoController.Instance.enabled)
             return;
         if (!EventSystem.current.IsPointerOverGameObject() && !InteractionManager.Instance.IsDragging() && !GizmoController.Instance.IsHoveringGizmo() && !InteractionManager.Instance.isDraggingSpawnedObject && !InteractionManager.Instance.IsHoveringObject())
         {
             if (Input.GetMouseButtonDown(0))
             {
+                isDragSelecting = true;
                 startPos = Input.mousePosition;
                 selectionBox.gameObject.SetActive(true);
             }
@@ -33,8 +35,9 @@ public class DragSelection : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0) && isDragSelecting)
         {
+            isDragSelecting = false;
             InteractionManager.Instance.RecoverAllRaycasts();
             startPos = Vector2.zero;
             endPos = Vector2.zero;

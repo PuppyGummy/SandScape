@@ -488,7 +488,9 @@ namespace RTG
             Vector3 orbitPoint = GetCurrentFocusPoint();
             // Vector3 orbitPoint = _targetTransform.position + _targetTransform.forward * _focusPointOffset;
 
+            //rotate around y axis
             _targetTransform.RotateAround(orbitPoint, Vector3.up, degreesWorldY);
+            //rotate around x axis
             _targetTransform.RotateAround(orbitPoint, _targetTransform.right, degreesLocalX);
             _targetTransform.LookAt(orbitPoint, _targetTransform.up);
         }
