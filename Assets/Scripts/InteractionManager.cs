@@ -39,6 +39,8 @@ public class InteractionManager : MonoBehaviour
     private bool isScalingWithMouseScroll = false;
     public bool isDraggingSpawnedObject = false;
     public float epsilon = 0.01f;
+    public float doubleClickTimeLimit = 0.25f;
+    private float lastClickTime;
 
     #endregion
 
@@ -93,9 +95,20 @@ public class InteractionManager : MonoBehaviour
         if (!selectMode)
             return;
 
-        if (Input.GetKeyDown(KeyCode.F))
+        if (Input.GetMouseButtonDown(0) && selectedObjects.Count != 0 && isHoveringObject)
         {
-            RTFocusCamera.Get.Focus(selectedObjects);
+            float timeSinceLastClick = Time.time - lastClickTime;
+
+            if (timeSinceLastClick <= doubleClickTimeLimit)
+            {
+                RTFocusCamera.Get.Focus(selectedObjects);
+
+                lastClickTime = -1f;
+            }
+            else
+            {
+                lastClickTime = Time.time;
+            }
         }
         if (Input.GetKeyDown(KeyCode.Delete) || Input.GetKeyDown(KeyCode.Backspace))
         {
