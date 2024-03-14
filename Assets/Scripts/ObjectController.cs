@@ -1,9 +1,10 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.Serialization;
 
 public class ObjectController : MonoBehaviour
 {
-    public bool lockRotation;
+    public bool locked;
     public bool isOnGround;
     public Vector3 defaultScale;
     public Quaternion defaultRotation;
@@ -12,6 +13,9 @@ public class ObjectController : MonoBehaviour
         InteractionManager.Instance.AddObject(gameObject);
         defaultScale = transform.localScale;
         defaultRotation = transform.rotation;
+        
+        if(locked)
+            InteractionManager.Instance.LockSingleObject(gameObject);
     }
 
     void Update()

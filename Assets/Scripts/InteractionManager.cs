@@ -579,11 +579,16 @@ public class InteractionManager : MonoBehaviour
             DisablePhysics(spawnedObject);
         }
         spawnedObject.layer = LayerMask.NameToLayer("Objects");
+        AddIndicator(spawnedObject);
+        return spawnedObject;
+    }
+
+    public void AddIndicator(GameObject spawnedObject)
+    {
         GameObject indicator = Instantiate(objectIndicator, Vector3.zero, Quaternion.identity);
         indicator.transform.SetParent(spawnedObject.transform);
         indicator.transform.SetAsFirstSibling();
         indicator.SetActive(false);
-        return spawnedObject;
     }
 
     public void Reset()
@@ -669,7 +674,7 @@ public class InteractionManager : MonoBehaviour
             if (!rb) continue;
 
             rb.constraints = RigidbodyConstraints.None;
-            if (!obj.GetComponent<ObjectController>().lockRotation) return;
+            if (!obj.GetComponent<ObjectController>().locked) return;
             obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
         }
     }
@@ -714,6 +719,12 @@ public class InteractionManager : MonoBehaviour
     public void AddObject(GameObject objectToAdd)
     {
         objs.Add(objectToAdd);
+        
+        //Add indicator if object is missing one
+        if (objectToAdd.transform.childCount <= 0)
+        {
+            AddIndicator(objectToAdd);
+        }
     }
     public void RemoveObject(GameObject objectToRemove)
     {
@@ -884,6 +895,20 @@ public class InteractionManager : MonoBehaviour
             }
         }
     }
+
+    public void LockSingleObject(GameObject objectToLock)
+    {
+        objectToLock.tag = "Locked";
+        objectToLock.GetComponent<Outline>().OutlineColor = lockedColor;
+        Rigidbody rigidbody = objectToLock.GetComponent<Rigidbody>();
+        rigidbody.isKinematic = true;
+        rigidbody.useGravity = false;
+        /*if (playerObject == objectToLock)
+        {
+            playerObject = null;
+        }*/
+    }
+    
     public void DuplicateObject()
     {
         if (selectedObjects.Count == 0) return;
