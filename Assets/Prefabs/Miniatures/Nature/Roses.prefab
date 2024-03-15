@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 1905326532392936712}
   - component: {fileID: 7643563208962259678}
   - component: {fileID: 5958390634080046029}
+  - component: {fileID: 8984302424746927586}
   m_Layer: 6
   m_Name: Roses
   m_TagString: Interactable
@@ -145,8 +146,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5a59a71ad15b403693e95d66331e722, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lockRotation: 0
+  locked: 0
   isOnGround: 0
+  defaultScale: {x: 0, y: 0, z: 0}
+  defaultRotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!65 &5958390634080046029
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -166,5 +169,27 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.44328153, y: 0.2156883, z: 0.4133131}
-  m_Center: {x: 0, y: 0.10035125, z: 0}
+  m_Size: {x: 0.5147333, y: 0.21568832, z: 0.51455104}
+  m_Center: {x: 0, y: 0.10035126, z: 0}
+--- !u!64 &8984302424746927586
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 857819525659505342}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300002, guid: bcb45abbf2f2252479463e3c49937bff, type: 3}

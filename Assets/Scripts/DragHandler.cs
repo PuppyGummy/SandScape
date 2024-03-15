@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
@@ -57,7 +58,10 @@ public class DragHandler : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
             Destroy(draggedInstance); // If it doesn't hit anything, destroy it
         }
         draggedInstance.layer = LayerMask.NameToLayer("Objects");
-        InteractionManager.Instance.EnablePhysics(draggedInstance);
+        if (!InteractionManager.Instance.GetUseGizmo())
+            InteractionManager.Instance.EnablePhysics(draggedInstance);
+
+        HistoryManager.Instance.SaveState(new List<GameObject> { draggedInstance }, Operation.Create);
     }
 
     private Vector3 GetWorldPositionOnPlane(Vector3 hitpos)
