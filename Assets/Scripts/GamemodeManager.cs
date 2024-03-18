@@ -117,6 +117,7 @@ public class GamemodeManager : MonoBehaviour
 
     public void ExitApp()
     {
+        HistoryManager.Instance.SaveCurrentState();
         Application.Quit();
     }
     public void CancelExit()
