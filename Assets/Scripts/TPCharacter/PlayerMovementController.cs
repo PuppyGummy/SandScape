@@ -10,16 +10,16 @@ public class PlayerMovementController : MonoBehaviour
     public KeyCode jumpKey = KeyCode.Space;
 
     [Header("Movement")]
-    public float speed;
-    public float jumpForce;
-    public float jumpCoolDown;
-    public float airMultiplier;
+    public float speed = 7.0f;
+    public float jumpForce = 8.0f;
+    public float jumpCoolDown = 0.25f;
+    public float airMultiplier = 1.0f;
     private bool readyToJump = true;
 
     [Header("Ground Check")]
-    public float playerHeight;
+    public float playerHeight = 2.0f;
     public LayerMask ground;
-    public float groundDrag;
+    public float groundDrag = 5.0f;
     private bool grounded;
 
     [Header("Properties")]
@@ -47,6 +47,7 @@ public class PlayerMovementController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         // characterController = GetComponent<CharacterController>();
+        ground = LayerMask.NameToLayer("Sandbox");
     }
 
     private void Update()
@@ -75,10 +76,16 @@ public class PlayerMovementController : MonoBehaviour
         Jump();
 
         Invoke(nameof(ResetJump), jumpCoolDown);
-        if (horizontalInput == 0 && verticalInput == 0)
-        {
-            targetVelocity = Vector3.zero;
-        }
+        // if (horizontalInput == 0 && verticalInput == 0)
+        // {
+        //     // lock the character's rotation
+        //     rb.constraints = RigidbodyConstraints.FreezeRotation;
+        // }
+        // else
+        // {
+        //     // unlock the character's rotation
+        //     rb.constraints = RigidbodyConstraints.None;
+        // }
     }
 
     void AddMovementInput()

@@ -27,4 +27,10 @@ public class UI_ImageFlipFlop : MonoBehaviour
                 break;
         }
     }
+
+    public void ResetImage()
+    {
+        imageElement.sprite = normalImage;
+        flipped = false;
+    }
 }

@@ -248,6 +248,32 @@ namespace RTG
                 else if (FocusSettings.FocusMode == CameraFocusMode.Smooth) StartCoroutine(_focusCrtn = DoSmoothFocus(focusData));
             }
         }
+        private Vector3 GetCurrentFocusPoint()
+        {
+            List<GameObject> selectedObjects = InteractionManager.Instance.GetSelectedObjects();
+            if (selectedObjects != null && selectedObjects.Count > 0)
+            {
+                var bounds = new Bounds(selectedObjects[0].transform.position, Vector3.zero);
+                for (int i = 1; i < selectedObjects.Count; i++)
+                {
+                    bounds.Encapsulate(selectedObjects[i].transform.position);
+                }
+
+                return bounds.center;
+            }
+            else
+            {
+                // if (!InteractionManager.Instance.sandbox) return default;
+                // Vector3 sandboxPos = InteractionManager.Instance.sandbox.transform.position;
+                Vector3 origin = new Vector3(0, 0, 0);
+                return new Vector3(origin.x, origin.y - 6, origin.z);
+            }
+        }
+        public void UpdateFocusPoint()
+        {
+            _lastFocusPoint = GetCurrentFocusPoint();
+            SetFocusPoint(_lastFocusPoint);
+        }
 
         public void Update_SystemCall()
         {
@@ -351,7 +377,7 @@ namespace RTG
                     }
                     // Rotate Camera
                     else
-                    if (_lookAroundSettings.IsLookAroundEnabled && Hotkeys.LookAround.IsActive() && InteractionManager.Instance.GetSelectedObjects().Count == 0)
+                    if (_lookAroundSettings.IsLookAroundEnabled && Hotkeys.LookAround.IsActive() && !InteractionManager.Instance.IsHoveringObject())
                     {
                         if (_lookAroundSettings.LookAroundMode == CameraLookAroundMode.Standard)
                         {
@@ -431,7 +457,17 @@ namespace RTG
             float zoomAmount = deviceScroll * _zoomSettings.GetZoomSensitivity(TargetCamera);
             if (_zoomSettings.InvertZoomAxis) zoomAmount *= -1.0f;
 
+            // Calculate the distance to the origin
+            float distanceToOrigin = Vector3.Distance(_targetTransform.position, Vector3.zero);
+
+            // Calculate a zoom speed factor based on the distance to the origin
+            float zoomSpeedFactor = Mathf.Clamp(distanceToOrigin / 100.0f, 0.5f, 2f);
+
+            zoomAmount *= zoomSpeedFactor;
+
             zoomAmount *= _targetCamera.EstimateZoomFactorSpherical(_lastFocusPoint);
+
+            // zoomAmount = Mathf.Clamp(zoomAmount, _zoomAmountMin, _zoomAmountMax);
 
             return zoomAmount;
         }
@@ -449,9 +485,12 @@ namespace RTG
 
         private void Orbit(float degreesLocalX, float degreesWorldY)
         {
-            Vector3 orbitPoint = _targetTransform.position + _targetTransform.forward * _focusPointOffset;
+            Vector3 orbitPoint = GetCurrentFocusPoint();
+            // Vector3 orbitPoint = _targetTransform.position + _targetTransform.forward * _focusPointOffset;
 
+            //rotate around y axis
             _targetTransform.RotateAround(orbitPoint, Vector3.up, degreesWorldY);
+            //rotate around x axis
             _targetTransform.RotateAround(orbitPoint, _targetTransform.right, degreesLocalX);
             _targetTransform.LookAt(orbitPoint, _targetTransform.up);
         }

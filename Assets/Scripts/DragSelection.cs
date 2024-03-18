@@ -1,10 +1,12 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class DragSelection : MonoBehaviour
 {
     [SerializeField] private RectTransform selectionBox;
     private Vector2 startPos;
     private Vector2 endPos;
+    private bool isDragSelecting = false;
 
     void Start()
     {
@@ -15,19 +17,27 @@ public class DragSelection : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (!GizmoController.Instance.enabled)
+            return;
+        if (!EventSystem.current.IsPointerOverGameObject() && !InteractionManager.Instance.IsDragging() && !GizmoController.Instance.IsHoveringGizmo() && !InteractionManager.Instance.isDraggingSpawnedObject && !InteractionManager.Instance.IsHoveringObject())
         {
-            startPos = Input.mousePosition;
-            selectionBox.gameObject.SetActive(true);
+            if (Input.GetMouseButtonDown(0))
+            {
+                isDragSelecting = true;
+                startPos = Input.mousePosition;
+                selectionBox.gameObject.SetActive(true);
+            }
+            if (Input.GetMouseButton(0))
+            {
+                endPos = Input.mousePosition;
+                InteractionManager.Instance.IgnoreAllRaycasts();
+                BoxSelect();
+            }
         }
-        if (Input.GetMouseButton(0) && !InteractionManager.Instance.IsDragging() && !GizmoController.Instance.IsHoveringGizmo())
+
+        if (Input.GetMouseButtonUp(0) && isDragSelecting)
         {
-            endPos = Input.mousePosition;
-            InteractionManager.Instance.IgnoreAllRaycasts();
-            BoxSelect();
-        }
-        if (Input.GetMouseButtonUp(0))
-        {
+            isDragSelecting = false;
             InteractionManager.Instance.RecoverAllRaycasts();
             startPos = Vector2.zero;
             endPos = Vector2.zero;
@@ -51,6 +61,8 @@ public class DragSelection : MonoBehaviour
 
         foreach (GameObject obj in InteractionManager.Instance.GetObjects())
         {
+            if (!obj) { InteractionManager.Instance.RemoveObject(obj); continue; }
+
             Vector3 screenPos = Camera.main.WorldToScreenPoint(obj.transform.position);
             if (screenPos.x > min.x && screenPos.x < max.x && screenPos.y > min.y && screenPos.y < max.y)
             {

@@ -1,13 +1,21 @@
-using System;
 using UnityEngine;
+using System.Collections.Generic;
+using UnityEngine.Serialization;
 
 public class ObjectController : MonoBehaviour
 {
-    public bool lockRotation;
+    public bool locked;
     public bool isOnGround;
+    public Vector3 defaultScale;
+    public Quaternion defaultRotation;
     private void Start()
     {
         InteractionManager.Instance.AddObject(gameObject);
+        defaultScale = transform.localScale;
+        defaultRotation = transform.rotation;
+        
+        if(locked)
+            InteractionManager.Instance.LockSingleObject(gameObject);
     }
 
     void Update()
@@ -16,10 +24,16 @@ public class ObjectController : MonoBehaviour
         {
             InteractionManager.Instance.RemoveObject(gameObject);
             Destroy(gameObject);
-            //Fixed an issue here; Have to check that the object being destroyed is also the one selected
+            HistoryManager.Instance.SaveState(new List<GameObject> { gameObject }, Operation.Delete);
             if (InteractionManager.Instance.GetSelectedObjects().Contains(gameObject) && InteractionManager.Instance.GetUseGizmo())
                 GizmoController.Instance.EnableGizmo(false);
         }
+        // Maybe not put it here inside the Update()
+        // if (InteractionManager.Instance.GetEnablePhysics() && !gameObject.GetComponent<Collider>().isTrigger)
+        // {
+        //     if (gameObject.CompareTag("Interactable"))
+        //         InteractionManager.Instance.EnablePhysics(gameObject);
+        // }
     }
 
     private void OnCollisionEnter(Collision other)

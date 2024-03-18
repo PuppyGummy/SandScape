@@ -32,23 +32,21 @@ public class GizmoController : MonoBehaviour
 
     private GizmoId workGizmoId;
     private ObjectTransformGizmo workGizmo;
-    // private List<GameObject> targetObjects;
 
     private void Start()
     {
-        // targetObjects = new List<GameObject>();
         objectMoveGizmo = RTGizmosEngine.Get.CreateObjectMoveGizmo();
         objectRotationGizmo = RTGizmosEngine.Get.CreateObjectRotationGizmo();
         objectScaleGizmo = RTGizmosEngine.Get.CreateObjectScaleGizmo();
         objectUniversalGizmo = RTGizmosEngine.Get.CreateObjectUniversalGizmo();
 
         EnableGizmo(false);
-        objectMoveGizmo.SetTargetObjects(InteractionManager.Instance.GetSelectedObjects());
-        objectRotationGizmo.SetTargetObjects(InteractionManager.Instance.GetSelectedObjects());
-        objectScaleGizmo.SetTargetObjects(InteractionManager.Instance.GetSelectedObjects());
-        objectUniversalGizmo.SetTargetObjects(InteractionManager.Instance.GetSelectedObjects());
-        workGizmo = objectMoveGizmo;
-        workGizmoId = GizmoId.Move;
+        objectMoveGizmo.SetTargetObjects(GetTartgetObjects());
+        objectRotationGizmo.SetTargetObjects(GetTartgetObjects());
+        objectScaleGizmo.SetTargetObjects(GetTartgetObjects());
+        objectUniversalGizmo.SetTargetObjects(GetTartgetObjects());
+        workGizmo = objectUniversalGizmo;
+        workGizmoId = GizmoId.Universal;
     }
 
     private void Update()
@@ -58,8 +56,7 @@ public class GizmoController : MonoBehaviour
             if (RTInput.WasLeftMouseButtonPressedThisFrame() &&
                 RTGizmosEngine.Get.HoveredGizmo == null)
             {
-                workGizmo.SetTargetObjects(InteractionManager.Instance.GetSelectedObjects());
-                OnSelectionChanged();
+                SetWorkGizmoTargetObjects();
             }
             if (RTInput.WasKeyPressedThisFrame(KeyCode.W)) SetWorkGizmoId(GizmoId.Move);
             else if (RTInput.WasKeyPressedThisFrame(KeyCode.E)) SetWorkGizmoId(GizmoId.Rotate);
@@ -80,10 +77,10 @@ public class GizmoController : MonoBehaviour
         else if (gizmoId == GizmoId.Scale) workGizmo = objectScaleGizmo;
         else if (gizmoId == GizmoId.Universal) workGizmo = objectUniversalGizmo;
 
-        if (InteractionManager.Instance.GetSelectedObjects().Count != 0)
+        if (GetTartgetObjects().Count != 0)
         {
             workGizmo.Gizmo.SetEnabled(true);
-            workGizmo.SetTargetObjects(InteractionManager.Instance.GetSelectedObjects());
+            SetWorkGizmoTargetObjects();
             workGizmo.RefreshPositionAndRotation();
         }
     }
@@ -94,7 +91,6 @@ public class GizmoController : MonoBehaviour
             if (InteractionManager.Instance.GetSelectedObjects().Count != 0)
             {
                 workGizmo.Gizmo.SetEnabled(true);
-                // workGizmo.SetTargetObjects(InteractionManager.Instance.GetSelectedObjects());
                 workGizmo.RefreshPositionAndRotation();
             }
             else
@@ -111,9 +107,21 @@ public class GizmoController : MonoBehaviour
     }
     public void EnableWorkGizmo(bool enable)
     {
-        // targetObjects = InteractionManager.Instance.GetSelectedObjects();
-        workGizmo.SetTargetObjects(InteractionManager.Instance.GetSelectedObjects());
-        workGizmo.Gizmo.SetEnabled(enable);
+        if (SetWorkGizmoTargetObjects())
+            workGizmo.Gizmo.SetEnabled(enable);
+    }
+    public List<GameObject> GetTartgetObjects()
+    {
+        List<GameObject> selectedObjects = InteractionManager.Instance.GetSelectedObjects();
+        List<GameObject> targetObjects = new List<GameObject>();
+        foreach (GameObject obj in selectedObjects)
+        {
+            if (obj.CompareTag("Interactable"))
+            {
+                targetObjects.Add(obj);
+            }
+        }
+        return targetObjects;
     }
     public void RefreshGizmo()
     {
@@ -122,5 +130,19 @@ public class GizmoController : MonoBehaviour
     public bool IsHoveringGizmo()
     {
         return workGizmo.Gizmo.IsHovered;
+    }
+    public bool SetWorkGizmoTargetObjects()
+    {
+        if (GetTartgetObjects().Count != 0)
+        {
+            workGizmo.SetTargetObjects(GetTartgetObjects());
+            OnSelectionChanged();
+            return true;
+        }
+        else
+        {
+            EnableGizmo(false);
+            return false;
+        }
     }
 }
