@@ -1,14 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using RTG;
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
 public class CustomizationUIManager : MonoBehaviour
 {
+    [SerializeField] private GameObject colorOptions;
+    [SerializeField] private GameObject colorUIPrefab;
+    
     // Start is called before the first frame update
     void Start()
     {
-        
+        SetupColorOptions();
     }
 
     // Update is called once per frame
@@ -50,5 +55,15 @@ public class CustomizationUIManager : MonoBehaviour
     public void FocusOnModel()
     {
         RTFocusCamera.Get.Focus(InteractionManager.Instance.selectedObjects);
+    }
+
+    private void SetupColorOptions()
+    {
+        foreach (var color in CustomizationItemManager.Instance.colorOptions)
+        {
+            GameObject colorUIObject = PrefabUtility.InstantiatePrefab(colorUIPrefab).GameObject();
+            colorUIObject.GetComponent<RectTransform>().SetParent(colorOptions.GetComponent<RectTransform>());
+            colorUIObject.GetComponent<UI_Color>().material = color;
+        }
     }
 }

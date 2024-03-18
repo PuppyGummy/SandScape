@@ -54,8 +54,6 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: c48ed0c67054fc24da0ac1cced5a308c, type: 2}
-  - {fileID: 2100000, guid: c48ed0c67054fc24da0ac1cced5a308c, type: 2}
-  - {fileID: 2100000, guid: c48ed0c67054fc24da0ac1cced5a308c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -84,7 +82,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 730373966168734063}
-  m_Mesh: {fileID: -2960699350584996137, guid: f19c3a40b87ec0a42944e260784af8bc, type: 3}
+  m_Mesh: {fileID: 4699892083836823234, guid: ce13c0ebd07061045973d334805b154d, type: 3}
 --- !u!1 &747962191672983612
 GameObject:
   m_ObjectHideFlags: 0
@@ -138,8 +136,6 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4b21980f2319365459f8d688b54b061f, type: 2}
-  - {fileID: 2100000, guid: 4b21980f2319365459f8d688b54b061f, type: 2}
   - {fileID: 2100000, guid: 4b21980f2319365459f8d688b54b061f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -223,9 +219,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7a6ea5b4f6354454ea975f86bf92ac79, type: 2}
-  - {fileID: 2100000, guid: 7a6ea5b4f6354454ea975f86bf92ac79, type: 2}
-  - {fileID: 2100000, guid: 7a6ea5b4f6354454ea975f86bf92ac79, type: 2}
+  - {fileID: 2100000, guid: b30ec2a4fbeb6184d932d17871418823, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -412,6 +406,11 @@ MonoBehaviour:
   allowShapeChange: 1
   allowStyleChange: 1
   materials: []
+  meshRenderers:
+  - {fileID: 8676658382765297888}
+  - {fileID: 701575588110520868}
+  - {fileID: 8914187538636027836}
+  - {fileID: 5955722576970171483}
 --- !u!114 &6198588671711454654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -424,7 +423,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5a59a71ad15b403693e95d66331e722, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lockRotation: 0
+  locked: 0
   isOnGround: 0
   defaultScale: {x: 0, y: 0, z: 0}
   defaultRotation: {x: 0, y: 0, z: 0, w: 0}

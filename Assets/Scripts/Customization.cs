@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -26,11 +27,14 @@ public class Customization : MonoBehaviour
     private int currentTop = 0;
     private int currentBottom = 0;
     private int currentShoes = 0;
+    
+    [SerializeField] private List<MeshRenderer> meshRenderers = new List<MeshRenderer>();
 
     public void Start()
     {
         SetComponents();
         shape = (BodyShape)1;
+        CountMaterials();
     }
 
     public void SetFacialExpression(int id)
@@ -57,6 +61,7 @@ public class Customization : MonoBehaviour
         topFilter.sharedMesh = CustomizationItemManager.Instance.tops[id].GetComponent<ClothingItem>().itemVariants[(int)shape];
         currentTop = id;
         SetClothesSize();
+        RefreshMaterials(meshRenderers[1], topFilter);
     }
     
     public void SetBottom(int id)
@@ -64,6 +69,7 @@ public class Customization : MonoBehaviour
         bottomFilter.sharedMesh = CustomizationItemManager.Instance.bottoms[id].GetComponent<ClothingItem>().itemVariants[(int)shape];
         currentBottom = id;
         SetClothesSize();
+        RefreshMaterials(meshRenderers[2], bottomFilter);
     }
     
     public void SetShoe(int id)
@@ -71,6 +77,7 @@ public class Customization : MonoBehaviour
         shoeFilter.sharedMesh = CustomizationItemManager.Instance.shoes[id].GetComponent<ClothingItem>().itemVariants[(int)shape];
         currentShoes = id;
         SetClothesSize();
+        RefreshMaterials(meshRenderers[3], shoeFilter);
     }
 
     private void SetClothesSize()
@@ -92,5 +99,49 @@ public class Customization : MonoBehaviour
         bodyFilter = GetComponent<MeshFilter>();
         
         Debug.Log("Components set!");
+    }
+
+    private void CountMaterials()
+    {
+        //Clean the list, so we have no overlaps
+        materials.Clear();
+        
+        //Hack to not count outline materials - this caused me too much pain :.^(
+        Outline outlineComp = InteractionManager.Instance.selectedObjects[0].GetComponent<Outline>();
+        outlineComp.enabled = false;
+
+        //Count materials
+        foreach (var sharedMaterial in meshRenderers.SelectMany(meshRenderer => meshRenderer.sharedMaterials))
+        {
+            materials.Add(sharedMaterial);
+        }
+        
+        //Reenable outline after count
+        outlineComp.enabled = true;
+    }
+
+    private void RefreshMaterials(MeshRenderer meshRenderer, MeshFilter meshFilter)
+    {
+        //Copy and save the core color
+        Material[] newMats = new Material[1];
+        newMats[0] = meshRenderer.sharedMaterials[0];
+
+        //Apply only the core color as color 1, remove all other colors
+        meshRenderer.sharedMaterials = newMats;
+        
+        //Create temp list used for appending colors to the list
+        List<Material> tempMats = new List<Material>();
+        
+        //For each submesh, copy the material and add it for transfer
+        for (int i = 0; i < meshFilter.sharedMesh.subMeshCount; i++)
+        {
+            //Copy material 0 and add it to the list
+            tempMats.Add(meshRenderer.sharedMaterials[0]);
+        }
+        //Apply the new materials
+        meshRenderer.sharedMaterials =  tempMats.ToArray();
+        
+        //Recount all materials
+        CountMaterials();
     }
 }

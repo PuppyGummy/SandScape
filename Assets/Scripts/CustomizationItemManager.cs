@@ -29,6 +29,8 @@ public class CustomizationItemManager : MonoBehaviour
     public List<MeshFilter> expressions;
     public List<MeshFilter> bodyShapes;
 
+    public List<Material> colorOptions; 
+
     public Customization selectedObject;
     
     public void SetSelectedObject()
