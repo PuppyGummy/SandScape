@@ -3,7 +3,7 @@ Shader "Custom/WaterVertexAnimSurf"
     Properties
     {
         _WaterColor ("Albedo", Color) = (1,1,1,1)
-        _FoamColor("Foam Color", Color) = (0,0,0,0)
+        [HDR]_FoamColor("Foam Color", Color) = (0,0,0,0)
         _FoamSize("Foam Size", Range(0,10)) = 2
         _EdgeWidth("Edge Width", Range(0,1)) = 0.5
         _Metallic ("Metallic", Range(0,1)) = 0.0
@@ -123,7 +123,7 @@ Shader "Custom/WaterVertexAnimSurf"
 			float foamWater = ( 1.0 - step( largeNoisePattern , edgeEffect - _EdgeWidth) );
 			float foamEdge = ( 1.0 - step( (0.1 + (_SinTime.w - -1.0) * (0.3 - 0.1) / (1.0 - -1.0)) , edgeEffect - _EdgeWidth) );
 
-            o.Albedo = saturate( ( saturate( ( ( _FoamColor * foamWater ) + ( _FoamColor * foamEdge ) ) ) + _WaterColor ) ).rgb;
+            o.Albedo = ( ( ( _FoamColor * foamWater ) + ( _FoamColor * foamEdge ) ) + _WaterColor ).rgb;
             o.Metallic = _Metallic;
             o.Smoothness = _Smoothness;
             o.Alpha = _WaterColor.a;
