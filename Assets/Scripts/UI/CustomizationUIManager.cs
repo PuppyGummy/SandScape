@@ -13,6 +13,7 @@ public class CustomizationUIManager : MonoBehaviour
     [SerializeField] private GameObject colorUIPrefab;
     [SerializeField] private Slider slider;
     [SerializeField] private List<UI_TabImage> expressions; //While the expressions are not tabs, this is a hack to make them toggleable
+    [SerializeField] private Image currentColorDisplay;
 
     private int colorID;
     private int bodyID;
@@ -38,6 +39,8 @@ public class CustomizationUIManager : MonoBehaviour
         slider.value = bodyID;
         
         FocusOnModel();
+
+        currentColorDisplay.color = CustomizationItemManager.Instance.selectedObject.materials[colorID].color;
     }
 
     public void ChangeExpression(int id)
@@ -82,53 +85,67 @@ public class CustomizationUIManager : MonoBehaviour
     {
         CustomizationItemManager.Instance.selectedObject.SetHair(id);
         colorID = 0;
+        currentColorDisplay.color = CustomizationItemManager.Instance.selectedObject.materials[colorID].color;
     }
 
     public void ChangeTop(int id)
     {
         CustomizationItemManager.Instance.selectedObject.SetTop(id);
         colorID = 0;
+        currentColorDisplay.color = CustomizationItemManager.Instance.selectedObject.materials[colorID].color;
     }
     
     public void ChangeBottom(int id)
     {
         CustomizationItemManager.Instance.selectedObject.SetBottom(id);
         colorID = 0;
+        currentColorDisplay.color = CustomizationItemManager.Instance.selectedObject.materials[colorID].color;
     }
     
     public void ChangeShoe(int id)
     {
         CustomizationItemManager.Instance.selectedObject.SetShoe(id);
         colorID = 0;
+        currentColorDisplay.color = CustomizationItemManager.Instance.selectedObject.materials[colorID].color;
     }
 
     public void ChangeColor(Material newColor)
     {
         CustomizationItemManager.Instance.selectedObject.SetColor(colorID, newColor);
+        
+        currentColorDisplay.color = CustomizationItemManager.Instance.selectedObject.materials[colorID].color;
     }
 
     public void IncrementColorID()
     {
         //Increment
         colorID++;
+        Debug.Log("Color ID: " + colorID);
         
         //Wrap
         if (colorID > CustomizationItemManager.Instance.selectedObject.materials.Count - 1)
         {
             colorID = 0;
+            Debug.Log("Wrap to bottom" + colorID);
         }
+        
+        currentColorDisplay.color = CustomizationItemManager.Instance.selectedObject.materials[colorID].color;
     }
 
     public void DecrementColorID()
     {
         //Decrement
         colorID--;
+        Debug.Log("Color ID: " + colorID);
         
         //Wrap
         if (colorID < 0)
         {
-            colorID = CustomizationItemManager.Instance.selectedObject.materials.Count + 1;
+            colorID = CustomizationItemManager.Instance.selectedObject.materials.Count - 1;
+            Debug.Log("Wrap to top" + colorID);
         }
+        
+        currentColorDisplay.color = CustomizationItemManager.Instance.selectedObject.materials[colorID].color;
     }
 
     public void FocusOnModel()
