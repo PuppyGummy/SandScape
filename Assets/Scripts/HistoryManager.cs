@@ -1,5 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
+using System.Collections;
+
 // using UnityEngine.AddressableAssets;
 // using UnityEngine.ResourceManagement.AsyncOperations;
 
@@ -91,19 +94,37 @@ public class HistoryManager : MonoBehaviour
 
     public void LoadState()
     {
+        Debug.Log("Loading state");
         GameData data = SaveLoadManager.LoadGame();
         if (data != null)
         {
             SceneLoader.Instance.LoadScene(data.sceneID);
-            foreach (ObjectData objectData in data.objectsData)
+            StartCoroutine(WaitForSceneLoad(data));
+        }
+    }
+
+    private IEnumerator WaitForSceneLoad(GameData data)
+    {
+        while (!SceneManager.GetSceneByBuildIndex(data.sceneID).isLoaded)
+        {
+            yield return null;
+        }
+
+        InteractionManager.Instance.ClearAll();
+        foreach (ObjectData objectData in data.objectsData)
+        {
+            GameObject prefab = PrefabLoader.LoadPrefabByName(objectData.objectName);
+            if (prefab != null)
             {
-                GameObject prefab = PrefabLoader.LoadPrefabByName(objectData.objectName);
-                if (prefab != null)
+                GameObject obj = Instantiate(prefab);
+                if (objectData.tag == "Locked")
                 {
-                    GameObject obj = Object.Instantiate(prefab, objectData.position, objectData.rotation);
-                    obj.transform.localScale = objectData.scale;
-                    obj.tag = objectData.tag;
+                    InteractionManager.Instance.LockSingleObject(obj);
                 }
+                obj.transform.position = objectData.position;
+                obj.transform.rotation = objectData.rotation;
+                obj.transform.localScale = objectData.scale;
+                obj.tag = objectData.tag;
             }
         }
     }
