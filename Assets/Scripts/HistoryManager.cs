@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using System.Text.RegularExpressions;
 
 // using UnityEngine.AddressableAssets;
 // using UnityEngine.ResourceManagement.AsyncOperations;
@@ -79,7 +80,7 @@ public class HistoryManager : MonoBehaviour
         {
             ObjectData objectData = new ObjectData
             {
-                objectName = obj.name.Replace("(Clone)", ""),
+                objectName = PrefabLoader.GetPrefabName(obj.name),
                 position = obj.transform.position,
                 rotation = obj.transform.rotation,
                 scale = obj.transform.localScale,
@@ -157,7 +158,7 @@ public class ObjectHistory
             rotation = targetObj.transform.rotation;
             scale = targetObj.transform.localScale;
 
-            prefabName = targetObj.name.Replace("(Clone)", "");
+            prefabName = PrefabLoader.GetPrefabName(targetObj.name);
         }
     }
 
@@ -331,4 +332,12 @@ public class PrefabLoader : MonoBehaviour
         }
         return null;
     }
+
+    public static string GetPrefabName(string objectName)
+    {
+        string cleanName = Regex.Replace(objectName, @"(\s?\(Clone\))+|\s?\(\d+\)", "");
+
+        return cleanName;
+    }
+
 }
