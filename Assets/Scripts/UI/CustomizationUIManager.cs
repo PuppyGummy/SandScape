@@ -1,16 +1,20 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using RTG;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CustomizationUIManager : MonoBehaviour
 {
     [SerializeField] private GameObject colorOptions;
     [SerializeField] private GameObject colorUIPrefab;
+    [SerializeField] private Slider slider;
 
     private int colorID;
+    private int bodyID;
     
     // Start is called before the first frame update
     void Start()
@@ -29,9 +33,33 @@ public class CustomizationUIManager : MonoBehaviour
         CustomizationItemManager.Instance.selectedObject.SetFacialExpression(id);
     }
     
-    public void ChangeShape(int id)
+    public void ChangeShape()
     {
-        CustomizationItemManager.Instance.selectedObject.SetBodyShape(id);
+        CustomizationItemManager.Instance.selectedObject.SetBodyShape(bodyID);
+    }
+
+    public void ShapeSliderChanged()
+    {
+        bodyID = (int)slider.value;
+        ChangeShape();
+    }
+
+    public void IncrementShape()
+    {
+        bodyID++;
+        bodyID = Math.Clamp(bodyID, 0, 2);
+        slider.value = bodyID;
+        
+        ChangeShape();
+    }
+    
+    public void DecrementShape()
+    {
+        bodyID--;
+        bodyID = Math.Clamp(bodyID, 0, 2);
+        slider.value = bodyID;
+        
+        ChangeShape();
     }
     
     public void ChangeHair(int id)
