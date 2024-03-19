@@ -537,7 +537,7 @@ public class InteractionManager : MonoBehaviour
 
                 float scaleFactor = scrollDelta > 0 ? 1.0f : -1.0f;
 
-                Vector3 newScale = Vector3.one * scaleFactor * scaleSpeed * 0.1f;
+                Vector3 newScale = Vector3.one * scaleFactor * scaleSpeed;
                 Vector3 totalScale = obj.transform.localScale + newScale;
 
                 if (totalScale.magnitude < minScaleSize || totalScale.magnitude > maxScaleSize)
@@ -719,7 +719,7 @@ public class InteractionManager : MonoBehaviour
     public void AddObject(GameObject objectToAdd)
     {
         objs.Add(objectToAdd);
-        
+
         //Add indicator if object is missing one
         if (objectToAdd.transform.childCount <= 0)
         {
@@ -908,7 +908,7 @@ public class InteractionManager : MonoBehaviour
             playerObject = null;
         }*/
     }
-    
+
     public void DuplicateObject()
     {
         if (selectedObjects.Count == 0) return;

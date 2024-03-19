@@ -1,5 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
+using System.Collections;
+
 // using UnityEngine.AddressableAssets;
 // using UnityEngine.ResourceManagement.AsyncOperations;
 
@@ -67,7 +70,64 @@ public class HistoryManager : MonoBehaviour
         return true;
     }
 
-    // ... Additional methods ...
+    public void SaveCurrentState()
+    {
+        GameData data = new GameData();
+        data.sceneID = SceneLoader.Instance.GetLoadedScenario();
+
+        foreach (GameObject obj in InteractionManager.Instance.GetObjects())
+        {
+            ObjectData objectData = new ObjectData
+            {
+                objectName = obj.name.Replace("(Clone)", ""),
+                position = obj.transform.position,
+                rotation = obj.transform.rotation,
+                scale = obj.transform.localScale,
+                tag = obj.tag
+            };
+
+            data.objectsData.Add(objectData);
+        }
+
+        SaveLoadManager.SaveGame(data);
+    }
+
+    public void LoadState()
+    {
+        Debug.Log("Loading state");
+        GameData data = SaveLoadManager.LoadGame();
+        if (data != null)
+        {
+            SceneLoader.Instance.LoadScene(data.sceneID);
+            StartCoroutine(WaitForSceneLoad(data));
+        }
+    }
+
+    private IEnumerator WaitForSceneLoad(GameData data)
+    {
+        while (!SceneManager.GetSceneByBuildIndex(data.sceneID).isLoaded)
+        {
+            yield return null;
+        }
+
+        InteractionManager.Instance.ClearAll();
+        foreach (ObjectData objectData in data.objectsData)
+        {
+            GameObject prefab = PrefabLoader.LoadPrefabByName(objectData.objectName);
+            if (prefab != null)
+            {
+                GameObject obj = Instantiate(prefab);
+                if (objectData.tag == "Locked")
+                {
+                    InteractionManager.Instance.LockSingleObject(obj);
+                }
+                obj.transform.position = objectData.position;
+                obj.transform.rotation = objectData.rotation;
+                obj.transform.localScale = objectData.scale;
+                obj.tag = objectData.tag;
+            }
+        }
+    }
 }
 
 public enum Operation
