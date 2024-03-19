@@ -80,6 +80,14 @@ public class Customization : MonoBehaviour
         RefreshMaterials(meshRenderers[3], shoeFilter);
     }
 
+    public void SetColor(int id, Material newColor)
+    {
+        materials[id] = newColor;
+        Debug.Log("Set material");
+        
+        RefreshColors();
+    }
+
     private void SetClothesSize()
     {
         topFilter.sharedMesh = CustomizationItemManager.Instance.tops[currentTop].GetComponent<ClothingItem>().itemVariants[(int)shape];
@@ -143,5 +151,58 @@ public class Customization : MonoBehaviour
         
         //Recount all materials
         CountMaterials();
+    }
+
+    private void RefreshColors()
+    {
+        //Disable the outline
+        Outline outlineComp = InteractionManager.Instance.selectedObjects[0].GetComponent<Outline>();
+        outlineComp.enabled = false;
+        
+        //Match colors to the list, using the submeshes as reference
+        
+        //Hair
+        meshRenderers[0].sharedMaterials = new[] { materials[0] };
+        
+        //Top
+        int topsMatCount = 1 + topFilter.sharedMesh.subMeshCount;
+        List<Material> tempTopsMats = new List<Material>();
+        
+        Debug.Log("Top count = " + topsMatCount);
+        
+        for (int i = 1; i < topsMatCount; i++)
+        {
+            tempTopsMats.Add(materials[i]);
+        }
+        
+        meshRenderers[1].sharedMaterials = tempTopsMats.ToArray();
+        
+        //Bottom
+        int bottomsMatCount = topsMatCount + bottomFilter.sharedMesh.subMeshCount;
+        List<Material> tempBottomMats = new List<Material>();
+        
+        Debug.Log("Bottom count = " + bottomsMatCount);
+        
+        for (int i = topsMatCount; i < bottomsMatCount; i++)
+        {
+            tempBottomMats.Add(materials[i]);
+        }
+        
+        meshRenderers[2].sharedMaterials = tempBottomMats.ToArray();
+        
+        //Shoes
+        int shoesMatCount = bottomsMatCount + shoeFilter.sharedMesh.subMeshCount;
+        List<Material> tempShoeMats = new List<Material>();
+        
+        Debug.Log("Shoe count = " + shoesMatCount);
+        
+        for (int i = bottomsMatCount; i < shoesMatCount; i++)
+        {
+            tempShoeMats.Add(materials[i]);
+        }
+        
+        meshRenderers[3].sharedMaterials = tempShoeMats.ToArray();
+
+        outlineComp.enabled = true;
     }
 }

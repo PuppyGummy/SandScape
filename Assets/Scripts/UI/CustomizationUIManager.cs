@@ -9,6 +9,8 @@ public class CustomizationUIManager : MonoBehaviour
 {
     [SerializeField] private GameObject colorOptions;
     [SerializeField] private GameObject colorUIPrefab;
+
+    private int colorID;
     
     // Start is called before the first frame update
     void Start()
@@ -35,21 +37,54 @@ public class CustomizationUIManager : MonoBehaviour
     public void ChangeHair(int id)
     {
         CustomizationItemManager.Instance.selectedObject.SetHair(id);
+        colorID = 0;
     }
 
     public void ChangeTop(int id)
     {
         CustomizationItemManager.Instance.selectedObject.SetTop(id);
+        colorID = 0;
     }
     
     public void ChangeBottom(int id)
     {
         CustomizationItemManager.Instance.selectedObject.SetBottom(id);
+        colorID = 0;
     }
     
     public void ChangeShoe(int id)
     {
         CustomizationItemManager.Instance.selectedObject.SetShoe(id);
+        colorID = 0;
+    }
+
+    public void ChangeColor(Material newColor)
+    {
+        CustomizationItemManager.Instance.selectedObject.SetColor(colorID, newColor);
+    }
+
+    public void IncrementColorID()
+    {
+        //Increment
+        colorID++;
+        
+        //Wrap
+        if (colorID > CustomizationItemManager.Instance.selectedObject.materials.Count - 1)
+        {
+            colorID = 0;
+        }
+    }
+
+    public void DecrementColorID()
+    {
+        //Decrement
+        colorID--;
+        
+        //Wrap
+        if (colorID < 0)
+        {
+            colorID = CustomizationItemManager.Instance.selectedObject.materials.Count + 1;
+        }
     }
 
     public void FocusOnModel()
