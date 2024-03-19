@@ -22,7 +22,7 @@ public class CustomizationUIManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SetupColorOptions();
+        // SetupColorOptions();
     }
 
     /// <summary>
@@ -149,16 +149,6 @@ public class CustomizationUIManager : MonoBehaviour
         RTFocusCamera.Get.Focus(InteractionManager.Instance.selectedObjects);
     }
 
-    private void SetupColorOptions()
-    {
-        foreach (var color in CustomizationItemManager.Instance.colorOptions)
-        {
-            GameObject colorUIObject = PrefabUtility.InstantiatePrefab(colorUIPrefab).GameObject();
-            colorUIObject.GetComponent<RectTransform>().SetParent(colorOptions.GetComponent<RectTransform>());
-            colorUIObject.GetComponent<UI_Color>().material = color;
-        }
-    }
-
     private void ClearChosenExpressions()
     {
         foreach (var expression in expressions)
@@ -166,4 +156,23 @@ public class CustomizationUIManager : MonoBehaviour
             expression.SetInactive();
         }
     }
+    
+    #if UNITY_EDITOR
+    public void SetupColorOptions()
+    {
+        for (int c = 0; c < colorOptions.transform.childCount; c++)
+        {
+            GameObject colorObject = colorOptions.transform.GetChild(c).gameObject;
+            DestroyImmediate(colorObject);
+        }
+        
+        foreach (var color in CustomizationItemManager.Instance.colorOptions)
+        {
+            GameObject colorUIObject = PrefabUtility.InstantiatePrefab(colorUIPrefab).GameObject();
+            colorUIObject.GetComponent<RectTransform>().SetParent(colorOptions.GetComponent<RectTransform>());
+            colorUIObject.GetComponent<UI_Color>().material = color;
+            colorUIObject.GetComponent<Image>().color = color.color;
+        }
+    }
+    #endif
 }

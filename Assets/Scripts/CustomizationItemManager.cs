@@ -32,6 +32,8 @@ public class CustomizationItemManager : MonoBehaviour
     public List<Material> colorOptions; 
 
     public Customization selectedObject;
+
+    [SerializeField] private CustomizationUIManager uiManager;
     
     public void SetSelectedObject()
     {
@@ -94,6 +96,11 @@ public class CustomizationItemManager : MonoBehaviour
                 }
             }   
         }
+    }
+
+    public void RefreshColors()
+    {
+        uiManager.SetupColorOptions();
     }
     
 #endif
