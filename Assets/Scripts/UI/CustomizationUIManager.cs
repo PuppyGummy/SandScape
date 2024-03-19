@@ -12,9 +12,11 @@ public class CustomizationUIManager : MonoBehaviour
     [SerializeField] private GameObject colorOptions;
     [SerializeField] private GameObject colorUIPrefab;
     [SerializeField] private Slider slider;
+    [SerializeField] private List<UI_TabImage> expressions; //While the expressions are not tabs, this is a hack to make them toggleable
 
     private int colorID;
     private int bodyID;
+    private int expressionID;
     
     // Start is called before the first frame update
     void Start()
@@ -22,15 +24,29 @@ public class CustomizationUIManager : MonoBehaviour
         SetupColorOptions();
     }
 
-    // Update is called once per frame
-    void Update()
+    /// <summary>
+    /// Method called upon opening the UI - Reads values from customization component and sets UI values accordingly
+    /// </summary>
+    public void Init()
     {
+        expressionID = CustomizationItemManager.Instance.selectedObject.currentFaceID;
+        bodyID = (int)CustomizationItemManager.Instance.selectedObject.shape;
+
+        ClearChosenExpressions();
+        expressions[expressionID].SetActive();
+
+        slider.value = bodyID;
         
+        FocusOnModel();
     }
 
     public void ChangeExpression(int id)
     {
         CustomizationItemManager.Instance.selectedObject.SetFacialExpression(id);
+        expressionID = id;
+        
+        ClearChosenExpressions();
+        expressions[expressionID].SetActive();
     }
     
     public void ChangeShape()
@@ -127,6 +143,14 @@ public class CustomizationUIManager : MonoBehaviour
             GameObject colorUIObject = PrefabUtility.InstantiatePrefab(colorUIPrefab).GameObject();
             colorUIObject.GetComponent<RectTransform>().SetParent(colorOptions.GetComponent<RectTransform>());
             colorUIObject.GetComponent<UI_Color>().material = color;
+        }
+    }
+
+    private void ClearChosenExpressions()
+    {
+        foreach (var expression in expressions)
+        {
+            expression.SetInactive();
         }
     }
 }

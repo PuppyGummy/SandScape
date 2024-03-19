@@ -10,6 +10,7 @@ public class Customization : MonoBehaviour
     public enum BodyShape {Small, Medium, Large}
 
     public BodyShape shape = BodyShape.Medium;
+    public int currentFaceID = 1;
     public bool allowColorChange;
     public bool allowShapeChange;
     public bool allowStyleChange;
@@ -40,6 +41,7 @@ public class Customization : MonoBehaviour
     public void SetFacialExpression(int id)
     {
         headFilter.sharedMesh = CustomizationItemManager.Instance.expressions[id].sharedMesh;
+        currentFaceID = id;
     }
 
     public void SetBodyShape(int id)
