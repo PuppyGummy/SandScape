@@ -120,13 +120,11 @@ public class CustomizationUIManager : MonoBehaviour
     {
         //Increment
         colorID++;
-        Debug.Log("Color ID: " + colorID);
         
         //Wrap
         if (colorID > CustomizationItemManager.Instance.selectedObject.materials.Count - 1)
         {
             colorID = 0;
-            Debug.Log("Wrap to bottom" + colorID);
         }
         
         currentColorDisplay.color = CustomizationItemManager.Instance.selectedObject.materials[colorID].color;
@@ -136,13 +134,11 @@ public class CustomizationUIManager : MonoBehaviour
     {
         //Decrement
         colorID--;
-        Debug.Log("Color ID: " + colorID);
         
         //Wrap
         if (colorID < 0)
         {
             colorID = CustomizationItemManager.Instance.selectedObject.materials.Count - 1;
-            Debug.Log("Wrap to top" + colorID);
         }
         
         currentColorDisplay.color = CustomizationItemManager.Instance.selectedObject.materials[colorID].color;
