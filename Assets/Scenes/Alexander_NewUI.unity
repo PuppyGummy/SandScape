@@ -21895,7 +21895,7 @@ GameObject:
   - component: {fileID: 842118748}
   - component: {fileID: 842118747}
   m_Layer: 2
-  m_Name: Button
+  m_Name: PreviousID
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -24851,7 +24851,7 @@ GameObject:
   - component: {fileID: 1106770716}
   - component: {fileID: 1106770715}
   m_Layer: 2
-  m_Name: Image
+  m_Name: CurrentColor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36834,6 +36834,7 @@ MonoBehaviour:
   - {fileID: 886513941}
   - {fileID: 208910182}
   - {fileID: 1964032700}
+  currentColorDisplay: {fileID: 1106770715}
 --- !u!1 &1332010226
 GameObject:
   m_ObjectHideFlags: 0
@@ -39680,7 +39681,7 @@ GameObject:
   - component: {fileID: 1578983448}
   - component: {fileID: 1578983447}
   m_Layer: 2
-  m_Name: Button (1)
+  m_Name: NextID
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
