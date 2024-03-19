@@ -42,6 +42,7 @@ public class Customization : MonoBehaviour
     {
         headFilter.sharedMesh = CustomizationItemManager.Instance.expressions[id].sharedMesh;
         currentFaceID = id;
+        ReloadOutline();
     }
 
     public void SetBodyShape(int id)
@@ -49,6 +50,7 @@ public class Customization : MonoBehaviour
         bodyFilter.sharedMesh = CustomizationItemManager.Instance.bodyShapes[id].sharedMesh;
         shape = (BodyShape)id;
         SetClothesSize();
+        ReloadOutline();
     }
 
     public void SetHair(int id)
@@ -56,6 +58,7 @@ public class Customization : MonoBehaviour
         hairFilter.sharedMesh = CustomizationItemManager.Instance.hair[id].GetComponent<ClothingItem>().itemVariants[(int)shape];
         currentHair = id;
         SetClothesSize();
+        ReloadOutline();
     }
     
     public void SetTop(int id)
@@ -64,6 +67,7 @@ public class Customization : MonoBehaviour
         currentTop = id;
         SetClothesSize();
         RefreshMaterials(meshRenderers[1], topFilter);
+        ReloadOutline();
     }
     
     public void SetBottom(int id)
@@ -72,6 +76,7 @@ public class Customization : MonoBehaviour
         currentBottom = id;
         SetClothesSize();
         RefreshMaterials(meshRenderers[2], bottomFilter);
+        ReloadOutline();
     }
     
     public void SetShoe(int id)
@@ -80,6 +85,7 @@ public class Customization : MonoBehaviour
         currentShoes = id;
         SetClothesSize();
         RefreshMaterials(meshRenderers[3], shoeFilter);
+        ReloadOutline();
     }
 
     public void SetColor(int id, Material newColor)
@@ -94,6 +100,7 @@ public class Customization : MonoBehaviour
     {
         topFilter.sharedMesh = CustomizationItemManager.Instance.tops[currentTop].GetComponent<ClothingItem>().itemVariants[(int)shape];
         bottomFilter.sharedMesh = CustomizationItemManager.Instance.bottoms[currentBottom].GetComponent<ClothingItem>().itemVariants[(int)shape];
+        ReloadOutline();
     }
 
     private void SetComponents()
@@ -206,5 +213,15 @@ public class Customization : MonoBehaviour
         meshRenderers[3].sharedMaterials = tempShoeMats.ToArray();
 
         outlineComp.enabled = true;
+    }
+
+    private void ReloadOutline()
+    {
+        Outline[] outlines = gameObject.GetComponentsInChildren<Outline>();
+        
+        foreach (var outline in outlines)
+        {
+            outline.RefreshOutline();
+        }
     }
 }
