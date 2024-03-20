@@ -109,7 +109,7 @@ public class Outline : MonoBehaviour
     // Apply material properties immediately
     needsUpdate = true;
     
-    Debug.Log("Woke yo!");
+    // Debug.Log("Woke yo!");
   }
 
   void OnEnable()
@@ -126,7 +126,7 @@ public class Outline : MonoBehaviour
       renderer.materials = materials.ToArray();
     }
     
-    Debug.Log("Enabled yo!");
+    // Debug.Log("Enabled yo!");
   }
 
   void OnValidate()

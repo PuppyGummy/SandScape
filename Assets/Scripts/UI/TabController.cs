@@ -35,7 +35,7 @@ namespace UI
         {
             tabButtons.Clear();
             
-            foreach (var button in gameObject.GetComponentsInChildren<Button>())
+            foreach (var button in gameObject.GetComponentsInChildren<Button>(true))
             {
                 tabButtons.Add(button);
                 button.onClick.AddListener(() => ButtonPressed(button.gameObject));
@@ -73,7 +73,7 @@ namespace UI
         /// <param name="pressedButton">The gameobject for the button that was pressed</param>
         public void ButtonPressed(GameObject pressedButton)
         {
-            Debug.Log("Tab button pressed");
+            Debug.Log("Tab button pressed" + pressedButton.gameObject.name);
             SwitchTabs(pressedButton.gameObject);
         }
 
@@ -96,6 +96,7 @@ namespace UI
             
             if(selectedTab)
                 selectedTab.SetInactive();
+            
             newTab = pressedButton.GetComponent<UI_TabImage>();
             newTab.SetActive();
             
