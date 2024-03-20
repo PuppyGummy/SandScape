@@ -40,6 +40,7 @@ public class CustomizationUIManager : MonoBehaviour
         
         FocusOnModel();
 
+        colorID = 0;
         currentColorDisplay.color = CustomizationItemManager.Instance.selectedObject.materials[colorID].color;
     }
 
