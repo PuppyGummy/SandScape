@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using RTG;
+using UI;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
@@ -14,6 +15,12 @@ public class CustomizationUIManager : MonoBehaviour
     [SerializeField] private Slider slider;
     [SerializeField] private List<UI_TabImage> expressions; //While the expressions are not tabs, this is a hack to make them toggleable
     [SerializeField] private Image currentColorDisplay;
+
+    [SerializeField] private List<GameObject> tabButtons;
+    [SerializeField] private List<GameObject> tabs;
+    [SerializeField] private TabController tabController;
+    
+    [SerializeField] private List<List<GameObject>> activeTabs = new List<List<GameObject>>();
 
     private int colorID;
     private int bodyID;
@@ -30,8 +37,60 @@ public class CustomizationUIManager : MonoBehaviour
     /// </summary>
     public void Init()
     {
-        expressionID = CustomizationItemManager.Instance.selectedObject.currentFaceID;
-        bodyID = (int)CustomizationItemManager.Instance.selectedObject.shape;
+        Debug.LogWarning("Started init!");
+        
+        Customization selectedObject = CustomizationItemManager.Instance.selectedObject;
+
+        if (activeTabs.Count > 0)
+        {
+            //Disable all
+            foreach (var tab in activeTabs)
+            {
+                foreach (var tabObj in tab)
+                {
+                    tabObj.SetActive(false);
+                    Debug.Log("Disabled tab: " + tabObj.name);
+                }
+            }
+        }
+        
+        activeTabs.Clear();
+
+        //Add relevant tabs to list of active tabs
+        if (selectedObject.allowShapeChange)
+        {
+            activeTabs.Add(new List<GameObject>() {tabs[0], tabButtons[0]});
+            Debug.Log("Added shape tab");
+        }
+        
+        if (selectedObject.allowStyleChange)
+        {
+            activeTabs.Add(new List<GameObject>() {tabs[1], tabButtons[1]});
+            Debug.Log("Added style tab");
+        }
+        
+        if (selectedObject.allowColorChange)
+        {
+            activeTabs.Add(new List<GameObject>() {tabs[2], tabButtons[2]});
+            Debug.Log("Added color tab");
+        }
+
+        //Enable tab one
+        activeTabs[0][0].SetActive(true); //Enable tab
+        activeTabs[0][1].SetActive(true); //Enable tab button
+        // activeTabs[0][1].gameObject.GetComponent<UI_TabImage>().SetActive(); //Set tab button as active
+
+        for (int i = 0; i < activeTabs.Count; i++)
+        {
+            activeTabs[i][1].SetActive(true);
+            Debug.Log("Enabled tab: " + activeTabs[i][1].name);
+        }
+        
+        // tabController.RefreshLists();
+        tabController.ButtonPressed(activeTabs[0][1]); //Set tab button as active by emulating click
+        
+        expressionID = selectedObject.currentFaceID;
+        bodyID = (int)selectedObject.shape;
 
         ClearChosenExpressions();
         expressions[expressionID].SetActive();
@@ -41,7 +100,8 @@ public class CustomizationUIManager : MonoBehaviour
         FocusOnModel();
 
         colorID = 0;
-        currentColorDisplay.color = CustomizationItemManager.Instance.selectedObject.materials[colorID].color;
+        selectedObject.CountMaterials();
+        currentColorDisplay.color = selectedObject.materials[colorID].color;
     }
 
     public void ChangeExpression(int id)

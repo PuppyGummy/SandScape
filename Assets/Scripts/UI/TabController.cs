@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -32,10 +33,13 @@ namespace UI
         /// </summary>
         private void AddButtons()
         {
+            tabButtons.Clear();
+            
             foreach (var button in gameObject.GetComponentsInChildren<Button>())
             {
                 tabButtons.Add(button);
                 button.onClick.AddListener(() => ButtonPressed(button.gameObject));
+                Debug.Log("Button added: " + button.name);
             }
         }
 
@@ -67,8 +71,9 @@ namespace UI
         /// Listener event for when the button is pressed - use this to call appropriate logic for tab switching
         /// </summary>
         /// <param name="pressedButton">The gameobject for the button that was pressed</param>
-        private void ButtonPressed(GameObject pressedButton)
+        public void ButtonPressed(GameObject pressedButton)
         {
+            Debug.Log("Tab button pressed");
             SwitchTabs(pressedButton.gameObject);
         }
 
@@ -89,12 +94,14 @@ namespace UI
             if(desiredTab == currentTab)
                 return;
             
-            selectedTab.SetInactive();
+            if(selectedTab)
+                selectedTab.SetInactive();
             newTab = pressedButton.GetComponent<UI_TabImage>();
             newTab.SetActive();
             
             //Disable current tab
-            currentTab.gameObject.SetActive(false);
+            if(currentTab)
+                currentTab.gameObject.SetActive(false);
             
             //Enable new tab and save current tab
             desiredTab.SetActive(true);

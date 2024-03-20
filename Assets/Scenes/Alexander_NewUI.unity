@@ -9925,7 +9925,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &329168250
 RectTransform:
   m_ObjectHideFlags: 0
@@ -12238,7 +12238,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &451896548
 RectTransform:
   m_ObjectHideFlags: 0
@@ -13436,7 +13436,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &498115162
 RectTransform:
   m_ObjectHideFlags: 0
@@ -38006,6 +38006,15 @@ MonoBehaviour:
   - {fileID: 208910182}
   - {fileID: 1964032700}
   currentColorDisplay: {fileID: 1106770715}
+  tabButtons:
+  - {fileID: 498115161}
+  - {fileID: 451896547}
+  - {fileID: 2084320096}
+  tabs:
+  - {fileID: 329168249}
+  - {fileID: 5113158}
+  - {fileID: 1656437129}
+  tabController: {fileID: 0}
 --- !u!1 &1332010226
 GameObject:
   m_ObjectHideFlags: 0
@@ -50267,7 +50276,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2084320097
 RectTransform:
   m_ObjectHideFlags: 0

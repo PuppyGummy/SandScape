@@ -33,8 +33,11 @@ public class Customization : MonoBehaviour
 
     public void Start()
     {
-        SetComponents();
-        shape = (BodyShape)1;
+        if (allowStyleChange)
+            SetComponents();
+        if(allowShapeChange)
+            shape = (BodyShape)1;
+        
         CountMaterials();
     }
 
@@ -118,7 +121,7 @@ public class Customization : MonoBehaviour
         Debug.Log("Components set!");
     }
 
-    private void CountMaterials()
+    public void CountMaterials()
     {
         //Clean the list, so we have no overlaps
         materials.Clear();
@@ -127,14 +130,34 @@ public class Customization : MonoBehaviour
         Outline outlineComp = InteractionManager.Instance.selectedObjects[0].GetComponent<Outline>();
         outlineComp.enabled = false;
 
-        //Count materials
-        foreach (var sharedMaterial in meshRenderers.SelectMany(meshRenderer => meshRenderer.sharedMaterials))
+        switch (allowStyleChange)
         {
-            materials.Add(sharedMaterial);
+            //Count materials only in clothes
+            case true:
+            {
+                foreach (var sharedMaterial in meshRenderers.SelectMany(meshRenderer => meshRenderer.sharedMaterials))
+                {
+                    materials.Add(sharedMaterial);
+                }
+
+                break;
+            }
+            //Count materials in mesh
+            case false:
+            {
+                foreach (var material in gameObject.GetComponent<MeshRenderer>().sharedMaterials)
+                {
+                    materials.Add(material);
+                }
+
+                break;
+            }
         }
-        
+
         //Reenable outline after count
         outlineComp.enabled = true;
+        
+        // Debug.Log("Counted materials");
     }
 
     private void RefreshMaterials(MeshRenderer meshRenderer, MeshFilter meshFilter)
@@ -164,55 +187,69 @@ public class Customization : MonoBehaviour
 
     private void RefreshColors()
     {
-        //Disable the outline
-        Outline outlineComp = InteractionManager.Instance.selectedObjects[0].GetComponent<Outline>();
-        outlineComp.enabled = false;
-        
-        //Match colors to the list, using the submeshes as reference
-        
-        //Hair
-        meshRenderers[0].sharedMaterials = new[] { materials[0] };
-        
-        //Top
-        int topsMatCount = 1 + topFilter.sharedMesh.subMeshCount;
-        List<Material> tempTopsMats = new List<Material>();
-        
-        Debug.Log("Top count = " + topsMatCount);
-        
-        for (int i = 1; i < topsMatCount; i++)
+        if (!allowStyleChange) //Color updates for regular avatars
         {
-            tempTopsMats.Add(materials[i]);
+            List<Material> tempMats = new List<Material>();
+            
+            for (int i = 0; i < materials.Count; i++)
+            {
+                tempMats.Add(materials[i]);
+            }
+            
+            gameObject.GetComponent<MeshRenderer>().sharedMaterials = tempMats.ToArray();
         }
-        
-        meshRenderers[1].sharedMaterials = tempTopsMats.ToArray();
-        
-        //Bottom
-        int bottomsMatCount = topsMatCount + bottomFilter.sharedMesh.subMeshCount;
-        List<Material> tempBottomMats = new List<Material>();
-        
-        Debug.Log("Bottom count = " + bottomsMatCount);
-        
-        for (int i = topsMatCount; i < bottomsMatCount; i++)
+        else //Color updates for style avatars
         {
-            tempBottomMats.Add(materials[i]);
-        }
+            //Disable the outline
+            Outline outlineComp = InteractionManager.Instance.selectedObjects[0].GetComponent<Outline>();
+            outlineComp.enabled = false;
         
-        meshRenderers[2].sharedMaterials = tempBottomMats.ToArray();
+            //Match colors to the list, using the submeshes as reference
         
-        //Shoes
-        int shoesMatCount = bottomsMatCount + shoeFilter.sharedMesh.subMeshCount;
-        List<Material> tempShoeMats = new List<Material>();
+            //Hair
+            meshRenderers[0].sharedMaterials = new[] { materials[0] };
         
-        Debug.Log("Shoe count = " + shoesMatCount);
+            //Top
+            int topsMatCount = 1 + topFilter.sharedMesh.subMeshCount;
+            List<Material> tempTopsMats = new List<Material>();
         
-        for (int i = bottomsMatCount; i < shoesMatCount; i++)
-        {
-            tempShoeMats.Add(materials[i]);
-        }
+            Debug.Log("Top count = " + topsMatCount);
         
-        meshRenderers[3].sharedMaterials = tempShoeMats.ToArray();
+            for (int i = 1; i < topsMatCount; i++)
+            {
+                tempTopsMats.Add(materials[i]);
+            }
+        
+            meshRenderers[1].sharedMaterials = tempTopsMats.ToArray();
+        
+            //Bottom
+            int bottomsMatCount = topsMatCount + bottomFilter.sharedMesh.subMeshCount;
+            List<Material> tempBottomMats = new List<Material>();
+        
+            Debug.Log("Bottom count = " + bottomsMatCount);
+        
+            for (int i = topsMatCount; i < bottomsMatCount; i++)
+            {
+                tempBottomMats.Add(materials[i]);
+            }
+        
+            meshRenderers[2].sharedMaterials = tempBottomMats.ToArray();
+        
+            //Shoes
+            int shoesMatCount = bottomsMatCount + shoeFilter.sharedMesh.subMeshCount;
+            List<Material> tempShoeMats = new List<Material>();
+        
+            Debug.Log("Shoe count = " + shoesMatCount);
+        
+            for (int i = bottomsMatCount; i < shoesMatCount; i++)
+            {
+                tempShoeMats.Add(materials[i]);
+            }
+        
+            meshRenderers[3].sharedMaterials = tempShoeMats.ToArray();
 
-        outlineComp.enabled = true;
+            outlineComp.enabled = true;   
+        }
     }
 
     private void ReloadOutline()
