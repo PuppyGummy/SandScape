@@ -198,7 +198,6 @@ namespace EditorUI
         private void RefreshItems()
         {
             GetItemManager().RefreshList();
-            CustomizationItemManager.Instance.RefreshColors();
         }
 
         private static CustomizationItemManager GetItemManager()
