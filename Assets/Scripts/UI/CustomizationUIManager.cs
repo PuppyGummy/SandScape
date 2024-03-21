@@ -37,7 +37,7 @@ public class CustomizationUIManager : MonoBehaviour
     /// </summary>
     public void Init()
     {
-        Debug.LogWarning("Started init!");
+        // Debug.LogWarning("Started init!");
         
         Customization selectedObject = CustomizationItemManager.Instance.selectedObject;
 
@@ -49,7 +49,7 @@ public class CustomizationUIManager : MonoBehaviour
                 foreach (var tabObj in tab)
                 {
                     tabObj.SetActive(false);
-                    Debug.Log("Disabled tab: " + tabObj.name);
+                    // Debug.Log("Disabled tab: " + tabObj.name);
                 }
             }
         }
@@ -60,19 +60,19 @@ public class CustomizationUIManager : MonoBehaviour
         if (selectedObject.allowShapeChange)
         {
             activeTabs.Add(new List<GameObject>() {tabs[0], tabButtons[0]});
-            Debug.Log("Added shape tab");
+            // Debug.Log("Added shape tab");
         }
         
         if (selectedObject.allowStyleChange)
         {
             activeTabs.Add(new List<GameObject>() {tabs[1], tabButtons[1]});
-            Debug.Log("Added style tab");
+            // Debug.Log("Added style tab");
         }
         
         if (selectedObject.allowColorChange)
         {
             activeTabs.Add(new List<GameObject>() {tabs[2], tabButtons[2]});
-            Debug.Log("Added color tab");
+            // Debug.Log("Added color tab");
         }
 
         //Enable tab one
@@ -83,7 +83,7 @@ public class CustomizationUIManager : MonoBehaviour
         for (int i = 0; i < activeTabs.Count; i++)
         {
             activeTabs[i][1].SetActive(true);
-            Debug.Log("Enabled tab: " + activeTabs[i][1].name);
+            // Debug.Log("Enabled tab: " + activeTabs[i][1].name);
         }
         
         // tabController.RefreshLists();

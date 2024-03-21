@@ -39,7 +39,7 @@ namespace UI
             {
                 tabButtons.Add(button);
                 button.onClick.AddListener(() => ButtonPressed(button.gameObject));
-                Debug.Log("Button added: " + button.name);
+                // Debug.Log("Button added: " + button.name);
             }
         }
 
