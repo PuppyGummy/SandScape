@@ -8,7 +8,7 @@ namespace TPCharacter
         private GameObject player;
         private Transform orientation;
         private CinemachineFreeLook cinemachineFreeLook;
-        public float distanceToTarget = 10f;
+        public float distanceToTarget = 1.5f;
 
 
         public float rotationSpeed;
