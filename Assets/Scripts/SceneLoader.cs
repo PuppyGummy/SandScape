@@ -25,7 +25,7 @@ public class SceneLoader : MonoBehaviour
         }
     }
 
-
+    
     /// <summary>
     /// Loads the scene based on the chosen ID.
     /// </summary>
@@ -35,11 +35,11 @@ public class SceneLoader : MonoBehaviour
         //Always unload the loaded scenario first to avoid unintended overlaps
         if (SceneManager.GetSceneByBuildIndex(loadedScenario).isLoaded)
             UnloadCurrentScenario();
-
+        
         //Load scene
         SceneManager.LoadScene(sceneID, LoadSceneMode.Additive);
         loadedScenario = sceneID;
-
+        
         scenePanel.SetActive(false);
         gameUIPanel.SetActive(true);
         boxSelectUI.SetActive(true);
@@ -52,12 +52,12 @@ public class SceneLoader : MonoBehaviour
     /// </summary>
     public void UnloadCurrentScenario()
     {
-        if (loadedScenario == 0)
+        if(loadedScenario == 0)
             return;
-
+        
         InteractionManager.Instance.ClearAll();
         SceneManager.UnloadSceneAsync(loadedScenario);
-
+        
         scenePanel.SetActive(true);
         gameUIPanel.SetActive(false);
         boxSelectUI.SetActive(false);
@@ -65,9 +65,5 @@ public class SceneLoader : MonoBehaviour
         gizmoController.enabled = false;
 
         loadedScenario = 0;
-    }
-    public int GetLoadedScenario()
-    {
-        return loadedScenario;
     }
 }

@@ -57,7 +57,7 @@ public class MiniatureManager : MonoBehaviour
         };
 
         //Get all miniatures from specified folder
-        string[] assets = AssetDatabase.FindAssets("t:prefab", new [] { "Assets/Resources/Prefabs/Miniatures/" + folderName + "/"});
+        string[] assets = AssetDatabase.FindAssets("t:prefab", new [] { "Assets/Prefabs/Miniatures/" + folderName + "/"});
         foreach (var assetGUID in assets)
         {
             var path = AssetDatabase.GUIDToAssetPath(assetGUID);
