@@ -50,6 +50,8 @@ public class Customization : MonoBehaviour
 
     public void SetBodyShape(int id)
     {
+        if(!allowShapeChange)
+            return;
         bodyFilter.sharedMesh = CustomizationItemManager.Instance.bodyShapes[id].sharedMesh;
         shape = (BodyShape)id;
         SetClothesSize();

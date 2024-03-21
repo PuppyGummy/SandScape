@@ -13471,7 +13471,7 @@ MonoBehaviour:
   image: {fileID: 498115165}
   activeImage: {fileID: 21300000, guid: ddad6a5351372f94a89504b5833ad352, type: 3}
   inactiveImage: {fileID: 21300000, guid: 9458ec47863ffe5468b6c7f122e25ae2, type: 3}
-  startActive: 1
+  startActive: 0
 --- !u!114 &498115164
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38014,7 +38014,7 @@ MonoBehaviour:
   - {fileID: 329168249}
   - {fileID: 5113158}
   - {fileID: 1656437129}
-  tabController: {fileID: 0}
+  tabController: {fileID: 665023}
 --- !u!1 &1332010226
 GameObject:
   m_ObjectHideFlags: 0
