@@ -8,13 +8,13 @@ public class ObjectController : MonoBehaviour
     public bool isOnGround;
     public Vector3 defaultScale;
     public Quaternion defaultRotation;
-    private void Start()
+    private void Awake()
     {
         InteractionManager.Instance.AddObject(gameObject);
         defaultScale = transform.localScale;
         defaultRotation = transform.rotation;
-        
-        if(locked)
+
+        if (locked)
             InteractionManager.Instance.LockSingleObject(gameObject);
     }
 
