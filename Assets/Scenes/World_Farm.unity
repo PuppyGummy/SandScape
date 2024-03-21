@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -266,7 +266,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3982833476073992687, guid: 5f8b7962dae9eb740a6c7b27ac52a1df, type: 3}
       propertyPath: m_Name
-      value: Bush (2)
+      value: Bush
       objectReference: {fileID: 0}
     - target: {fileID: 7292602858877683247, guid: 5f8b7962dae9eb740a6c7b27ac52a1df, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -420,7 +420,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3982833476073992687, guid: 5f8b7962dae9eb740a6c7b27ac52a1df, type: 3}
       propertyPath: m_Name
-      value: Bush (1)
+      value: Bush
       objectReference: {fileID: 0}
     - target: {fileID: 7292602858877683247, guid: 5f8b7962dae9eb740a6c7b27ac52a1df, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -1556,7 +1556,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1023966031118221490, guid: 355d18bb20794984092a058a73aab003, type: 3}
       propertyPath: m_Name
-      value: Fence Start (1)
+      value: Fence Start
       objectReference: {fileID: 0}
     - target: {fileID: 1575079772804332197, guid: 355d18bb20794984092a058a73aab003, type: 3}
       propertyPath: locked
@@ -2413,7 +2413,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3982833476073992687, guid: 5f8b7962dae9eb740a6c7b27ac52a1df, type: 3}
       propertyPath: m_Name
-      value: Bush (3)
+      value: Bush
       objectReference: {fileID: 0}
     - target: {fileID: 7292602858877683247, guid: 5f8b7962dae9eb740a6c7b27ac52a1df, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -2762,7 +2762,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9140818569675655385, guid: d13ff77f9c847c9489f08bf9a8ec5c88, type: 3}
       propertyPath: m_Name
-      value: Lime_Tree (1)
+      value: Lime_Tree
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2912,7 +2912,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4587379744785319226, guid: 3e877a7dbc6a51b47b1d26cb5af51e47, type: 3}
       propertyPath: m_Name
-      value: Flowers Window (1)
+      value: Flowers Window
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3053,7 +3053,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1023966031118221490, guid: 355d18bb20794984092a058a73aab003, type: 3}
       propertyPath: m_Name
-      value: Fence Start (2)
+      value: Fence Start
       objectReference: {fileID: 0}
     - target: {fileID: 1575079772804332197, guid: 355d18bb20794984092a058a73aab003, type: 3}
       propertyPath: locked
@@ -3114,7 +3114,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1023966031118221490, guid: 355d18bb20794984092a058a73aab003, type: 3}
       propertyPath: m_Name
-      value: Fence Start (4)
+      value: Fence Start
       objectReference: {fileID: 0}
     - target: {fileID: 1575079772804332197, guid: 355d18bb20794984092a058a73aab003, type: 3}
       propertyPath: locked
@@ -3479,7 +3479,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1658201812840398612, guid: d92ae87025344db4b8a42658be9ec7b4, type: 3}
       propertyPath: m_Name
-      value: Hay (2)
+      value: Hay
       objectReference: {fileID: 0}
     - target: {fileID: 2873842795349133445, guid: d92ae87025344db4b8a42658be9ec7b4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3540,7 +3540,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1658201812840398612, guid: d92ae87025344db4b8a42658be9ec7b4, type: 3}
       propertyPath: m_Name
-      value: Hay (1)
+      value: Hay
       objectReference: {fileID: 0}
     - target: {fileID: 2873842795349133445, guid: d92ae87025344db4b8a42658be9ec7b4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3651,7 +3651,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1023966031118221490, guid: 355d18bb20794984092a058a73aab003, type: 3}
       propertyPath: m_Name
-      value: Fence Start (3)
+      value: Fence Start
       objectReference: {fileID: 0}
     - target: {fileID: 1575079772804332197, guid: 355d18bb20794984092a058a73aab003, type: 3}
       propertyPath: locked
@@ -4222,7 +4222,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 583421035877717952, guid: ee3ac7dfc8ae8c045a7844d9e32fc9b7, type: 3}
       propertyPath: m_Name
-      value: Carnations (1)
+      value: Carnations
       objectReference: {fileID: 0}
     - target: {fileID: 2071531642783787572, guid: ee3ac7dfc8ae8c045a7844d9e32fc9b7, type: 3}
       propertyPath: m_LocalScale.x

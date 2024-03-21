@@ -40,7 +40,7 @@ namespace EditorUI
         {
             // Each editor window contains a root VisualElement object
             VisualElement root = rootVisualElement;
-            
+
             // VisualElements objects can contain other VisualElement following a tree hierarchy
             Label mainLabel = new Label("Clothes Creator")
             {
@@ -54,7 +54,7 @@ namespace EditorUI
                 }
             };
             root.Add(mainLabel);
-            
+
             //Item name field
             nameField = new TextField
             {
@@ -67,7 +67,7 @@ namespace EditorUI
                 }
             };
             root.Add(nameField);
-            
+
             //Model fields
             thinMeshField = new ObjectField
             {
@@ -78,7 +78,7 @@ namespace EditorUI
                 allowSceneObjects = false
             };
             root.Add(thinMeshField);
-            
+
             fitMeshField = new ObjectField
             {
                 label = "Fit Model",
@@ -87,7 +87,7 @@ namespace EditorUI
                 style = { marginLeft = 10, marginRight = 10 }
             };
             root.Add(fitMeshField);
-            
+
             fatMeshField = new ObjectField
             {
                 label = "Fat Model",
@@ -96,23 +96,23 @@ namespace EditorUI
                 style = { marginLeft = 10, marginRight = 10 }
             };
             root.Add(fatMeshField);
-            
+
             //Only allow meshes to be uploaded
             thinMeshField.objectType = typeof(Mesh);
             fitMeshField.objectType = typeof(Mesh);
             fatMeshField.objectType = typeof(Mesh);
-            
+
             //Category field
             categoryField = new DropdownField
             {
                 label = "Category",
-                choices = new List<string> { "Hair", "Top", "Bottom", "Shoe"}
+                choices = new List<string> { "Hair", "Top", "Bottom", "Shoe" }
             };
             categoryField.value = categoryField.choices[0];
             categoryField.style.marginLeft = 10;
             categoryField.style.marginRight = 10;
             root.Add(categoryField);
-            
+
             //Finalize section
             Label finalizeLabel = new Label("Create Item")
             {
@@ -125,7 +125,7 @@ namespace EditorUI
                 }
             };
             root.Add(finalizeLabel);
-            
+
             //Create miniature button
             createButton = new Button
             {
@@ -134,7 +134,7 @@ namespace EditorUI
             };
             createButton.clicked += OnCreateClicked();
             root.Add(createButton);
-            
+
             Label inventoryLabel = new Label("Inventory")
             {
                 style =
@@ -146,7 +146,7 @@ namespace EditorUI
                 }
             };
             root.Add(inventoryLabel);
-            
+
             //Refresh miniature inventory
             refreshInventoryButton = new Button
             {
@@ -173,12 +173,12 @@ namespace EditorUI
         {
             return CreateClothPrefab;
         }
-        
+
         private Action OnRefreshClicked()
         {
             return RefreshItems;
         }
-        
+
         private Action OnClearClicked()
         {
             return ClearItems;
@@ -203,7 +203,7 @@ namespace EditorUI
 
         private static CustomizationItemManager GetItemManager()
         {
-            if(CustomizationItemManager.Instance != null)
+            if (CustomizationItemManager.Instance != null)
             {
                 return CustomizationItemManager.Instance;
             }
@@ -214,24 +214,24 @@ namespace EditorUI
 
         private void CreatePrefab()
         {
-            const string rootPath = "Assets/Prefabs/Clothes/";
+            const string rootPath = "Assets/Resources/Prefabs/Clothes/";
             string categoryPath = categoryField.value + "/";
             string localPath;
-            
+
             GameObject prefabObject = new GameObject();
-            
+
             if (!Directory.Exists(rootPath))
                 Debug.LogError("Failed to create asset! Are we missing a folder?");
 
             localPath = rootPath + categoryPath + nameField.value + ".prefab";
-            
+
             prefabObject = BuildPrefab(prefabObject);
-            
+
             if (!Directory.Exists(rootPath))
                 Debug.LogError("Failed to create asset! Are we missing a folder?");
 
             localPath = rootPath + categoryPath + nameField.value + ".prefab";
-            
+
             PrefabUtility.SaveAsPrefabAsset(prefabObject, localPath);
 
             DestroyImmediate(prefabObject);

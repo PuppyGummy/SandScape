@@ -1,7 +1,11 @@
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.SceneManagement;
+using System.Collections;
+using System.Text.RegularExpressions;
+
+// using UnityEngine.AddressableAssets;
+// using UnityEngine.ResourceManagement.AsyncOperations;
 
 
 public class HistoryManager : MonoBehaviour
@@ -67,7 +71,64 @@ public class HistoryManager : MonoBehaviour
         return true;
     }
 
-    // ... Additional methods ...
+    public void SaveCurrentState()
+    {
+        GameData data = new GameData();
+        data.sceneID = SceneLoader.Instance.GetLoadedScenario();
+
+        foreach (GameObject obj in InteractionManager.Instance.GetObjects())
+        {
+            ObjectData objectData = new ObjectData
+            {
+                objectName = PrefabLoader.GetPrefabName(obj.name),
+                position = obj.transform.position,
+                rotation = obj.transform.rotation,
+                scale = obj.transform.localScale,
+                tag = obj.tag
+            };
+
+            data.objectsData.Add(objectData);
+        }
+
+        SaveLoadManager.SaveGame(data);
+    }
+
+    public void LoadState()
+    {
+        Debug.Log("Loading state");
+        GameData data = SaveLoadManager.LoadGame();
+        if (data != null)
+        {
+            SceneLoader.Instance.LoadScene(data.sceneID);
+            StartCoroutine(WaitForSceneLoad(data));
+        }
+    }
+
+    private IEnumerator WaitForSceneLoad(GameData data)
+    {
+        while (!SceneManager.GetSceneByBuildIndex(data.sceneID).isLoaded)
+        {
+            yield return null;
+        }
+
+        InteractionManager.Instance.ClearAll();
+        foreach (ObjectData objectData in data.objectsData)
+        {
+            GameObject prefab = PrefabLoader.LoadPrefabByName(objectData.objectName);
+            if (prefab != null)
+            {
+                GameObject obj = Instantiate(prefab);
+                if (objectData.tag == "Locked")
+                {
+                    InteractionManager.Instance.LockSingleObject(obj);
+                }
+                obj.transform.position = objectData.position;
+                obj.transform.rotation = objectData.rotation;
+                obj.transform.localScale = objectData.scale;
+                obj.tag = objectData.tag;
+            }
+        }
+    }
 }
 
 public enum Operation
@@ -97,7 +158,7 @@ public class ObjectHistory
             rotation = targetObj.transform.rotation;
             scale = targetObj.transform.localScale;
 
-            prefabName = targetObj.name.Replace("(Clone)", "");
+            prefabName = PrefabLoader.GetPrefabName(targetObj.name);
         }
     }
 
@@ -154,7 +215,9 @@ public class ObjectHistory
 
     private void UndoDelete()
     {
-        PrefabLoader.LoadPrefabByName(prefabName, OnPrefabLoaded);
+        // PrefabLoader.LoadPrefabByName(prefabName, OnPrefabLoaded);
+        GameObject prefab = PrefabLoader.LoadPrefabByName(prefabName);
+        OnPrefabLoaded(prefab);
     }
 
     private void UndoModify()
@@ -170,7 +233,9 @@ public class ObjectHistory
     // Define what each Redo helper function does
     private void RedoCreate()
     {
-        PrefabLoader.LoadPrefabByName(prefabName, OnPrefabLoaded);
+        // PrefabLoader.LoadPrefabByName(prefabName, OnPrefabLoaded);
+        GameObject prefab = PrefabLoader.LoadPrefabByName(prefabName);
+        OnPrefabLoaded(prefab);
     }
 
     private void RedoDelete()
@@ -206,34 +271,73 @@ public class ObjectHistory
     }
 }
 
+// public class PrefabLoader : MonoBehaviour
+// {
+//     public static void LoadPrefabByName(string prefabName, System.Action<GameObject> onComplete)
+//     {
+//         string[] prefabFolders = { "Animal", "Avatar", "Building", "Furniture", "Monster", "Nature", "Spiritual" };
+
+//         foreach (string folderName in prefabFolders)
+//         {
+//             LoadPrefabInFolder(prefabName, folderName, onComplete);
+//         }
+//     }
+
+//     private static void LoadPrefabInFolder(string prefabName, string folderName, System.Action<GameObject> onComplete)
+//     {
+//         string prefabPath = "Assets/Prefabs/Miniatures/" + folderName + "/" + prefabName + ".prefab";
+
+//         Addressables.LoadResourceLocationsAsync(prefabPath).Completed += locationsHandle =>
+//         {
+//             if (locationsHandle.Result.Count > 0)
+//             {
+//                 Addressables.LoadAssetAsync<GameObject>(prefabPath).Completed += assetHandle =>
+//                 {
+//                     if (assetHandle.Status == AsyncOperationStatus.Succeeded)
+//                     {
+//                         onComplete?.Invoke(assetHandle.Result);
+//                     }
+//                 };
+//             }
+//         };
+//     }
+// }
+
 public class PrefabLoader : MonoBehaviour
 {
-    public static void LoadPrefabByName(string prefabName, System.Action<GameObject> onComplete)
+    public static GameObject LoadPrefabByName(string prefabName)
     {
         string[] prefabFolders = { "Animal", "Avatar", "Building", "Furniture", "Monster", "Nature", "Spiritual" };
 
         foreach (string folderName in prefabFolders)
         {
-            LoadPrefabInFolder(prefabName, folderName, onComplete);
-        }
-    }
-
-    private static void LoadPrefabInFolder(string prefabName, string folderName, System.Action<GameObject> onComplete)
-    {
-        string prefabPath = "Assets/Prefabs/Miniatures/" + folderName + "/" + prefabName + ".prefab";
-
-        Addressables.LoadResourceLocationsAsync(prefabPath).Completed += locationsHandle =>
-        {
-            if (locationsHandle.Result.Count > 0)
+            GameObject prefab = LoadPrefabInFolder(prefabName, folderName);
+            if (prefab != null)
             {
-                Addressables.LoadAssetAsync<GameObject>(prefabPath).Completed += assetHandle =>
-                {
-                    if (assetHandle.Status == AsyncOperationStatus.Succeeded)
-                    {
-                        onComplete?.Invoke(assetHandle.Result);
-                    }
-                };
+                return prefab;
             }
-        };
+        }
+
+        Debug.LogError("Prefab not found: " + prefabName);
+        return null;
     }
+
+    private static GameObject LoadPrefabInFolder(string prefabName, string folderName)
+    {
+        string prefabPath = "Prefabs/Miniatures/" + folderName + "/" + prefabName;
+        GameObject prefab = Resources.Load<GameObject>(prefabPath);
+        if (prefab != null)
+        {
+            return prefab;
+        }
+        return null;
+    }
+
+    public static string GetPrefabName(string objectName)
+    {
+        string cleanName = Regex.Replace(objectName, @"(\s?\(Clone\))+|\s?\(\d+\)", "");
+
+        return cleanName;
+    }
+
 }

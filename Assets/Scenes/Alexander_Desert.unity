@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -198,7 +198,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2443415713405632367, guid: 06f9ff479c6db584198cb99b490bc7aa, type: 3}
       propertyPath: m_Name
-      value: Aloe Vera (5)
+      value: Aloe Vera
       objectReference: {fileID: 0}
     - target: {fileID: 6863337234139547433, guid: 06f9ff479c6db584198cb99b490bc7aa, type: 3}
       propertyPath: m_LocalScale.x
@@ -385,7 +385,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5043884629977638100, guid: 7ac717872c92bb746b9b13d463f1fb36, type: 3}
       propertyPath: m_Name
-      value: Cactus_Medium (1)
+      value: Cactus_Medium
       objectReference: {fileID: 0}
     - target: {fileID: 5043884629977638100, guid: 7ac717872c92bb746b9b13d463f1fb36, type: 3}
       propertyPath: m_IsActive
@@ -467,7 +467,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2443415713405632367, guid: 06f9ff479c6db584198cb99b490bc7aa, type: 3}
       propertyPath: m_Name
-      value: Aloe Vera (4)
+      value: Aloe Vera
       objectReference: {fileID: 0}
     - target: {fileID: 6863337234139547433, guid: 06f9ff479c6db584198cb99b490bc7aa, type: 3}
       propertyPath: m_LocalScale.x
@@ -673,7 +673,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2443415713405632367, guid: 06f9ff479c6db584198cb99b490bc7aa, type: 3}
       propertyPath: m_Name
-      value: Aloe Vera (1)
+      value: Aloe Vera
       objectReference: {fileID: 0}
     - target: {fileID: 6863337234139547433, guid: 06f9ff479c6db584198cb99b490bc7aa, type: 3}
       propertyPath: m_LocalScale.x
@@ -969,7 +969,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3032208563994346283, guid: fe1f938869d0feb4aa3ab72c63de5865, type: 3}
       propertyPath: m_Name
-      value: Stone Diamond (1)
+      value: Stone Diamond
       objectReference: {fileID: 0}
     - target: {fileID: 3032208563994346283, guid: fe1f938869d0feb4aa3ab72c63de5865, type: 3}
       propertyPath: m_IsActive
@@ -1127,7 +1127,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2443415713405632367, guid: 06f9ff479c6db584198cb99b490bc7aa, type: 3}
       propertyPath: m_Name
-      value: Aloe Vera (3)
+      value: Aloe Vera
       objectReference: {fileID: 0}
     - target: {fileID: 6863337234139547433, guid: 06f9ff479c6db584198cb99b490bc7aa, type: 3}
       propertyPath: m_LocalScale.x
@@ -1424,7 +1424,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5464325021194649216, guid: d34bf67f043b4054b89138f1b98f5848, type: 3}
       propertyPath: m_Name
-      value: Stone Flat (1)
+      value: Stone Flat
       objectReference: {fileID: 0}
     - target: {fileID: 6152079150384651758, guid: d34bf67f043b4054b89138f1b98f5848, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -1605,7 +1605,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2443415713405632367, guid: 06f9ff479c6db584198cb99b490bc7aa, type: 3}
       propertyPath: m_Name
-      value: Aloe Vera (2)
+      value: Aloe Vera
       objectReference: {fileID: 0}
     - target: {fileID: 6863337234139547433, guid: 06f9ff479c6db584198cb99b490bc7aa, type: 3}
       propertyPath: m_LocalScale.x

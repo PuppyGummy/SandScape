@@ -20,7 +20,7 @@ public class CustomizationItemManager : MonoBehaviour
             return instance;
         }
     }
-    
+
     //Public lists for customization
     public List<GameObject> hair;
     public List<GameObject> tops;
@@ -72,12 +72,12 @@ public class CustomizationItemManager : MonoBehaviour
             };
 
             //Get all miniatures from specified folder
-            string[] assets = AssetDatabase.FindAssets("t:prefab", new [] { "Assets/Prefabs/Clothes/" + folderName + "/"});
+            string[] assets = AssetDatabase.FindAssets("t:prefab", new[] { "Assets/Resources/Prefabs/Clothes/" + folderName + "/" });
             foreach (var assetGUID in assets)
             {
                 var path = AssetDatabase.GUIDToAssetPath(assetGUID);
                 GameObject go = AssetDatabase.LoadAssetAtPath<GameObject>(path);
-           
+
                 //Add item from folder to corresponding list
                 switch (folderName)
                 {
@@ -94,7 +94,7 @@ public class CustomizationItemManager : MonoBehaviour
                         shoes.Add(go);
                         break;
                 }
-            }   
+            }
         }
     }
 

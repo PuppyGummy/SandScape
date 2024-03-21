@@ -8,6 +8,8 @@ namespace TPCharacter
         private GameObject player;
         private Transform orientation;
         private CinemachineFreeLook cinemachineFreeLook;
+        public float distanceToTarget = 10f;
+
 
         public float rotationSpeed;
 
@@ -23,24 +25,32 @@ namespace TPCharacter
 
             cinemachineFreeLook.LookAt = player.transform;
             cinemachineFreeLook.Follow = player.transform;
+            AdjustCameraFOV();
+        }
+        private void OnDisable()
+        {
+            Camera.main.fieldOfView = 50f;
         }
 
-        void Update()
+        void AdjustCameraFOV()
         {
-            //Set forward rotation ot view direction
-            // var transformPosition = transform.position;
-            // var playerPosition = player.transform.position;
-            // Vector3 viewDirection = playerPosition - new Vector3(transformPosition.x, playerPosition.y, transformPosition.z);
+            if (cinemachineFreeLook != null && player != null)
+            {
+                float targetFOV = CalculateFOV(player.transform.localScale, distanceToTarget);
+                // Update the FOV for each Rig (TopRig, MiddleRig, BottomRig)
+                cinemachineFreeLook.m_Lens.FieldOfView = targetFOV;
+                // Debug.Log("Target Scale: " + player.transform.localScale);
+                // Debug.Log("Camera FOV: " + targetFOV);
+                // Debug.Log("freeLookCamera.m_Lens.FieldOfView: " + cinemachineFreeLook.m_Lens.FieldOfView);
+            }
+        }
 
-            // orientation.forward = viewDirection.normalized;
+        float CalculateFOV(Vector3 targetScale, float distance)
+        {
+            float objectSize = Mathf.Max(targetScale.x, targetScale.y, targetScale.z); // Consider the largest dimension
+            float fov = 2.0f * Mathf.Atan(objectSize / (2.0f * distance)) * Mathf.Rad2Deg; // Basic FOV calculation
 
-            // //If there's any input, turn to new forward direction
-            // float horizontalInput = Input.GetAxisRaw("Horizontal");
-            // float verticalInput = Input.GetAxisRaw("Vertical");
-            // Vector3 inputDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
-
-            // if (inputDirection != Vector3.zero)
-            // player.transform.forward = Vector3.Slerp(player.transform.forward, inputDirection.normalized, Time.deltaTime * rotationSpeed);
+            return Mathf.Clamp(fov, 40, 90); // Clamp the FOV to reasonable limits
         }
     }
 }
