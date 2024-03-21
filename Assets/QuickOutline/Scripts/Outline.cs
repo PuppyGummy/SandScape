@@ -108,6 +108,8 @@ public class Outline : MonoBehaviour
 
     // Apply material properties immediately
     needsUpdate = true;
+    
+    // Debug.Log("Woke yo!");
   }
 
   void OnEnable()
@@ -123,6 +125,8 @@ public class Outline : MonoBehaviour
 
       renderer.materials = materials.ToArray();
     }
+    
+    // Debug.Log("Enabled yo!");
   }
 
   void OnValidate()
@@ -190,9 +194,9 @@ public class Outline : MonoBehaviour
       // Skip duplicates
       if (!bakedMeshes.Add(meshFilter.sharedMesh))
       {
+        Debug.Log("Bake failed :^(");
         continue;
       }
-
       // Serialize smooth normals
       var smoothNormals = SmoothNormals(meshFilter.sharedMesh);
 
@@ -217,7 +221,6 @@ public class Outline : MonoBehaviour
       // Retrieve or generate smooth normals
       var index = bakeKeys.IndexOf(meshFilter.sharedMesh);
       var smoothNormals = (index >= 0) ? bakeValues[index].data : SmoothNormals(meshFilter.sharedMesh);
-
       // Store smooth normals in UV3
       meshFilter.sharedMesh.SetUVs(3, smoothNormals);
 
@@ -250,7 +253,6 @@ public class Outline : MonoBehaviour
 
   List<Vector3> SmoothNormals(Mesh mesh)
   {
-
     // Group vertices by location
     var groups = mesh.vertices.Select((vertex, index) => new KeyValuePair<Vector3, int>(vertex, index)).GroupBy(pair => pair.Key);
 
@@ -345,5 +347,13 @@ public class Outline : MonoBehaviour
         outlineFillMaterial.SetFloat("_OutlineWidth", 0f);
         break;
     }
+  }
+
+  /// <summary>
+  /// Used when changing models in customization, to make Outline appear as intended
+  /// </summary>
+  public void RefreshOutline()
+  {
+    LoadSmoothNormals();
   }
 }

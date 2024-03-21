@@ -16,16 +16,19 @@ public class CircleMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Disable menu
         if (InteractionManager.Instance.GetSelectedObjects().Count == 0)
         {
             actionMenu.gameObject.SetActive(false);
             return;
         }
+        //Open menu
         if (Input.GetMouseButtonDown(1) && InteractionManager.Instance.IsHoveringObject())
         {
             actionMenu.gameObject.SetActive(!actionMenu.gameObject.activeSelf);
         }
-        //TODO: This creates a lot of errors...
+        
+        //If our object is invalid, remove objects and disable.
         selectedObject = InteractionManager.Instance.GetSelectedObjects()[0];
         if (!selectedObject)
         {
@@ -33,6 +36,7 @@ public class CircleMenu : MonoBehaviour
             return;
         }
 
+        //Center object on selected objects mean position
         Vector3 screenPos;
 
         if (InteractionManager.Instance.GetSelectedObjects().Count > 1)
