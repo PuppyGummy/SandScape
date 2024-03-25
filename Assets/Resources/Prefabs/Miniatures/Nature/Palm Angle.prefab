@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 655954881796807394}
   - component: {fileID: 1748400568265116376}
   - component: {fileID: 1493296601014540815}
+  - component: {fileID: -49334736218881507}
   m_Layer: 6
   m_Name: Palm Angle
   m_TagString: Interactable
@@ -193,3 +194,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.8032124, y: 0.14947902, z: 2.1828747}
   m_Center: {x: 0, y: 0.047795765, z: 0.77753043}
+--- !u!114 &-49334736218881507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6382021467794355456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []

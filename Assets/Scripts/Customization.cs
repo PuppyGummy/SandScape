@@ -30,6 +30,7 @@ public class Customization : MonoBehaviour
     private int currentShoes = 0;
     
     [SerializeField] private List<MeshRenderer> meshRenderers = new List<MeshRenderer>();
+    [SerializeField] private List<Material> blackListedMaterials = new List<Material>();
 
     public void Start()
     {
@@ -129,8 +130,13 @@ public class Customization : MonoBehaviour
         materials.Clear();
         
         //Hack to not count outline materials - this caused me too much pain :.^(
-        Outline outlineComp = InteractionManager.Instance.selectedObjects[0].GetComponent<Outline>();
-        outlineComp.enabled = false;
+        Outline outlineComp = null;
+        
+        if (InteractionManager.Instance.selectedObjects.Count > 0)
+        {
+            outlineComp = InteractionManager.Instance.selectedObjects[0].GetComponent<Outline>();
+            outlineComp.enabled = false;
+        }
 
         switch (allowStyleChange)
         {
@@ -149,17 +155,27 @@ public class Customization : MonoBehaviour
             {
                 foreach (var material in gameObject.GetComponent<MeshRenderer>().sharedMaterials)
                 {
-                    materials.Add(material);
+                    //Exclude black listed materials here...
+                    if (blackListedMaterials.Count <= 0)
+                    {
+                        materials.Add(material);
+                        continue;
+                    }
+                    
+                    foreach (var blackListedMaterial in blackListedMaterials)
+                    {
+                        if (blackListedMaterial.name != material.name)
+                            materials.Add(material);
+                    }
                 }
-
                 break;
             }
         }
 
         //Reenable outline after count
-        outlineComp.enabled = true;
-        
-        // Debug.Log("Counted materials");
+        if (outlineComp != null) outlineComp.enabled = true;
+
+        Debug.Log("Counted materials. Count is: " + materials.Count);
     }
 
     private void RefreshMaterials(MeshRenderer meshRenderer, MeshFilter meshFilter)
@@ -189,13 +205,19 @@ public class Customization : MonoBehaviour
 
     private void RefreshColors()
     {
-        if (!allowStyleChange) //Color updates for regular avatars
+        if (!allowStyleChange) //Color updates for regular miniatures
         {
             List<Material> tempMats = new List<Material>();
             
             for (int i = 0; i < materials.Count; i++)
             {
                 tempMats.Add(materials[i]);
+            }
+
+            //Re-append blacklisted material
+            if (blackListedMaterials.Count > 0)
+            {
+                tempMats.Add(blackListedMaterials[0]);
             }
             
             gameObject.GetComponent<MeshRenderer>().sharedMaterials = tempMats.ToArray();

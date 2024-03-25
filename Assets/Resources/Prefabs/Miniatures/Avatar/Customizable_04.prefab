@@ -402,6 +402,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shape: 0
+  currentFaceID: 1
   allowColorChange: 1
   allowShapeChange: 1
   allowStyleChange: 1

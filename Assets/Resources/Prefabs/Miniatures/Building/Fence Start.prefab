@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 7711250874997128243}
   - component: {fileID: 1575079772804332197}
   - component: {fileID: 4323178517503594140}
+  - component: {fileID: -2366992366113038258}
   m_Layer: 6
   m_Name: Fence Start
   m_TagString: Interactable
@@ -171,3 +172,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.07, y: 1.1116856, z: 0.22347786}
   m_Center: {x: -0.9610098, y: 0.5552477, z: 0.027229391}
+--- !u!114 &-2366992366113038258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1023966031118221490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []

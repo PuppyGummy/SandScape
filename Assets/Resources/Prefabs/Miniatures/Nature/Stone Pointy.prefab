@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 5758747188655525161}
   - component: {fileID: 1556412747000032084}
   - component: {fileID: 4241963817926379305}
+  - component: {fileID: -4274293601037699410}
   m_Layer: 6
   m_Name: Stone Pointy
   m_TagString: Interactable
@@ -170,3 +171,22 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300002, guid: 2e262dac35a353247839292320a9d2ab, type: 3}
+--- !u!114 &-4274293601037699410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4731005076320423421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []

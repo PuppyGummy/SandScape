@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 3601165300350299919}
   - component: {fileID: 2486860446309731457}
   - component: {fileID: 1874490527053376683}
+  - component: {fileID: 5088809886583302168}
   m_Layer: 6
   m_Name: Coral
   m_TagString: Interactable
@@ -145,8 +146,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5a59a71ad15b403693e95d66331e722, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lockRotation: 0
+  locked: 0
   isOnGround: 0
+  defaultScale: {x: 0, y: 0, z: 0}
+  defaultRotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!65 &2486860446309731457
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -190,3 +193,22 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 53e30c3c8deff4efa911d5331ac5a05c, type: 3}
+--- !u!114 &5088809886583302168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 881253334678177285}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []

@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 6256269645775188037}
   - component: {fileID: 8866264470567576685}
   - component: {fileID: 8882575503327279754}
+  - component: {fileID: -9022813208673087467}
   m_Layer: 6
   m_Name: Grass Long
   m_TagString: Interactable
@@ -192,3 +193,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.0149407, y: 0.08536343, z: 0.40117067}
   m_Center: {x: -0.063374996, y: 0.024270363, z: 0.08351499}
+--- !u!114 &-9022813208673087467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4999386430990946422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []

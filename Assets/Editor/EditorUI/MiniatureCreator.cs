@@ -28,6 +28,9 @@ namespace EditorUI
         private TextField miniPath;
         private TextField neededIconPath;
         private Button openIconToolButton;
+        private Button addColorButton;
+        private Button addMovementButton;
+        private DropdownField movementCategoryField;
 
         public void CreateGUI()
         {
@@ -183,6 +186,63 @@ namespace EditorUI
             };
             clearInventoryButton.clicked += OnClearClicked();
             root.Add(clearInventoryButton);
+            
+            Label editLabel = new Label("Edit")
+            {
+                style =
+                {
+                    fontSize = 16,
+                    marginTop = 5,
+                    marginBottom = 5,
+                    marginLeft = 5
+                }
+            };
+            root.Add(editLabel);
+            
+            //TODO: Add button for adding colors to all non-avatars
+            //Add color button
+            addColorButton = new Button
+            {
+                name = "button",
+                text = "Add color options...",
+                tooltip = "Adds color customization to all assets that currently do not have it"
+            };
+            addColorButton.clicked += AddColor();
+            root.Add(addColorButton);
+            
+            Label movementLabel = new Label("Movement input")
+            {
+                style =
+                {
+                    fontSize = 14,
+                    marginTop = 5,
+                    marginBottom = 5,
+                    marginLeft = 10
+                }
+            };
+            root.Add(movementLabel);
+            
+            //Category field
+            movementCategoryField = new DropdownField
+            {
+                label = "Category",
+                choices = new List<string> { "Avatar", "Animal", "Nature", "Building", "Monster", "Furniture", "Spiritual" },
+                tooltip = "The category to add movement input to",
+                style = { marginLeft = 10, marginRight = 10, marginBottom = 5, marginTop = 5},
+                value = "Avatar"
+            };
+            root.Add(movementCategoryField);
+            
+            //Add movement button
+            addMovementButton = new Button
+            {
+                name = "button",
+                text = "Add movement input to...",
+                tooltip = "Adds movement input to all assets in category",
+                style = { marginLeft = 10, marginRight = 10}
+            };
+            addMovementButton.clicked += AddMovement();
+            root.Add(addMovementButton);
         }
 
         #region Methods
@@ -200,6 +260,16 @@ namespace EditorUI
         private System.Action OnClearClicked()
         {
             return ClearAll;
+        }
+        
+        private System.Action AddColor()
+        {
+            return AddColors;
+        }
+        
+        private System.Action AddMovement()
+        {
+            return AddMovementInputs;
         }
 
         private void ClearAll()
@@ -229,6 +299,78 @@ namespace EditorUI
             nameField.value = "Enter name here...";
             meshField.value = null;
             categoryField.value = categoryField.choices[0];
+        }
+
+        private void AddColors()
+        {
+            const string rootPath = "Assets/Resources/Prefabs/Miniatures/";
+
+            foreach (var categoryName in categoryField.choices)
+            {
+                string categoryPath = categoryName + "/";
+                string localPath = rootPath + categoryPath;
+
+                //Get all miniatures from specified folder
+                string[] assets = AssetDatabase.FindAssets("t:prefab", new [] { localPath + "/"});
+                foreach (var assetGUID in assets)
+                {
+                    var path = AssetDatabase.GUIDToAssetPath(assetGUID);
+                    GameObject go = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+                    
+                    //Check if customization component exists...
+                    Customization customizationComp = go.GetComponent<Customization>();
+                    
+                    if (customizationComp) //Edit existing component
+                    {
+                        customizationComp.allowColorChange = true;
+                    }
+                    else //Add a new component and use that
+                    {
+                        customizationComp = go.AddComponent<Customization>();
+                        customizationComp.allowColorChange = true;
+                    }
+
+                    //Add name and .prefab to path, save asset as an override
+                    localPath = rootPath + categoryPath + go.name + ".prefab";
+                    PrefabUtility.SaveAsPrefabAsset(go, localPath);
+                }
+            }
+        }
+        
+        private void AddMovementInputs()
+        {
+            const string rootPath = "Assets/Resources/Prefabs/Miniatures/";
+            string categoryPath = movementCategoryField.value + "/";
+            string localPath = rootPath + categoryPath;
+
+            //Get all miniatures from specified folder
+            string[] assets = AssetDatabase.FindAssets("t:prefab", new [] { localPath + "/"});
+            foreach (var assetGUID in assets)
+            {
+                var path = AssetDatabase.GUIDToAssetPath(assetGUID);
+                GameObject go = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+                    
+                //Check if customization component exists...
+                PlayerMovementController movementController = go.GetComponent<PlayerMovementController>();
+                GameObject originalObject = Instantiate(go);
+                    
+                if (!movementController) //Edit existing component
+                {
+                    movementController = originalObject.AddComponent<PlayerMovementController>();
+                    movementController.enabled = false;
+                    
+                    GameObject orientationObject = new GameObject();
+                    orientationObject.name = "Orientation";
+
+                    orientationObject.transform.parent = originalObject.transform;
+                }
+
+                //Add name and .prefab to path, save asset as an override
+                localPath = rootPath + categoryPath + go.name + ".prefab";
+                PrefabUtility.SaveAsPrefabAsset(originalObject, localPath);
+
+                if (originalObject != null) DestroyImmediate(originalObject);
+            }
         }
 
         private void CreatePrefab()

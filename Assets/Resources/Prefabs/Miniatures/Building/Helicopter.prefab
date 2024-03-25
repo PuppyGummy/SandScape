@@ -184,6 +184,7 @@ GameObject:
   - component: {fileID: 7802450710467778864}
   - component: {fileID: 8950997885461482716}
   - component: {fileID: 6223280554975899603}
+  - component: {fileID: -3760135120844105618}
   m_Layer: 6
   m_Name: Helicopter
   m_TagString: Interactable
@@ -319,8 +320,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5a59a71ad15b403693e95d66331e722, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lockRotation: 0
+  locked: 0
   isOnGround: 0
+  defaultScale: {x: 0, y: 0, z: 0}
+  defaultRotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!65 &8950997885461482716
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -364,3 +367,22 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 0bfcb4c8d0e48544c9af80a06547e4a5, type: 3}
+--- !u!114 &-3760135120844105618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6885199852051887793}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []
