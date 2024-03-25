@@ -190,3 +190,5 @@ MonoBehaviour:
   allowStyleChange: 0
   materials: []
   meshRenderers: []
+  blackListedMaterials:
+  - {fileID: 2100000, guid: 3fbeb1b077ad3de448ec505bbb436401, type: 2}
