@@ -311,7 +311,7 @@ namespace EditorUI
                 string localPath = rootPath + categoryPath;
 
                 //Get all miniatures from specified folder
-                string[] assets = AssetDatabase.FindAssets("t:prefab", new [] { "Assets/Resources/Prefabs/Miniatures/" + localPath + "/"});
+                string[] assets = AssetDatabase.FindAssets("t:prefab", new [] { localPath + "/"});
                 foreach (var assetGUID in assets)
                 {
                     var path = AssetDatabase.GUIDToAssetPath(assetGUID);
@@ -334,7 +334,7 @@ namespace EditorUI
                     localPath = rootPath + categoryPath + go.name + ".prefab";
                     PrefabUtility.SaveAsPrefabAsset(go, localPath);
                     
-                    DestroyImmediate(go);
+                    // DestroyImmediate(go);
                 }
             }
         }

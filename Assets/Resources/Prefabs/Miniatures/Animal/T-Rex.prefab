@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 5638524561642999310}
   - component: {fileID: 7013341058166945011}
   - component: {fileID: 6348789591440977360}
+  - component: {fileID: 5345886882551352816}
   m_Layer: 6
   m_Name: T-Rex
   m_TagString: Interactable
@@ -174,8 +175,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5a59a71ad15b403693e95d66331e722, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lockRotation: 0
+  locked: 0
   isOnGround: 0
+  defaultScale: {x: 0, y: 0, z: 0}
+  defaultRotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &6348789591440977360
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -194,3 +197,22 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!114 &5345886882551352816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5299328692133995571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []

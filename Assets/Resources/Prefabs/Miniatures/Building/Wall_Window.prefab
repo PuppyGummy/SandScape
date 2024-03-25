@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 8110664603238218303}
   - component: {fileID: 7681819224048660375}
   - component: {fileID: 6364895863111542503}
+  - component: {fileID: 7079962560064173312}
   m_Layer: 6
   m_Name: Wall_Window
   m_TagString: Interactable
@@ -145,8 +146,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5a59a71ad15b403693e95d66331e722, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lockRotation: 0
+  locked: 0
   isOnGround: 0
+  defaultScale: {x: 0, y: 0, z: 0}
+  defaultRotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!65 &6364895863111542503
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -168,3 +171,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3, y: 3.005, z: 0.20000014}
   m_Center: {x: -1.5, y: 1.5025, z: 0.10000007}
+--- !u!114 &7079962560064173312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7872095144028727472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []

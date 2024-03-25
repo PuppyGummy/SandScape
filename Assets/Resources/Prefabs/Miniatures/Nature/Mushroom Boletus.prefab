@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 482089959301699793}
   - component: {fileID: 2213725746956926460}
   - component: {fileID: 783956384641801968}
+  - component: {fileID: -7964334457107266185}
   m_Layer: 6
   m_Name: Mushroom Boletus
   m_TagString: Interactable
@@ -171,3 +172,22 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300004, guid: 77e4f8bec86d1b44385923980b370141, type: 3}
+--- !u!114 &-7964334457107266185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6340264998905487641}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []

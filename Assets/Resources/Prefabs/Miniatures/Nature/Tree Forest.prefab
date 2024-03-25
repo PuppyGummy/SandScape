@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 3561844180680521550}
   - component: {fileID: 790764881577224046}
   - component: {fileID: 3955742638808374522}
+  - component: {fileID: 5471939759824537952}
   m_Layer: 6
   m_Name: Tree Forest
   m_TagString: Interactable
@@ -193,3 +194,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.9459877, y: 0.19137438, z: 2.0142846}
   m_Center: {x: 0, y: 0.08185319, z: 0}
+--- !u!114 &5471939759824537952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8810209733410904763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []

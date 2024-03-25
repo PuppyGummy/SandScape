@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 2962523410248357677}
   - component: {fileID: 1507191621029492677}
   - component: {fileID: 1107166919980436929}
+  - component: {fileID: -9102294861407836226}
   m_Layer: 6
   m_Name: Penguin
   m_TagString: Interactable
@@ -191,5 +192,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5a59a71ad15b403693e95d66331e722, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lockRotation: 0
+  locked: 0
   isOnGround: 0
+  defaultScale: {x: 0, y: 0, z: 0}
+  defaultRotation: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &-9102294861407836226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1610124131051768802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []

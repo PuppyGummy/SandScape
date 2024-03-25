@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 4339667928648282474}
   - component: {fileID: 327816154222574880}
   - component: {fileID: 5043578077683098529}
+  - component: {fileID: -7109287986329273312}
   m_Layer: 6
   m_Name: Tree Baobab
   m_TagString: Interactable
@@ -260,3 +261,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3.0498898, y: 0.23332499, z: 3.15321}
   m_Center: {x: 0, y: 0.116662495, z: 0}
+--- !u!114 &-7109287986329273312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2008059050557845603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []

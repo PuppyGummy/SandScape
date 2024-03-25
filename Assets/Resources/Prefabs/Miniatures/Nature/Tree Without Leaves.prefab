@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 7860098922094470681}
   - component: {fileID: 8455394758516299870}
   - component: {fileID: 3584327753846886617}
+  - component: {fileID: 6213167464347569585}
   m_Layer: 6
   m_Name: Tree Without Leaves
   m_TagString: Interactable
@@ -193,3 +194,22 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 7812975524354438028, guid: bdb30eaf1352e8f4793528665cf267a8, type: 3}
+--- !u!114 &6213167464347569585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4138634543731249480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []

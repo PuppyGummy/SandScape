@@ -129,8 +129,13 @@ public class Customization : MonoBehaviour
         materials.Clear();
         
         //Hack to not count outline materials - this caused me too much pain :.^(
-        Outline outlineComp = InteractionManager.Instance.selectedObjects[0].GetComponent<Outline>();
-        outlineComp.enabled = false;
+        Outline outlineComp = null;
+        
+        if (InteractionManager.Instance.selectedObjects.Count > 0)
+        {
+            outlineComp = InteractionManager.Instance.selectedObjects[0].GetComponent<Outline>();
+            outlineComp.enabled = false;
+        }
 
         switch (allowStyleChange)
         {
@@ -157,8 +162,8 @@ public class Customization : MonoBehaviour
         }
 
         //Reenable outline after count
-        outlineComp.enabled = true;
-        
+        if (outlineComp != null) outlineComp.enabled = true;
+
         // Debug.Log("Counted materials");
     }
 

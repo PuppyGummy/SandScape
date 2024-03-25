@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 6117357935351429513}
   - component: {fileID: 1676262880539373089}
   - component: {fileID: 4836543068580971327}
+  - component: {fileID: -3434061873416324481}
   m_Layer: 6
   m_Name: Cactus_Basic
   m_TagString: Interactable
@@ -145,8 +146,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5a59a71ad15b403693e95d66331e722, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lockRotation: 0
+  locked: 0
   isOnGround: 0
+  defaultScale: {x: 0, y: 0, z: 0}
+  defaultRotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!65 &1676262880539373089
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -190,3 +193,22 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300002, guid: 5e83b32f3466de74280e7e860d2c8ec2, type: 3}
+--- !u!114 &-3434061873416324481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6780922596671026334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []

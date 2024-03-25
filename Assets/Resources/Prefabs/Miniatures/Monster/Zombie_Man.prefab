@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 2791782551150523515}
   - component: {fileID: 5021305363139255816}
   - component: {fileID: 8898454574169803890}
+  - component: {fileID: -8203070521506209214}
   m_Layer: 6
   m_Name: Zombie_Man
   m_TagString: Interactable
@@ -150,8 +151,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5a59a71ad15b403693e95d66331e722, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lockRotation: 0
+  locked: 0
   isOnGround: 0
+  defaultScale: {x: 0, y: 0, z: 0}
+  defaultRotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!65 &5021305363139255816
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -196,3 +199,22 @@ CapsuleCollider:
   m_Height: 1.8296546
   m_Direction: 1
   m_Center: {x: 0, y: 0.91551894, z: 0.024380408}
+--- !u!114 &-8203070521506209214
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1703534282913365322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []

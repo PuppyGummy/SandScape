@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 8480435261842560148}
   - component: {fileID: 6096926706649963256}
   - component: {fileID: 1927644445383597968}
+  - component: {fileID: -1881444265302013372}
   m_Layer: 6
   m_Name: Pumpkin
   m_TagString: Interactable
@@ -171,3 +172,22 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: ff2fdda45cd49407ab6d7b7e85a76e68, type: 3}
+--- !u!114 &-1881444265302013372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3786697690813731400}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []
