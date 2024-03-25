@@ -333,15 +333,44 @@ namespace EditorUI
                     //Add name and .prefab to path, save asset as an override
                     localPath = rootPath + categoryPath + go.name + ".prefab";
                     PrefabUtility.SaveAsPrefabAsset(go, localPath);
-                    
-                    // DestroyImmediate(go);
                 }
             }
         }
         
         private void AddMovementInputs()
         {
-            
+            const string rootPath = "Assets/Resources/Prefabs/Miniatures/";
+            string categoryPath = movementCategoryField.value + "/";
+            string localPath = rootPath + categoryPath;
+
+            //Get all miniatures from specified folder
+            string[] assets = AssetDatabase.FindAssets("t:prefab", new [] { localPath + "/"});
+            foreach (var assetGUID in assets)
+            {
+                var path = AssetDatabase.GUIDToAssetPath(assetGUID);
+                GameObject go = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+                    
+                //Check if customization component exists...
+                PlayerMovementController movementController = go.GetComponent<PlayerMovementController>();
+                GameObject originalObject = Instantiate(go);
+                    
+                if (!movementController) //Edit existing component
+                {
+                    movementController = originalObject.AddComponent<PlayerMovementController>();
+                    movementController.enabled = false;
+                    
+                    GameObject orientationObject = new GameObject();
+                    orientationObject.name = "Orientation";
+
+                    orientationObject.transform.parent = originalObject.transform;
+                }
+
+                //Add name and .prefab to path, save asset as an override
+                localPath = rootPath + categoryPath + go.name + ".prefab";
+                PrefabUtility.SaveAsPrefabAsset(originalObject, localPath);
+
+                if (originalObject != null) DestroyImmediate(originalObject);
+            }
         }
 
         private void CreatePrefab()

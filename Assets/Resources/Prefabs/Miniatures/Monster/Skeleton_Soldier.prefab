@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 3409645051002489274}
   - component: {fileID: 3018374388776218928}
   - component: {fileID: -1102535460545442625}
+  - component: {fileID: 8574457030417442234}
   m_Layer: 6
   m_Name: Skeleton_Soldier
   m_TagString: Interactable
@@ -35,8 +36,9 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
-  m_ConstrainProportionsScale: 1
-  m_Children: []
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 577438801595437320}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &3099226229635636954
@@ -216,3 +218,64 @@ MonoBehaviour:
   allowStyleChange: 0
   materials: []
   meshRenderers: []
+  blackListedMaterials: []
+--- !u!114 &8574457030417442234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5615770962224906949}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7ef86af96dfb664eac0320137bb8df4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jumpKey: 32
+  speed: 7
+  jumpForce: 8
+  jumpCoolDown: 0.25
+  airMultiplier: 1
+  playerHeight: 2
+  ground:
+    serializedVersion: 2
+    m_Bits: 0
+  groundDrag: 5
+  rb: {fileID: 0}
+  orientation: {fileID: 0}
+  active: 0
+  turnSmoothTime: 0.1
+  turnSmoothVelocity: 0
+  direction: {x: 0, y: 0, z: 0}
+  targetVelocity: {x: 0, y: 0, z: 0}
+--- !u!1 &6736963027830456477
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 577438801595437320}
+  m_Layer: 0
+  m_Name: Orientation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &577438801595437320
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6736963027830456477}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2115600768401071001}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
