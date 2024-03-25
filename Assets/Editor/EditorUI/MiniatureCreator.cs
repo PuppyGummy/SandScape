@@ -228,9 +228,9 @@ namespace EditorUI
                 label = "Category",
                 choices = new List<string> { "Avatar", "Animal", "Nature", "Building", "Monster", "Furniture", "Spiritual" },
                 tooltip = "The category to add movement input to",
-                style = { marginLeft = 10, marginRight = 10, marginBottom = 5, marginTop = 5}
+                style = { marginLeft = 10, marginRight = 10, marginBottom = 5, marginTop = 5},
+                value = "Avatar"
             };
-            movementCategoryField.value = "Avatar";
             root.Add(movementCategoryField);
             
             //Add movement button
@@ -303,7 +303,40 @@ namespace EditorUI
 
         private void AddColors()
         {
-            
+            const string rootPath = "Assets/Resources/Prefabs/Miniatures/";
+
+            foreach (var categoryName in categoryField.choices)
+            {
+                string categoryPath = categoryName + "/";
+                string localPath = rootPath + categoryPath;
+
+                //Get all miniatures from specified folder
+                string[] assets = AssetDatabase.FindAssets("t:prefab", new [] { "Assets/Resources/Prefabs/Miniatures/" + localPath + "/"});
+                foreach (var assetGUID in assets)
+                {
+                    var path = AssetDatabase.GUIDToAssetPath(assetGUID);
+                    GameObject go = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+                    
+                    //Check if customization component exists...
+                    Customization customizationComp = go.GetComponent<Customization>();
+                    
+                    if (customizationComp) //Edit existing component
+                    {
+                        customizationComp.allowColorChange = true;
+                    }
+                    else //Add a new component and use that
+                    {
+                        customizationComp = go.AddComponent<Customization>();
+                        customizationComp.allowColorChange = true;
+                    }
+
+                    //Add name and .prefab to path, save asset as an override
+                    localPath = rootPath + categoryPath + go.name + ".prefab";
+                    PrefabUtility.SaveAsPrefabAsset(go, localPath);
+                    
+                    DestroyImmediate(go);
+                }
+            }
         }
         
         private void AddMovementInputs()
