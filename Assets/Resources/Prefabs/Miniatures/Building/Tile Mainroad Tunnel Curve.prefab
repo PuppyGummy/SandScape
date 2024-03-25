@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 7454070626390746889}
   - component: {fileID: 7798840063225562175}
   - component: {fileID: 6506799669270587004}
+  - component: {fileID: 4137686678338793175}
   m_Layer: 6
   m_Name: Tile Mainroad Tunnel Curve
   m_TagString: Interactable
@@ -176,3 +177,23 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4301212, guid: 796cd739e5835aa42902293dac19ee04, type: 3}
+--- !u!114 &4137686678338793175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2488651225285518720}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []
+  blackListedMaterials: []

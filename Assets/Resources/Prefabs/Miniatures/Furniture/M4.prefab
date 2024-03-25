@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 3330860059180951348}
   - component: {fileID: 4858032232701150937}
   - component: {fileID: 4858073879915379434}
+  - component: {fileID: 1441817888903657194}
   m_Layer: 6
   m_Name: M4
   m_TagString: Interactable
@@ -192,3 +193,23 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 256bde1ec516644aab634cda7cbbd694, type: 3}
+--- !u!114 &1441817888903657194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5796913988984585618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []
+  blackListedMaterials: []

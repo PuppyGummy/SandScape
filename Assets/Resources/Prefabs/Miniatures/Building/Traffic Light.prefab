@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 2414632995394094998}
   - component: {fileID: 1289375983710144149}
   - component: {fileID: 16275032214548008}
+  - component: {fileID: 2031376702610261731}
   m_Layer: 6
   m_Name: Traffic Light
   m_TagString: Interactable
@@ -196,3 +197,23 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 098d8f4d710624470abcf9679250c430, type: 3}
+--- !u!114 &2031376702610261731
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7293995896987649129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []
+  blackListedMaterials: []

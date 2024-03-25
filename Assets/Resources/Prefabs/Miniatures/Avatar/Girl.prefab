@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 8397777255020350190}
   - component: {fileID: 5170218578748137832}
   - component: {fileID: 2805295700477003546}
+  - component: {fileID: 6620252265743957951}
   m_Layer: 6
   m_Name: Girl
   m_TagString: Interactable
@@ -229,6 +230,26 @@ CapsuleCollider:
   m_Height: 1.1013591
   m_Direction: 1
   m_Center: {x: 0, y: 0.55108416, z: -0.0071113557}
+--- !u!114 &6620252265743957951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3609146800391396342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []
+  blackListedMaterials: []
 --- !u!1 &5884534076308674796
 GameObject:
   m_ObjectHideFlags: 0

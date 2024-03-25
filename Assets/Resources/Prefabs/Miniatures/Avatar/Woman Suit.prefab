@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 5678266677124920277}
   - component: {fileID: 1142208625433444409}
   - component: {fileID: 6213597417722874279}
+  - component: {fileID: 7248387653194178516}
   m_Layer: 6
   m_Name: Woman Suit
   m_TagString: Interactable
@@ -229,6 +230,26 @@ CapsuleCollider:
   m_Height: 1.8555255
   m_Direction: 1
   m_Center: {x: 0, y: 0.9251785, z: -0.02243311}
+--- !u!114 &7248387653194178516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7595366696245167441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []
+  blackListedMaterials: []
 --- !u!1 &7832930714002044316
 GameObject:
   m_ObjectHideFlags: 0

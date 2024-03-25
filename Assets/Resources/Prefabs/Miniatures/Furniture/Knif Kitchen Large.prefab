@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 695487557853607808}
   - component: {fileID: 7336734190822609425}
   - component: {fileID: 5195392444916629010}
+  - component: {fileID: 452092281844630393}
   m_Layer: 6
   m_Name: Knif Kitchen Large
   m_TagString: Interactable
@@ -193,3 +194,23 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -2997317798985368739, guid: 143d014be06433a42b579b853746be06, type: 3}
+--- !u!114 &452092281844630393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6477726794949819035}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []
+  blackListedMaterials: []

@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 1019942925384739472}
   - component: {fileID: 4999236846591578133}
   - component: {fileID: 8589141803025123562}
+  - component: {fileID: -553257613925128401}
   m_Layer: 6
   m_Name: Bowl Salad
   m_TagString: Interactable
@@ -172,3 +173,23 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -8316080124820551857, guid: 3af167dc29333db42aa6194f14945a85, type: 3}
+--- !u!114 &-553257613925128401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2343321037325712620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []
+  blackListedMaterials: []

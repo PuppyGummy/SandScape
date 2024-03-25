@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 4727872876879746369}
   - component: {fileID: 6920191933540143353}
   - component: {fileID: 4552816818580546943}
+  - component: {fileID: -5223763051267058357}
   m_Layer: 6
   m_Name: Gravestone
   m_TagString: Interactable
@@ -193,3 +194,23 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 6224d836bf690f14a894272ee8120746, type: 3}
+--- !u!114 &-5223763051267058357
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6517421245633005251}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []
+  blackListedMaterials: []

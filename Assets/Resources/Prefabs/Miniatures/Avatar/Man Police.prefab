@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 3136650989397077787}
   - component: {fileID: 2439952141383701655}
   - component: {fileID: 525309102160181533}
+  - component: {fileID: 7353485482975983177}
   m_Layer: 6
   m_Name: Man Police
   m_TagString: Interactable
@@ -229,6 +230,26 @@ CapsuleCollider:
   m_Height: 1.8630836
   m_Direction: 1
   m_Center: {x: 0, y: 0.93223345, z: 0.029529668}
+--- !u!114 &7353485482975983177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 928110341559622399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []
+  blackListedMaterials: []
 --- !u!1 &2128823065312113606
 GameObject:
   m_ObjectHideFlags: 0

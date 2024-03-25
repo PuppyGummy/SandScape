@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 6330935997673956789}
   - component: {fileID: 2986096469824622310}
   - component: {fileID: 2531002373964734372}
+  - component: {fileID: -7923465974515524165}
   m_Layer: 6
   m_Name: Man King
   m_TagString: Interactable
@@ -205,6 +206,26 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.62522304, y: 0.03642579, z: 0.4959139}
   m_Center: {x: 0, y: 0.018904548, z: 0}
+--- !u!114 &-7923465974515524165
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7942973270248900368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []
+  blackListedMaterials: []
 --- !u!1 &9042634948575593252
 GameObject:
   m_ObjectHideFlags: 0

@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 6442737616605952499}
   - component: {fileID: 404847548089624980}
   - component: {fileID: 2627278977161058963}
+  - component: {fileID: 8306994782572786685}
   m_Layer: 6
   m_Name: Horse
   m_TagString: Interactable
@@ -227,6 +228,26 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300004, guid: 06e01e951fbe6ad48882e35656d6d4b6, type: 3}
+--- !u!114 &8306994782572786685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3695859294090550566}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []
+  blackListedMaterials: []
 --- !u!1 &4041257219192487384
 GameObject:
   m_ObjectHideFlags: 0

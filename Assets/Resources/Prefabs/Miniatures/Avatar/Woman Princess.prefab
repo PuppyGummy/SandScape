@@ -48,6 +48,7 @@ GameObject:
   - component: {fileID: 7912042245335011807}
   - component: {fileID: 7748014570077539225}
   - component: {fileID: 6956080799700639302}
+  - component: {fileID: -7503648710665117377}
   m_Layer: 6
   m_Name: Woman Princess
   m_TagString: Interactable
@@ -260,3 +261,23 @@ CapsuleCollider:
   m_Height: 1.864533
   m_Direction: 1
   m_Center: {x: 0, y: 0.9369389, z: -0.03337723}
+--- !u!114 &-7503648710665117377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5774638069500386329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []
+  blackListedMaterials: []

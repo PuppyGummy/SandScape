@@ -244,6 +244,7 @@ MonoBehaviour:
   allowStyleChange: 0
   materials: []
   meshRenderers: []
+  blackListedMaterials: []
 --- !u!1 &6241996776024531526
 GameObject:
   m_ObjectHideFlags: 0

@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 5794333449548708175}
   - component: {fileID: 5862948720336629419}
   - component: {fileID: 6906085642809756473}
+  - component: {fileID: -3906707970108871961}
   m_Layer: 6
   m_Name: Building Temple China
   m_TagString: Interactable
@@ -178,3 +179,23 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 618d4fe6a1ca8de499605957d925e625, type: 3}
+--- !u!114 &-3906707970108871961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5901581876694709131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []
+  blackListedMaterials: []

@@ -412,6 +412,7 @@ MonoBehaviour:
   - {fileID: 701575588110520868}
   - {fileID: 8914187538636027836}
   - {fileID: 5955722576970171483}
+  blackListedMaterials: []
 --- !u!114 &6198588671711454654
 MonoBehaviour:
   m_ObjectHideFlags: 0

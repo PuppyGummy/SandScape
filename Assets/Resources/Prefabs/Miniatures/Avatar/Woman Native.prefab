@@ -47,6 +47,7 @@ GameObject:
   - component: {fileID: 4510998326471678294}
   - component: {fileID: 667300077250347526}
   - component: {fileID: 1380087373664421500}
+  - component: {fileID: 5114252162287614210}
   m_Layer: 6
   m_Name: Woman Native
   m_TagString: Interactable
@@ -235,3 +236,23 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.612359, y: 0.0494587, z: 0.56559336}
   m_Center: {x: 0, y: 0.031117627, z: 0}
+--- !u!114 &5114252162287614210
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5674229344531772590}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []
+  blackListedMaterials: []

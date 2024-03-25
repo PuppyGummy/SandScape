@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 6472937513568801840}
   - component: {fileID: 2734505036103418918}
   - component: {fileID: 6569257421557698448}
+  - component: {fileID: -4203453145813576316}
   m_Layer: 6
   m_Name: Hammer
   m_TagString: Interactable
@@ -194,3 +195,23 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300002, guid: 989b477ec80e93e4f980b805e28af924, type: 3}
+--- !u!114 &-4203453145813576316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8831809339920304200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []
+  blackListedMaterials: []

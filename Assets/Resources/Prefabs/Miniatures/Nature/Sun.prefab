@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 457318803861515748}
   - component: {fileID: 5421661371890623608}
   - component: {fileID: 2354372710007491325}
+  - component: {fileID: 5984747521695343836}
   m_Layer: 6
   m_Name: Sun
   m_TagString: Interactable
@@ -170,3 +171,23 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 4.95
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5984747521695343836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6139403670072550399}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []
+  blackListedMaterials: []

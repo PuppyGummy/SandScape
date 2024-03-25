@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 6180596811056453758}
   - component: {fileID: 338436871709013008}
   - component: {fileID: 6269934488197007300}
+  - component: {fileID: 4352330192447031329}
   m_Layer: 6
   m_Name: Bridge Japan
   m_TagString: Interactable
@@ -194,3 +195,23 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300002, guid: df57bc131f14042e4b538a11bf1fac7f, type: 3}
+--- !u!114 &4352330192447031329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3157710021107780913}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []
+  blackListedMaterials: []

@@ -48,6 +48,7 @@ GameObject:
   - component: {fileID: 714241278073984353}
   - component: {fileID: 7153364721966060361}
   - component: {fileID: 4883909620931513000}
+  - component: {fileID: -2347779168934264182}
   m_Layer: 6
   m_Name: Man Farm
   m_TagString: Interactable
@@ -259,3 +260,23 @@ CapsuleCollider:
   m_Height: 1.8777642
   m_Direction: 1
   m_Center: {x: 0, y: 0.9410609, z: 0.005694963}
+--- !u!114 &-2347779168934264182
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8262661859774664143}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []
+  blackListedMaterials: []

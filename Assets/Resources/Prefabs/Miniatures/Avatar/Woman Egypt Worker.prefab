@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 3645963048331837515}
   - component: {fileID: 1501157723298060232}
   - component: {fileID: 819752387069023756}
+  - component: {fileID: 1975256034873119739}
   m_Layer: 6
   m_Name: Woman Egypt Worker
   m_TagString: Interactable
@@ -226,6 +227,26 @@ CapsuleCollider:
   m_Height: 1.8299484
   m_Direction: 1
   m_Center: {x: 0, y: 0.9196466, z: -0.027378976}
+--- !u!114 &1975256034873119739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1341385738751422335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []
+  blackListedMaterials: []
 --- !u!1 &6239868452992600000
 GameObject:
   m_ObjectHideFlags: 0

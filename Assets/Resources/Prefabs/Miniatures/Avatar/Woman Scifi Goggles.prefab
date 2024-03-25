@@ -48,6 +48,7 @@ GameObject:
   - component: {fileID: 792669845936554529}
   - component: {fileID: 8938613202533303841}
   - component: {fileID: 6602089060966413085}
+  - component: {fileID: -7318105331567661533}
   m_Layer: 6
   m_Name: Woman Scifi Goggles
   m_TagString: Interactable
@@ -261,3 +262,23 @@ CapsuleCollider:
   m_Height: 1.868313
   m_Direction: 1
   m_Center: {x: 0.0059312284, y: 0.9348481, z: 0.0062721}
+--- !u!114 &-7318105331567661533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6074253391440193960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []
+  blackListedMaterials: []

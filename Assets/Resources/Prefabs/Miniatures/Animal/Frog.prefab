@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 3801984666151402546}
   - component: {fileID: 502435369344425322}
   - component: {fileID: 6834189986231702097}
+  - component: {fileID: 2254420590702764625}
   m_Layer: 6
   m_Name: Frog
   m_TagString: Interactable
@@ -204,6 +205,26 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 2b5e11e499fa96242a63186554d56482, type: 3}
+--- !u!114 &2254420590702764625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1443539811393895660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []
+  blackListedMaterials: []
 --- !u!1 &1619818631318927710
 GameObject:
   m_ObjectHideFlags: 0

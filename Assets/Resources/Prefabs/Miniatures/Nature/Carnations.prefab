@@ -214,3 +214,4 @@ MonoBehaviour:
   allowStyleChange: 0
   materials: []
   meshRenderers: []
+  blackListedMaterials: []

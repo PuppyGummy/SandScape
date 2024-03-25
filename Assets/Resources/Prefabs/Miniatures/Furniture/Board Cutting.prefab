@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 8187339820988482623}
   - component: {fileID: 7800355375552928038}
   - component: {fileID: 6521612364049420471}
+  - component: {fileID: -2934152345735475581}
   m_Layer: 6
   m_Name: Board Cutting
   m_TagString: Interactable
@@ -170,3 +171,23 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -3829121567266312068, guid: be2af6ada7b308f439d04d8cb7d7e4da, type: 3}
+--- !u!114 &-2934152345735475581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1384890858249172937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []
+  blackListedMaterials: []

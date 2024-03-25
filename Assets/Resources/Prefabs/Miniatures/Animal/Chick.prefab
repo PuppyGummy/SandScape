@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 6891465208186007550}
   - component: {fileID: 7755583858618555542}
   - component: {fileID: 8280280228799576899}
+  - component: {fileID: 3536969117258332488}
   m_Layer: 6
   m_Name: Chick
   m_TagString: Interactable
@@ -225,6 +226,26 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: c9a49e581aa666b4daeb7d60c95e2825, type: 3}
+--- !u!114 &3536969117258332488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2572778990764877242}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31e6611b8a43282439821b3a6f1512e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shape: 1
+  currentFaceID: 1
+  allowColorChange: 1
+  allowShapeChange: 0
+  allowStyleChange: 0
+  materials: []
+  meshRenderers: []
+  blackListedMaterials: []
 --- !u!1 &3457241491232800084
 GameObject:
   m_ObjectHideFlags: 0
