@@ -28,6 +28,9 @@ namespace EditorUI
         private TextField miniPath;
         private TextField neededIconPath;
         private Button openIconToolButton;
+        private Button addColorButton;
+        private Button addMovementButton;
+        private DropdownField movementCategoryField;
 
         public void CreateGUI()
         {
@@ -183,6 +186,63 @@ namespace EditorUI
             };
             clearInventoryButton.clicked += OnClearClicked();
             root.Add(clearInventoryButton);
+            
+            Label editLabel = new Label("Edit")
+            {
+                style =
+                {
+                    fontSize = 16,
+                    marginTop = 5,
+                    marginBottom = 5,
+                    marginLeft = 5
+                }
+            };
+            root.Add(editLabel);
+            
+            //TODO: Add button for adding colors to all non-avatars
+            //Add color button
+            addColorButton = new Button
+            {
+                name = "button",
+                text = "Add color options...",
+                tooltip = "Adds color customization to all assets that currently do not have it"
+            };
+            addColorButton.clicked += AddColor();
+            root.Add(addColorButton);
+            
+            Label movementLabel = new Label("Movement input")
+            {
+                style =
+                {
+                    fontSize = 14,
+                    marginTop = 5,
+                    marginBottom = 5,
+                    marginLeft = 10
+                }
+            };
+            root.Add(movementLabel);
+            
+            //Category field
+            movementCategoryField = new DropdownField
+            {
+                label = "Category",
+                choices = new List<string> { "Avatar", "Animal", "Nature", "Building", "Monster", "Furniture", "Spiritual" },
+                tooltip = "The category to add movement input to",
+                style = { marginLeft = 10, marginRight = 10, marginBottom = 5, marginTop = 5}
+            };
+            movementCategoryField.value = "Avatar";
+            root.Add(movementCategoryField);
+            
+            //Add movement button
+            addMovementButton = new Button
+            {
+                name = "button",
+                text = "Add movement input to...",
+                tooltip = "Adds movement input to all assets in category",
+                style = { marginLeft = 10, marginRight = 10}
+            };
+            addMovementButton.clicked += AddMovement();
+            root.Add(addMovementButton);
         }
 
         #region Methods
@@ -200,6 +260,16 @@ namespace EditorUI
         private System.Action OnClearClicked()
         {
             return ClearAll;
+        }
+        
+        private System.Action AddColor()
+        {
+            return AddColors;
+        }
+        
+        private System.Action AddMovement()
+        {
+            return AddMovementInputs;
         }
 
         private void ClearAll()
@@ -229,6 +299,16 @@ namespace EditorUI
             nameField.value = "Enter name here...";
             meshField.value = null;
             categoryField.value = categoryField.choices[0];
+        }
+
+        private void AddColors()
+        {
+            
+        }
+        
+        private void AddMovementInputs()
+        {
+            
         }
 
         private void CreatePrefab()
