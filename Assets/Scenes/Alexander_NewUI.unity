@@ -43362,14 +43362,14 @@ MonoBehaviour:
   selectedObjects: []
   isDraggingSpawnedObject: 0
   epsilon: 1.2
-  doubleClickTimeLimit: 0.25
+  doubleClickTimeLimit: 0.1
   dragSpeed: 10
   rotationSpeed: 10
   minYValue: 1
   buryDepth: 0.3
   sandbox: {fileID: 0}
   destroyYValue: -5
-  scaleSpeed: 0.1
+  scaleSpeed: 0.115
   selectMode: 1
   objectIndicator: {fileID: 1521069232243536, guid: 3d70d3a3371de497a840b5641fd46a4e, type: 3}
   playerObject: {fileID: 0}
