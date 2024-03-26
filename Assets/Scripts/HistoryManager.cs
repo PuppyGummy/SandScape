@@ -84,7 +84,8 @@ public class HistoryManager : MonoBehaviour
                 position = obj.transform.position,
                 rotation = obj.transform.rotation,
                 scale = obj.transform.localScale,
-                tag = obj.tag
+                tag = obj.tag,
+                customizationData = obj.GetComponent<Customization>().SaveCustomization()
             };
 
             data.objectsData.Add(objectData);
@@ -126,6 +127,7 @@ public class HistoryManager : MonoBehaviour
                 obj.transform.rotation = objectData.rotation;
                 obj.transform.localScale = objectData.scale;
                 obj.tag = objectData.tag;
+                obj.GetComponent<Customization>().LoadCustomization(objectData.customizationData);
             }
         }
     }
@@ -146,6 +148,7 @@ public class ObjectHistory
     public Vector3 scale;
     public Operation operation;
     public GameObject target;
+    public CustomizationData customizationData;
     public string prefabName;
 
     public ObjectHistory(GameObject targetObj, Operation op)
@@ -157,6 +160,7 @@ public class ObjectHistory
             position = targetObj.transform.position;
             rotation = targetObj.transform.rotation;
             scale = targetObj.transform.localScale;
+            customizationData = targetObj.GetComponent<Customization>().SaveCustomization();
 
             prefabName = PrefabLoader.GetPrefabName(targetObj.name);
         }
@@ -227,6 +231,7 @@ public class ObjectHistory
             target.transform.position = position;
             target.transform.rotation = rotation;
             target.transform.localScale = scale;
+            target.GetComponent<Customization>().LoadCustomization(customizationData);
         }
     }
 
@@ -255,6 +260,7 @@ public class ObjectHistory
             target.transform.position = position;
             target.transform.rotation = rotation;
             target.transform.localScale = scale;
+            target.GetComponent<Customization>().LoadCustomization(customizationData);
         }
     }
     private void OnPrefabLoaded(GameObject prefab)
@@ -263,6 +269,7 @@ public class ObjectHistory
         {
             target = Object.Instantiate(prefab, position, rotation);
             target.transform.localScale = scale;
+            target.GetComponent<Customization>().LoadCustomization(customizationData);
         }
         else
         {
