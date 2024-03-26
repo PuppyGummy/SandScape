@@ -725,6 +725,12 @@ public class InteractionManager : MonoBehaviour
         {
             AddIndicator(objectToAdd);
         }
+
+        if (objectToAdd.transform.GetChild(0).name != "Indicator")
+        {
+            Debug.Log("Not indicator");
+            AddIndicator(objectToAdd);
+        }
     }
     public void RemoveObject(GameObject objectToRemove)
     {
