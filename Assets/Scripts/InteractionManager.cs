@@ -585,10 +585,15 @@ public class InteractionManager : MonoBehaviour
 
     public void AddIndicator(GameObject spawnedObject)
     {
+        //Do not add if we have an indicator
+        if (spawnedObject.transform.childCount > 0 && spawnedObject.transform.GetChild(0).name.Contains("Indicator"))
+            return;
+        
         GameObject indicator = Instantiate(objectIndicator, Vector3.zero, Quaternion.identity);
         indicator.transform.SetParent(spawnedObject.transform);
         indicator.transform.SetAsFirstSibling();
         indicator.SetActive(false);
+        Debug.Log("Indicator added");
     }
 
     public void Reset()
@@ -723,12 +728,6 @@ public class InteractionManager : MonoBehaviour
         //Add indicator if object is missing one
         if (objectToAdd.transform.childCount <= 0)
         {
-            AddIndicator(objectToAdd);
-        }
-
-        if (objectToAdd.transform.GetChild(0).name != "Indicator")
-        {
-            Debug.Log("Not indicator");
             AddIndicator(objectToAdd);
         }
     }
