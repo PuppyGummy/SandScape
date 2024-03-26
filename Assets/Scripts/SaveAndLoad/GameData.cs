@@ -17,4 +17,16 @@ public class ObjectData
     public Quaternion rotation;
     public Vector3 scale;
     public string tag;
+    public CustomizationData customizationData;
+}
+[Serializable]
+public class CustomizationData
+{
+    public int currentFaceID;
+    public int shape;
+    public int currentHair;
+    public int currentTop;
+    public int currentBottom;
+    public int currentShoes;
+    public List<Material> materials;
 }

@@ -19,13 +19,13 @@ public class CustomizationUIManager : MonoBehaviour
     [SerializeField] private List<GameObject> tabButtons;
     [SerializeField] private List<GameObject> tabs;
     [SerializeField] private TabController tabController;
-    
+
     [SerializeField] private List<List<GameObject>> activeTabs = new List<List<GameObject>>();
 
     private int colorID;
     private int bodyID;
     private int expressionID;
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -38,7 +38,7 @@ public class CustomizationUIManager : MonoBehaviour
     public void Init()
     {
         // Debug.LogWarning("Started init!");
-        
+
         Customization selectedObject = CustomizationItemManager.Instance.selectedObject;
 
         if (activeTabs.Count > 0)
@@ -53,25 +53,25 @@ public class CustomizationUIManager : MonoBehaviour
                 }
             }
         }
-        
+
         activeTabs.Clear();
 
         //Add relevant tabs to list of active tabs
         if (selectedObject.allowShapeChange)
         {
-            activeTabs.Add(new List<GameObject>() {tabs[0], tabButtons[0]});
+            activeTabs.Add(new List<GameObject>() { tabs[0], tabButtons[0] });
             // Debug.Log("Added shape tab");
         }
-        
+
         if (selectedObject.allowStyleChange)
         {
-            activeTabs.Add(new List<GameObject>() {tabs[1], tabButtons[1]});
+            activeTabs.Add(new List<GameObject>() { tabs[1], tabButtons[1] });
             // Debug.Log("Added style tab");
         }
-        
+
         if (selectedObject.allowColorChange)
         {
-            activeTabs.Add(new List<GameObject>() {tabs[2], tabButtons[2]});
+            activeTabs.Add(new List<GameObject>() { tabs[2], tabButtons[2] });
             // Debug.Log("Added color tab");
         }
 
@@ -85,10 +85,10 @@ public class CustomizationUIManager : MonoBehaviour
             activeTabs[i][1].SetActive(true);
             // Debug.Log("Enabled tab: " + activeTabs[i][1].name);
         }
-        
+
         // tabController.RefreshLists();
         tabController.ButtonPressed(activeTabs[0][1]); //Set tab button as active by emulating click
-        
+
         expressionID = selectedObject.currentFaceID;
         bodyID = (int)selectedObject.shape;
 
@@ -96,7 +96,7 @@ public class CustomizationUIManager : MonoBehaviour
         expressions[expressionID].SetActive();
 
         slider.value = bodyID;
-        
+
         FocusOnModel();
 
         colorID = 0;
@@ -108,14 +108,16 @@ public class CustomizationUIManager : MonoBehaviour
     {
         CustomizationItemManager.Instance.selectedObject.SetFacialExpression(id);
         expressionID = id;
-        
+
         ClearChosenExpressions();
         expressions[expressionID].SetActive();
+        HistoryManager.Instance.SaveState(new List<GameObject> { gameObject }, Operation.Modify);
     }
-    
+
     public void ChangeShape()
     {
         CustomizationItemManager.Instance.selectedObject.SetBodyShape(bodyID);
+        HistoryManager.Instance.SaveState(new List<GameObject> { gameObject }, Operation.Modify);
     }
 
     public void ShapeSliderChanged()
@@ -129,24 +131,25 @@ public class CustomizationUIManager : MonoBehaviour
         bodyID++;
         bodyID = Math.Clamp(bodyID, 0, 2);
         slider.value = bodyID;
-        
+
         ChangeShape();
     }
-    
+
     public void DecrementShape()
     {
         bodyID--;
         bodyID = Math.Clamp(bodyID, 0, 2);
         slider.value = bodyID;
-        
+
         ChangeShape();
     }
-    
+
     public void ChangeHair(int id)
     {
         CustomizationItemManager.Instance.selectedObject.SetHair(id);
         colorID = 0;
         currentColorDisplay.color = CustomizationItemManager.Instance.selectedObject.materials[colorID].color;
+        HistoryManager.Instance.SaveState(new List<GameObject> { gameObject }, Operation.Modify);
     }
 
     public void ChangeTop(int id)
@@ -154,40 +157,44 @@ public class CustomizationUIManager : MonoBehaviour
         CustomizationItemManager.Instance.selectedObject.SetTop(id);
         colorID = 0;
         currentColorDisplay.color = CustomizationItemManager.Instance.selectedObject.materials[colorID].color;
+        HistoryManager.Instance.SaveState(new List<GameObject> { gameObject }, Operation.Modify);
     }
-    
+
     public void ChangeBottom(int id)
     {
         CustomizationItemManager.Instance.selectedObject.SetBottom(id);
         colorID = 0;
         currentColorDisplay.color = CustomizationItemManager.Instance.selectedObject.materials[colorID].color;
+        HistoryManager.Instance.SaveState(new List<GameObject> { gameObject }, Operation.Modify);
     }
-    
+
     public void ChangeShoe(int id)
     {
         CustomizationItemManager.Instance.selectedObject.SetShoe(id);
         colorID = 0;
         currentColorDisplay.color = CustomizationItemManager.Instance.selectedObject.materials[colorID].color;
+        HistoryManager.Instance.SaveState(new List<GameObject> { gameObject }, Operation.Modify);
     }
 
     public void ChangeColor(Material newColor)
     {
         CustomizationItemManager.Instance.selectedObject.SetColor(colorID, newColor);
-        
+
         currentColorDisplay.color = CustomizationItemManager.Instance.selectedObject.materials[colorID].color;
+        HistoryManager.Instance.SaveState(new List<GameObject> { gameObject }, Operation.Modify);
     }
 
     public void IncrementColorID()
     {
         //Increment
         colorID++;
-        
+
         //Wrap
         if (colorID > CustomizationItemManager.Instance.selectedObject.materials.Count - 1)
         {
             colorID = 0;
         }
-        
+
         currentColorDisplay.color = CustomizationItemManager.Instance.selectedObject.materials[colorID].color;
     }
 
@@ -195,13 +202,13 @@ public class CustomizationUIManager : MonoBehaviour
     {
         //Decrement
         colorID--;
-        
+
         //Wrap
         if (colorID < 0)
         {
             colorID = CustomizationItemManager.Instance.selectedObject.materials.Count - 1;
         }
-        
+
         currentColorDisplay.color = CustomizationItemManager.Instance.selectedObject.materials[colorID].color;
     }
 
@@ -217,8 +224,8 @@ public class CustomizationUIManager : MonoBehaviour
             expression.SetInactive();
         }
     }
-    
-    #if UNITY_EDITOR
+
+#if UNITY_EDITOR
     public void SetupColorOptions()
     {
         for (int c = 0; c < colorOptions.transform.childCount; c++)
@@ -226,7 +233,7 @@ public class CustomizationUIManager : MonoBehaviour
             GameObject colorObject = colorOptions.transform.GetChild(c).gameObject;
             DestroyImmediate(colorObject);
         }
-        
+
         foreach (var color in CustomizationItemManager.Instance.colorOptions)
         {
             GameObject colorUIObject = PrefabUtility.InstantiatePrefab(colorUIPrefab).GameObject();
@@ -235,5 +242,5 @@ public class CustomizationUIManager : MonoBehaviour
             colorUIObject.GetComponent<Image>().color = color.color;
         }
     }
-    #endif
+#endif
 }
