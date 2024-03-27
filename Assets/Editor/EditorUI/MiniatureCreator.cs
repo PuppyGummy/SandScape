@@ -350,7 +350,7 @@ namespace EditorUI
                 var path = AssetDatabase.GUIDToAssetPath(assetGUID);
                 GameObject go = AssetDatabase.LoadAssetAtPath<GameObject>(path);
                     
-                //Check if customization component exists...
+                //Check if movement component exists...
                 PlayerMovementController movementController = go.GetComponent<PlayerMovementController>();
                 GameObject originalObject = Instantiate(go);
                     
