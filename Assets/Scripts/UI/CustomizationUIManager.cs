@@ -26,6 +26,20 @@ public class CustomizationUIManager : MonoBehaviour
     private int bodyID;
     private int expressionID;
 
+    public static CustomizationUIManager Instance;
+
+    void Awake()
+    {
+        if (Instance != null)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -106,18 +120,21 @@ public class CustomizationUIManager : MonoBehaviour
 
     public void ChangeExpression(int id)
     {
+        HistoryManager.Instance.SaveState(new List<GameObject> { CustomizationItemManager.Instance.selectedObject.gameObject }, Operation.Customize);
+
         CustomizationItemManager.Instance.selectedObject.SetFacialExpression(id);
         expressionID = id;
 
         ClearChosenExpressions();
         expressions[expressionID].SetActive();
-        HistoryManager.Instance.SaveState(new List<GameObject> { gameObject }, Operation.Modify);
+        HistoryManager.Instance.SaveState(new List<GameObject> { CustomizationItemManager.Instance.selectedObject.gameObject }, Operation.Customize);
     }
 
     public void ChangeShape()
     {
+        HistoryManager.Instance.SaveState(new List<GameObject> { CustomizationItemManager.Instance.selectedObject.gameObject }, Operation.Customize);
         CustomizationItemManager.Instance.selectedObject.SetBodyShape(bodyID);
-        HistoryManager.Instance.SaveState(new List<GameObject> { gameObject }, Operation.Modify);
+        HistoryManager.Instance.SaveState(new List<GameObject> { CustomizationItemManager.Instance.selectedObject.gameObject }, Operation.Customize);
     }
 
     public void ShapeSliderChanged()
@@ -146,42 +163,52 @@ public class CustomizationUIManager : MonoBehaviour
 
     public void ChangeHair(int id)
     {
+        HistoryManager.Instance.SaveState(new List<GameObject> { CustomizationItemManager.Instance.selectedObject.gameObject }, Operation.Customize);
+
         CustomizationItemManager.Instance.selectedObject.SetHair(id);
         colorID = 0;
         currentColorDisplay.color = CustomizationItemManager.Instance.selectedObject.materials[colorID].color;
-        HistoryManager.Instance.SaveState(new List<GameObject> { gameObject }, Operation.Modify);
+        HistoryManager.Instance.SaveState(new List<GameObject> { CustomizationItemManager.Instance.selectedObject.gameObject }, Operation.Customize);
     }
 
     public void ChangeTop(int id)
     {
+        HistoryManager.Instance.SaveState(new List<GameObject> { CustomizationItemManager.Instance.selectedObject.gameObject }, Operation.Customize);
+
         CustomizationItemManager.Instance.selectedObject.SetTop(id);
         colorID = 0;
         currentColorDisplay.color = CustomizationItemManager.Instance.selectedObject.materials[colorID].color;
-        HistoryManager.Instance.SaveState(new List<GameObject> { gameObject }, Operation.Modify);
+        HistoryManager.Instance.SaveState(new List<GameObject> { CustomizationItemManager.Instance.selectedObject.gameObject }, Operation.Customize);
     }
 
     public void ChangeBottom(int id)
     {
+        HistoryManager.Instance.SaveState(new List<GameObject> { CustomizationItemManager.Instance.selectedObject.gameObject }, Operation.Customize);
+
         CustomizationItemManager.Instance.selectedObject.SetBottom(id);
         colorID = 0;
         currentColorDisplay.color = CustomizationItemManager.Instance.selectedObject.materials[colorID].color;
-        HistoryManager.Instance.SaveState(new List<GameObject> { gameObject }, Operation.Modify);
+        HistoryManager.Instance.SaveState(new List<GameObject> { CustomizationItemManager.Instance.selectedObject.gameObject }, Operation.Customize);
     }
 
     public void ChangeShoe(int id)
     {
+        HistoryManager.Instance.SaveState(new List<GameObject> { CustomizationItemManager.Instance.selectedObject.gameObject }, Operation.Customize);
+
         CustomizationItemManager.Instance.selectedObject.SetShoe(id);
         colorID = 0;
         currentColorDisplay.color = CustomizationItemManager.Instance.selectedObject.materials[colorID].color;
-        HistoryManager.Instance.SaveState(new List<GameObject> { gameObject }, Operation.Modify);
+        HistoryManager.Instance.SaveState(new List<GameObject> { CustomizationItemManager.Instance.selectedObject.gameObject }, Operation.Customize);
     }
 
     public void ChangeColor(Material newColor)
     {
+        HistoryManager.Instance.SaveState(new List<GameObject> { CustomizationItemManager.Instance.selectedObject.gameObject }, Operation.Customize);
+
         CustomizationItemManager.Instance.selectedObject.SetColor(colorID, newColor);
 
         currentColorDisplay.color = CustomizationItemManager.Instance.selectedObject.materials[colorID].color;
-        HistoryManager.Instance.SaveState(new List<GameObject> { gameObject }, Operation.Modify);
+        HistoryManager.Instance.SaveState(new List<GameObject> { CustomizationItemManager.Instance.selectedObject.gameObject }, Operation.Customize);
     }
 
     public void IncrementColorID()
@@ -223,6 +250,20 @@ public class CustomizationUIManager : MonoBehaviour
         {
             expression.SetInactive();
         }
+    }
+    public void RefreshUI()
+    {
+        Customization selectedObject = CustomizationItemManager.Instance.selectedObject;
+
+        expressionID = selectedObject.currentFaceID;
+        bodyID = (int)selectedObject.shape;
+
+        ClearChosenExpressions();
+        expressions[expressionID].SetActive();
+
+        slider.value = bodyID;
+
+        currentColorDisplay.color = selectedObject.materials[colorID].color;
     }
 
 #if UNITY_EDITOR

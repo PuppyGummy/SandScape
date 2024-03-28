@@ -275,6 +275,10 @@ public class Customization : MonoBehaviour
             outlineComp.enabled = true;
         }
     }
+    public void RefreshUI()
+    {
+        CustomizationUIManager.Instance.RefreshUI();
+    }
 
     private void ReloadOutline()
     {
@@ -295,6 +299,7 @@ public class Customization : MonoBehaviour
         SetShoe(data.currentShoes);
         materials = data.materials;
         RefreshColors();
+        RefreshUI();
     }
     public CustomizationData SaveCustomization()
     {
@@ -306,6 +311,7 @@ public class Customization : MonoBehaviour
         data.currentBottom = currentBottom;
         data.currentShoes = currentShoes;
         data.materials = materials;
+        Debug.Log("data.currentFaceID = " + data.currentFaceID);
         return data;
     }
 }

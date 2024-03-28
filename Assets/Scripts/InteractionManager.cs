@@ -189,7 +189,6 @@ public class InteractionManager : MonoBehaviour
     /// <summary>
     /// Handles selection of objects, and starts dragging the object if held
     /// </summary>
-    // TODO: Stop lifting the object when selecting it?
     private void HandleSelectionInput()
     {
         //If the mouse is over a UI element, return
@@ -588,7 +587,7 @@ public class InteractionManager : MonoBehaviour
         //Do not add if we have an indicator
         if (spawnedObject.transform.childCount > 0 && spawnedObject.transform.GetChild(0).name.Contains("Indicator"))
             return;
-        
+
         GameObject indicator = Instantiate(objectIndicator, Vector3.zero, Quaternion.identity);
         indicator.transform.SetParent(spawnedObject.transform);
         indicator.transform.SetAsFirstSibling();

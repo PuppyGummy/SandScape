@@ -137,7 +137,8 @@ public enum Operation
 {
     Create,
     Delete,
-    Modify
+    Modify,
+    Customize
 }
 
 [System.Serializable]
@@ -183,6 +184,10 @@ public class ObjectHistory
                 // To undo a modification, revert to the previous state
                 UndoModify();
                 break;
+            case Operation.Customize:
+                // To undo a customization, revert to the previous state
+                UndoCustomize();
+                break;
         }
     }
 
@@ -202,6 +207,10 @@ public class ObjectHistory
             case Operation.Modify:
                 // To redo a modification, reapply the new state
                 RedoModify();
+                break;
+            case Operation.Customize:
+                // To redo a customization, reapply the new state
+                RedoCustomize();
                 break;
         }
     }
@@ -231,6 +240,12 @@ public class ObjectHistory
             target.transform.position = position;
             target.transform.rotation = rotation;
             target.transform.localScale = scale;
+        }
+    }
+    private void UndoCustomize()
+    {
+        if (target != null)
+        {
             target.GetComponent<Customization>().LoadCustomization(customizationData);
         }
     }
@@ -260,6 +275,12 @@ public class ObjectHistory
             target.transform.position = position;
             target.transform.rotation = rotation;
             target.transform.localScale = scale;
+        }
+    }
+    private void RedoCustomize()
+    {
+        if (target != null)
+        {
             target.GetComponent<Customization>().LoadCustomization(customizationData);
         }
     }
