@@ -225,7 +225,7 @@ public class Customization : MonoBehaviour
         else //Color updates for style avatars
         {
             //Disable the outline
-            Outline outlineComp = InteractionManager.Instance.selectedObjects[0].GetComponent<Outline>();
+            Outline outlineComp = gameObject.GetComponent<Outline>();
             outlineComp.enabled = false;
 
             //Match colors to the list, using the submeshes as reference
@@ -307,12 +307,15 @@ public class Customization : MonoBehaviour
             SetTop(data.currentTop);
             SetBottom(data.currentBottom);
             SetShoe(data.currentShoes);
-            Debug.Log("faceID: " + data.currentFaceID + " hairID: " + data.currentHair + " topID: " + data.currentTop + " bottomID: " + data.currentBottom + " shoeID: " + data.currentShoes);
+            // Debug.Log("faceID: " + data.currentFaceID + " hairID: " + data.currentHair + " topID: " + data.currentTop + " bottomID: " + data.currentBottom + " shoeID: " + data.currentShoes);
         }
         if (allowShapeChange)
             SetBodyShape(data.shape);
 
-        materials = data.materials;
+        materials = new List<Material>(data.materials);
+        // Debug.Log("Loading customization");
+        // Debug.Log("materials: ");
+        // PrintMaterials();
         RefreshColors();
         RefreshUI();
     }
@@ -326,12 +329,22 @@ public class Customization : MonoBehaviour
             data.currentTop = currentTop;
             data.currentBottom = currentBottom;
             data.currentShoes = currentShoes;
-            Debug.Log("faceID: " + currentFaceID + " hairID: " + currentHair + " topID: " + currentTop + " bottomID: " + currentBottom + " shoeID: " + currentShoes);
+            // Debug.Log("faceID: " + currentFaceID + " hairID: " + currentHair + " topID: " + currentTop + " bottomID: " + currentBottom + " shoeID: " + currentShoes);
         }
         if (allowShapeChange)
             data.shape = (int)shape;
 
-        data.materials = materials;
+        data.materials = new List<Material>(materials);
+        // Debug.Log("Saving customization");
+        // Debug.Log("materials: ");
+        // PrintMaterials();
         return data;
     }
+    // public void PrintMaterials()
+    // {
+    //     foreach (var material in materials)
+    //     {
+    //         Debug.Log(material.name);
+    //     }
+    // }
 }

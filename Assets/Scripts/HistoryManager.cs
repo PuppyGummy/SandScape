@@ -161,7 +161,8 @@ public class ObjectHistory
             position = targetObj.transform.position;
             rotation = targetObj.transform.rotation;
             scale = targetObj.transform.localScale;
-            customizationData = targetObj.GetComponent<Customization>().SaveCustomization();
+            if (op == Operation.Customize)
+                customizationData = targetObj.GetComponent<Customization>().SaveCustomization();
 
             prefabName = PrefabLoader.GetPrefabName(targetObj.name);
         }
