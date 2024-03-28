@@ -175,7 +175,7 @@ public class Customization : MonoBehaviour
         //Reenable outline after count
         if (outlineComp != null) outlineComp.enabled = true;
 
-        Debug.Log("Counted materials. Count is: " + materials.Count);
+        // Debug.Log("Counted materials. Count is: " + materials.Count);
     }
 
     private void RefreshMaterials(MeshRenderer meshRenderer, MeshFilter meshFilter)
@@ -277,7 +277,7 @@ public class Customization : MonoBehaviour
     }
     public void RefreshUI()
     {
-        CustomizationUIManager.Instance.RefreshUI();
+        CustomizationItemManager.Instance.uiManager.RefreshUI();
     }
 
     private void ReloadOutline()
@@ -291,12 +291,27 @@ public class Customization : MonoBehaviour
     }
     public void LoadCustomization(CustomizationData data)
     {
-        SetFacialExpression(data.currentFaceID);
-        SetBodyShape(data.shape);
-        SetHair(data.currentHair);
-        SetTop(data.currentTop);
-        SetBottom(data.currentBottom);
-        SetShoe(data.currentShoes);
+        InteractionManager.Instance.AddIndicator(gameObject);
+
+        if (allowStyleChange)
+            SetComponents();
+        if (allowShapeChange)
+            shape = (BodyShape)1;
+
+        CountMaterials();
+
+        if (allowStyleChange)
+        {
+            SetFacialExpression(data.currentFaceID);
+            SetHair(data.currentHair);
+            SetTop(data.currentTop);
+            SetBottom(data.currentBottom);
+            SetShoe(data.currentShoes);
+            Debug.Log("faceID: " + data.currentFaceID + " hairID: " + data.currentHair + " topID: " + data.currentTop + " bottomID: " + data.currentBottom + " shoeID: " + data.currentShoes);
+        }
+        if (allowShapeChange)
+            SetBodyShape(data.shape);
+
         materials = data.materials;
         RefreshColors();
         RefreshUI();
@@ -304,14 +319,19 @@ public class Customization : MonoBehaviour
     public CustomizationData SaveCustomization()
     {
         CustomizationData data = new CustomizationData();
-        data.currentFaceID = currentFaceID;
-        data.shape = (int)shape;
-        data.currentHair = currentHair;
-        data.currentTop = currentTop;
-        data.currentBottom = currentBottom;
-        data.currentShoes = currentShoes;
+        if (allowStyleChange)
+        {
+            data.currentFaceID = currentFaceID;
+            data.currentHair = currentHair;
+            data.currentTop = currentTop;
+            data.currentBottom = currentBottom;
+            data.currentShoes = currentShoes;
+            Debug.Log("faceID: " + currentFaceID + " hairID: " + currentHair + " topID: " + currentTop + " bottomID: " + currentBottom + " shoeID: " + currentShoes);
+        }
+        if (allowShapeChange)
+            data.shape = (int)shape;
+
         data.materials = materials;
-        Debug.Log("data.currentFaceID = " + data.currentFaceID);
         return data;
     }
 }

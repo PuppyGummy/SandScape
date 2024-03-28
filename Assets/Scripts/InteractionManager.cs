@@ -144,10 +144,10 @@ public class InteractionManager : MonoBehaviour
                 obj.layer = LayerMask.NameToLayer("Ignore Raycast");
             }
         }
-        if (Input.GetMouseButtonUp(1) && selectedObjects.Count != 0)
-        {
-            HistoryManager.Instance.SaveState(selectedObjects, Operation.Modify);
-        }
+        // if (Input.GetMouseButtonUp(1) && selectedObjects.Count != 0)
+        // {
+        //     HistoryManager.Instance.SaveState(selectedObjects, Operation.Modify);
+        // }
 
         if (!useGizmo || selectedObjects.Count == 0) return;
 
@@ -592,7 +592,7 @@ public class InteractionManager : MonoBehaviour
         indicator.transform.SetParent(spawnedObject.transform);
         indicator.transform.SetAsFirstSibling();
         indicator.SetActive(false);
-        Debug.Log("Indicator added");
+        // Debug.Log("Indicator added");
     }
 
     public void Reset()

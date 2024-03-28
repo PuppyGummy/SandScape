@@ -26,20 +26,6 @@ public class CustomizationUIManager : MonoBehaviour
     private int bodyID;
     private int expressionID;
 
-    public static CustomizationUIManager Instance;
-
-    void Awake()
-    {
-        if (Instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-    }
-
     // Start is called before the first frame update
     void Start()
     {
@@ -255,13 +241,20 @@ public class CustomizationUIManager : MonoBehaviour
     {
         Customization selectedObject = CustomizationItemManager.Instance.selectedObject;
 
-        expressionID = selectedObject.currentFaceID;
-        bodyID = (int)selectedObject.shape;
+        if (selectedObject == null)
+        {
+            return;
+        }
+        if (selectedObject.allowStyleChange)
+        {
+            expressionID = selectedObject.currentFaceID;
+            bodyID = (int)selectedObject.shape;
 
-        ClearChosenExpressions();
-        expressions[expressionID].SetActive();
+            ClearChosenExpressions();
+            expressions[expressionID].SetActive();
 
-        slider.value = bodyID;
+            slider.value = bodyID;
+        }
 
         currentColorDisplay.color = selectedObject.materials[colorID].color;
     }

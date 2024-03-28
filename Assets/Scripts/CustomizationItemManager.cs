@@ -29,12 +29,12 @@ public class CustomizationItemManager : MonoBehaviour
     public List<MeshFilter> expressions;
     public List<MeshFilter> bodyShapes;
 
-    public List<Material> colorOptions; 
+    public List<Material> colorOptions;
 
     public Customization selectedObject;
 
-    [SerializeField] private CustomizationUIManager uiManager;
-    
+    public CustomizationUIManager uiManager;
+
     public void SetSelectedObject()
     {
         var list = InteractionManager.Instance.GetSelectedObjects();
@@ -102,7 +102,7 @@ public class CustomizationItemManager : MonoBehaviour
     {
         uiManager.SetupColorOptions();
     }
-    
+
 #endif
 }
 
