@@ -27,7 +27,7 @@ public class Customization : MonoBehaviour
     private int currentHair = 0;
     private int currentTop = 0;
     private int currentBottom = 0;
-    private int currentShoes = 0;
+    private int currentShoes = 5;
 
     [SerializeField] private List<MeshRenderer> meshRenderers = new List<MeshRenderer>();
     [SerializeField] private List<Material> blackListedMaterials = new List<Material>();
