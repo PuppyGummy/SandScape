@@ -5,23 +5,14 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/SampleScene.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 0
-    path: Assets/Scenes/Alexander_TPC_Scene.unity
-    guid: e106e16c7d28cff44beeb46b3816e368
-  - enabled: 0
-    path: Assets/Scenes/Alexander_BaseScene.unity
-    guid: aaf87f3ffba79694b9bdcdf995e091bb
   - enabled: 1
-    path: Assets/Scenes/Alexander_NewUI.unity
+    path: Assets/Scenes/MainScene.unity
     guid: d080efa80c3abdd4b860c5cc61ca7cde
   - enabled: 1
-    path: Assets/Scenes/Alexander_Desert.unity
+    path: Assets/Scenes/World_Desert.unity
     guid: 800f487751f6253448b5b77bedacd73d
   - enabled: 1
-    path: Assets/Scenes/Alexander_Desert 1.unity
+    path: Assets/Scenes/World_Desert_Plain.unity
     guid: f8e31821e84870e429535480827787d4
   - enabled: 1
     path: Assets/Scenes/World_Forest.unity
