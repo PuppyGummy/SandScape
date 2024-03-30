@@ -132,11 +132,14 @@ public class Customization : MonoBehaviour
         //Hack to not count outline materials - this caused me too much pain :.^(
         Outline outlineComp = null;
 
-        if (InteractionManager.Instance.selectedObjects.Count > 0)
+        /*if (InteractionManager.Instance.selectedObjects.Count > 0)
         {
             outlineComp = InteractionManager.Instance.selectedObjects[0].GetComponent<Outline>();
             outlineComp.enabled = false;
-        }
+        }*/
+
+        outlineComp = gameObject.GetComponent<Outline>();
+        outlineComp.enabled = false;
 
         switch (allowStyleChange)
         {
@@ -175,7 +178,7 @@ public class Customization : MonoBehaviour
         //Reenable outline after count
         if (outlineComp != null) outlineComp.enabled = true;
 
-        // Debug.Log("Counted materials. Count is: " + materials.Count);
+        Debug.Log("Counted materials. Count is: " + materials.Count);
     }
 
     private void RefreshMaterials(MeshRenderer meshRenderer, MeshFilter meshFilter)
@@ -267,6 +270,9 @@ public class Customization : MonoBehaviour
 
             for (int i = bottomsMatCount; i < shoesMatCount; i++)
             {
+                //Safe guard to prevent occasional out of bounds 
+                if (i >= materials.Count)
+                    break;
                 tempShoeMats.Add(materials[i]);
             }
 
