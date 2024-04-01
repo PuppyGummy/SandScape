@@ -262,12 +262,14 @@ public class CustomizationUIManager : MonoBehaviour
 #if UNITY_EDITOR
     public void SetupColorOptions()
     {
+        //Remove all previous colors
         for (int c = 0; c < colorOptions.transform.childCount; c++)
         {
             GameObject colorObject = colorOptions.transform.GetChild(c).gameObject;
             DestroyImmediate(colorObject);
         }
 
+        //Add all colors from the customization manager list
         foreach (var color in CustomizationItemManager.Instance.colorOptions)
         {
             GameObject colorUIObject = PrefabUtility.InstantiatePrefab(colorUIPrefab).GameObject();
