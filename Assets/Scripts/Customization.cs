@@ -176,7 +176,7 @@ public class Customization : MonoBehaviour
         }
 
         //Reenable outline after count
-        if (outlineComp != null) outlineComp.enabled = true;
+        if (outlineComp != null && InteractionManager.Instance.selectedObjects.Contains(gameObject)) outlineComp.enabled = true;
 
         Debug.Log("Counted materials. Count is: " + materials.Count);
     }
